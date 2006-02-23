@@ -1,0 +1,17 @@
+Here is a list of components of Mail::DKIM, and the parts of the DKIM spec.
+they implement:
+
+http://mipassoc.org/dkim/specs/draft-allman-dkim-base-01.txt
+
+  Canonicalization/DkimCommon.pm -- 5.4
+  Canonicalization/simple.pm     -- 3.4.1 and 3.4.3
+  Canonicalization/relaxed.pm    -- 3.4.2 and 3.4.4
+
+
+http://mipassoc.org/mass/specs/draft-allman-dkim-base-00-10dc.html
+
+  Algorithm/rsa_sha1.pm      -- 3.3.1
+  Canonicalization/nowsp.pm  -- 3.4.2
+  Signature.pm               -- 3.5
+  Signer.pm                  -- 5
+  Verifier.pm                -- 6

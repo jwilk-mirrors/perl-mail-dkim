@@ -1,0 +1,6 @@
+Revision history for Perl extension Mail::DKIM.
+
+0.12  Thu Feb 23 09:41:57 2006
+	- original version; created by h2xs 1.23 with options
+		-X -b 5.8.0 -v 0.12 -n Mail::DKIM
+

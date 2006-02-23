@@ -1,0 +1,41 @@
+Mail-DKIM version 0.12
+======================
+
+This module implements the various components of the DKIM message-signing
+and verifying standard for Internet mail.
+
+INSTALLATION
+
+To install this module type the following:
+
+   perl Makefile.PL
+   make
+   make test
+   make install
+
+DEPENDENCIES
+
+This module requires these other modules and libraries:
+
+  Crypt::OpenSSL::RSA
+  Crypt::RSA
+  Digest::SHA1
+  Mail::Address (part of the MailTools package)
+  MIME::Base64
+  Net::DNS
+
+The Crypt::RSA dependency is especially messy, since it in turn depends
+on many other libraries. I've had a particular problem installing the
+Crypt::Random package through CPAN, which seems to stall in the test phase.
+It may help to `force install Crypt::Random' and press Ctrl+C if it gets
+stuck on the test phase.
+
+COPYRIGHT AND LICENCE
+
+Copyright (C) 2006 by Messiah College
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.6 or,
+at your option, any later version of Perl 5 you may have available.
+
+
