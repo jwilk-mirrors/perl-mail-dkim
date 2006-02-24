@@ -1,6 +1,10 @@
-Revision history for Perl extension Mail::DKIM.
+2006-02-24: Jason Long <jlong@messiah.edu>
+ * t/: wrote some tests and added them to the project
+ * README, Makefile.PL: discovered additional dependency:
+   Crypt::OpenSSL::Bignum
+ * lib/Mail/DKIM/Signature.pm: fixed a warning that could occur if
+   the h= tag was left undefined
 
-0.12  Thu Feb 23 09:41:57 2006
-	- original version; created by h2xs 1.23 with options
-		-X -b 5.8.0 -v 0.12 -n Mail::DKIM
-
+2006-02-23: Jason Long <jlong@messiah.edu>
+ * converted to ExtUtils::MakeMaker package format,
+   see the dkimproxy project for revision history prior to 2006-02-23.

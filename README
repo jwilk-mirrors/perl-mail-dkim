@@ -17,6 +17,7 @@ DEPENDENCIES
 
 This module requires these other modules and libraries:
 
+  Crypt::OpenSSL::Bignum
   Crypt::OpenSSL::RSA
   Crypt::RSA
   Digest::SHA1

@@ -374,7 +374,7 @@ sub headerlist
 	(@_) and
 		$self->set_tag("h", shift);
 
-	my $h = $self->get_tag("h");
+	my $h = $self->get_tag("h") || "";
 
 	# remove whitespace next to colons
 	$h =~ s/\s+:/:/g;

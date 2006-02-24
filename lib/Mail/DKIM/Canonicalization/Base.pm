@@ -79,4 +79,14 @@ Mail::DKIM::Canonicalization::Base - base class for canonicalization methods
   # this adds the signature to the end
   $method->finish_message;
 
+=head1 METHODS
+
+=head2 result()
+
+  my $result = $method->result;
+
+If you did not specify an object or handle to send the output to, the
+result of the canonicalization is stored in the canonicalization method
+itself, and can be accessed using this method.
+
 =cut
