@@ -1,3 +1,7 @@
+2006-03-01: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Signature.pm: correctly handle spaces around = character
+ * t/signature.t: test for spaces around = character in signature
+
 2006-02-24: Jason Long <jlong@messiah.edu>
  * t/: wrote some tests and added them to the project
  * README, Makefile.PL: discovered additional dependency:

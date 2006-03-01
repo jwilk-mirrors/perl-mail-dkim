@@ -44,7 +44,7 @@ sub parse
 
 		next if ($raw_tag eq "");
 
-		my ($tagname, $value) = split(/=/, $raw_tag, 2);
+		my ($tagname, $value) = split(/\s*=\s*/, $raw_tag, 2);
 		unless (defined $value)
 		{
 			die "key value list syntax error\n";

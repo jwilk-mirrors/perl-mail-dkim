@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::Simple tests => 7;
+use Test::Simple tests => 9;
 
 use Mail::DKIM::Signature;
 
@@ -25,4 +25,14 @@ ok($signature->canonicalization eq "simple/relaxed",
 
 my $unparsed = "DKIM-Signature: a=rsa-sha1; c=relaxed";
 $signature = Mail::DKIM::Signature->parse($unparsed);
-ok($signature, "parse() works");
+ok($signature, "parse() works (I)");
+
+$unparsed = "DKIM-Signature: a 	 = 	 rsa-sha1;  c 	 = 	 simple/simple;
+	d 	 = 	example.org ;
+ h 	 = 	 Date : From : MIME-Version : To : Subject : Content-Type :
+Content-Transfer-Encoding; s 	 = 	 foo;
+ b=aqanVhX/f1gmXSdVeX3KdmeKTZb1mkj1y111tZRp/8tXWX/srpGu2SJ/+O06fQv8YtgP0BrSRpEC
+ WEtFgMHcDf0ZFLQgtm0f7vPBO98vDtB7dpDExzHyTsK9rxm8Cf18";
+$signature = Mail::DKIM::Signature->parse($unparsed);
+ok($signature, "parse() works (II)");
+ok($signature->domain eq "example.org", "parse() correctly handles spaces");
