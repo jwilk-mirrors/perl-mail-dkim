@@ -30,6 +30,7 @@ scripts/test_signing_filter.pl
 scripts/test.txt
 scripts/test_nowsp_rsa_sha1.pl
 t/Mail-DKIM.t
+t/policy.t
 t/signature.t
 t/simple_canonicalization.t
 t/signer.t

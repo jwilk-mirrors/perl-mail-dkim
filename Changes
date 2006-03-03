@@ -1,3 +1,8 @@
+2006-03-03: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Policy.pm: new() and testing() are now warning-free
+   (thanks to jm@jmason.org for the patch)
+ * t/policy.t: tests the Policy package
+
 2006-03-01: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Signature.pm: correctly handle spaces around = character
  * t/signature.t: test for spaces around = character in signature

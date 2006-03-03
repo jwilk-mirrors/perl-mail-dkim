@@ -104,7 +104,7 @@ sub fetch
 sub new
 {
 	my $class = shift;
-	return $class->parse("o=~");
+	return $class->parse(String => "o=~");
 }
 
 =head2 parse() - gets a policy object by parsing a string
@@ -320,7 +320,7 @@ sub testing
 {
 	my $self = shift;
 	my $t = $self->flags;
-	($t =~ /y/i)
+	($t && $t =~ /y/i)
 		and return 1;
 	return;
 }
