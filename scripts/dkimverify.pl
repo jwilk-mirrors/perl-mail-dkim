@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -I../lib
 #
 # Copyright (c) 2005-2006 Messiah College. This program is free software.
 # You can redistribute it and/or modify it under the terms of the

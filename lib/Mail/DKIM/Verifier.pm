@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2005 Messiah College. All rights reserved.
+# Copyright 2005-2006 Messiah College. All rights reserved.
 # Jason Long <jlong@messiah.edu>
 
 # Copyright (c) 2004 Anthony D. Urso. All rights reserved.
@@ -11,7 +11,6 @@ use strict;
 use warnings;
 
 use Mail::DKIM::Canonicalization::nowsp;
-use Mail::DKIM::Algorithm::rsa_sha1;
 use Mail::DKIM::Signature;
 use Mail::Address;
 
@@ -26,7 +25,10 @@ Mail::DKIM::Verifier - verifies a DKIM-signed message
   # create a verifier object
   my $dkim = Mail::DKIM::Verifier->new_object();
 
-  # read an email from stdin, pass it into the verifier
+  # read an email from a file handle
+  $dkim->load(*STDIN);
+
+  # or read an email and pass it into the verifier, one line at a time
   while (<STDIN>)
   {
       # remove local line terminators
@@ -40,6 +42,18 @@ Mail::DKIM::Verifier - verifies a DKIM-signed message
 
   # what is the result of the verify?
   my $result = $dkim->result;
+
+=cut
+
+#=head1 DESCRIPTION
+#
+#The verification process does the following, in order:
+#
+# 1. Reads all the headers.
+# 2. Select a valid signature to verify.
+# 3. Sets up an appropriate algorithm and canonicalization implementation.
+# 4. Feeds the headers into the algorithm/canonicalization implementation.
+# 5. Reads the body and feeds it into the body canonicalization.
 
 =head1 CONSTRUCTOR
 
@@ -125,12 +139,12 @@ sub check_signature
 	croak "wrong number of arguments" unless (@_ == 1);
 	my ($signature) = @_;
 
-	unless ($signature->algorithm && $signature->algorithm eq "rsa-sha1")
-	{
-		# unsupported algorithm
-		$self->{signature_reject_reason} = "unsupported algorithm";
-		return 0;
-	}
+#	unless ($signature->algorithm && $signature->algorithm eq "rsa-sha1")
+#	{
+#		# unsupported algorithm
+#		$self->{signature_reject_reason} = "unsupported algorithm";
+#		return 0;
+#	}
 
 	unless ($signature->check_canonicalization)
 	{
@@ -160,7 +174,7 @@ sub check_signature
 		return 0;
 	}
 
-	# check domain again message From: and Sender: headers
+	# check domain against message From: and Sender: headers
 #	my $responsible_address = $self->message_originator;
 #	if (!$responsible_address)
 #	{
@@ -177,6 +191,30 @@ sub check_signature
 #	}
 
 	return 1;
+}
+
+sub check_public_key
+{
+	my $self = shift;
+	croak "wrong number of arguments" unless (@_ == 2);
+	my ($signature, $public_key) = @_;
+
+	my $result = 0;
+	try
+	{
+		# check public key's allowed hash algorithms
+		$result = $public_key->check_hash_algorithm(
+				$signature->hash_algorithm);
+
+		# TODO - check public key's granularity
+	}
+	otherwise
+	{
+		my $E = shift;
+		chomp $E;
+		$self->{signature_reject_reason} = $E;
+	};
+	return $result;
 }
 
 sub match_subdomain
@@ -225,7 +263,12 @@ sub finish_header
 			$self->{signature_reject_reason} = $E;
 		};
 
-		unless ($self->{public_key})
+		if ($self->{public_key})
+		{
+			$self->check_public_key($signature, $self->{public_key})
+				or next;
+		}
+		else
 		{
 			# public key not available
 			next;
@@ -271,10 +314,13 @@ sub finish_body
 		die "no public key" unless ($self->{public_key});
 
 		# verify signature
+		$@ = undef;
 		my $signb64 = $self->{signature}->signature;
 		my $verify_result = $self->{algorithm}->verify($signb64,
 		                                               $self->{public_key});
 		$self->{result} = $verify_result ? "pass" : "fail";
+		$self->{details} = $self->{algorithm}->{verification_details}
+			|| $@;
 	}
 }
 
@@ -391,6 +437,29 @@ see $dkim->{signature_reject_reason}.
 =back
 
 =cut
+
+=head2 result_detail() - access the result, plus details if available
+
+  my $detail = $dkim->result_detail;
+
+The detail is constructed by taking the result (i.e. one of "pass", "fail",
+"invalid" or "none") and appending any details provided by the verification
+process in parenthesis.
+
+The following are possible results from the result_detail() method:
+
+  pass
+  fail (bad RSA signature)
+  fail (headers have been altered)
+  fail (body has been altered)
+  invalid (unsupported canonicalization)
+  invalid (unsupported protocol)
+  invalid (missing d= parameter)
+  invalid (missing s= parameter)
+  invalid (detected forbidden v= tag)
+  invalid (no public key available)
+  invalid (public key has been revoked)
+  none
 
 =head2 signature() - access the message's DKIM signature
 

@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -I../lib
 #
 # Copyright (c) 2005-2006 Messiah College. This program is free software.
 # You can redistribute it and/or modify it under the terms of the
@@ -13,11 +13,13 @@ use Mail::DKIM::Signer;
 use Getopt::Long;
 use Pod::Usage;
 
-my $method = "simple";
 my $selector = "selector1";
+my $algorithm = "rsa-sha1";
+my $method = "simple";
 my $debug_canonicalization;
 my $help;
 GetOptions(
+		"algorithm=s" => \$algorithm,
 		"method=s" => \$method,
 		"selector=s" => \$selector,
 		"debug-canonicalization=s" => \$debug_canonicalization,
@@ -30,7 +32,7 @@ pod2usage("Error: unrecognized argument(s)")
 
 my $dkim = new Mail::DKIM::Signer(
 		Policy => "MySignerPolicy",
-		Algorithm => "rsa-sha1",
+		Algorithm => $algorithm,
 		Method => $method,
 		Selector => $selector,
 		KeyFile => "private.key",

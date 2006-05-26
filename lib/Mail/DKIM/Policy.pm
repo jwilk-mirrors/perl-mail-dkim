@@ -146,6 +146,11 @@ sub parse
 
 =head2 apply() - apply the policy to the results of a DKIM verifier
 
+  my $result = $policy->apply($dkim_verifier);
+
+The caller must provide an instance of Mail::DKIM::Verifier, one which
+has already been fed the message being verified.
+
 Possible results are:
 
 =over
@@ -263,7 +268,7 @@ Party Signature SHOULD be accepted.
 
 =back
 
-TODO
+Other values are possible as well, they just haven't been documented yet.
 
 =cut
 

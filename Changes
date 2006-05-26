@@ -1,3 +1,42 @@
+2006-05-26: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Algorithm/Base.pm: check_body_hash() - new method
+   that verifies the body hash against the bh= tag; format for
+   canonicalization debugging output has changed
+ * lib/Mail/DKIM/Algorithm/rsa_sha1.pm: call check_body_hash() before
+   returning results to verify()
+ * lib/Mail/DKIM/Algorithm/rsa_sha256.pm: call check_body_hash() before
+   returning results to verify()
+ * lib/Mail/DKIM/Canonicalization/DkimCommon.pm: fixed bug where extra
+   CRLF was being canonicalized
+ * lib/Mail/DKIM/Key.pm: moved calculate_EM function here from PrivateKey
+   after realizing that it would be needed when verifying
+ * lib/Mail/DKIM/PublicKey.pm: now SHA256 hashes can be verified as well;
+   also, the verification can distinguish between wrong hash and a
+   bad signature
+ * lib/Mail/DKIM/Verifier.pm: provide result details when verification
+   fails; added documentation for the result_detail() method
+ * t/corpus/: added several sample signed messages for the testing routines
+
+2006-04-17: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Algorithm/Base.pm: common class for DKIM algorithms
+ * lib/Mail/DKIM/Algorithm/rsa_sha1.pm: now subclasses Algorithm::Base.
+ * lib/Mail/DKIM/Algorithm/rsa_sha256.pm: new class for handling the
+   rsa-sha256 DKIM algorithm
+ * lib/Mail/DKIM/Common.pm: recognize rsa-sha256 algorithm
+ * lib/Mail/DKIM/PrivateKey.pm: implemented signing of a SHA-256 digest
+ * lib/Mail/DKIM/PublicKey.pm: implemented verifying of a SHA-256 digest
+ * lib/Mail/DKIM/Signature.pm: allows algorithm to be "rsa-sha256";
+   body_hash() - new method handling the bh tag;
+   hash_algorithm() - new method to determine what hash is being used;
+ * lib/Mail/DKIM/Verifier.pm: check_public_key() - new method for checking
+   the validity of a fetched public key
+ * Makefile.PL: added Digest::SHA as a dependency
+
+2006-03-26: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Common.pm: remove version number from this file
+ * lib/Mail/DKIM.pm: bump version to 0.17
+ * README: bump version to 0.17
+
 2006-03-03: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Policy.pm: new() and testing() are now warning-free
    (thanks to jm@jmason.org for the patch)

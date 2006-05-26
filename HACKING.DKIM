@@ -15,3 +15,20 @@ http://mipassoc.org/mass/specs/draft-allman-dkim-base-00-10dc.html
   Signature.pm               -- 3.5
   Signer.pm                  -- 5
   Verifier.pm                -- 6
+
+--
+
+New version - update version numbers in these files:
+  lib/Mail/DKIM.pm
+  README
+
+--
+
+New algorithm:
+  create new algorithm class by copying and editing
+    lib/Mail/DKIM/Algorithm/rsa_sha1.pm
+  edit lib/Mail/DKIM/Common.pm:
+    get_algorithm_class() - add a check for your new algorithm and return
+      the name of your new algorithm class
+    add a "use" line at the top of this file so that your algorithm class
+      gets imported

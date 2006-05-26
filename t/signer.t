@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::Simple tests => 2;
+use Test::Simple tests => 4;
 
 use Mail::DKIM::Signer;
 
@@ -29,3 +29,17 @@ my $signature = $dkim->signature;
 ok($signature, "signature() works");
 
 print "signature=" . $signature->as_string . "\n";
+
+# now try a SHA256 signature
+$dkim = Mail::DKIM::Signer->new_object(
+		Algorithm => "rsa-sha256",
+		Method => "relaxed",
+		Domain => "example.org",
+		Selector => "test",
+		KeyFile => "t/test.key");
+ok($dkim, "new_object() works");
+
+$dkim->PRINT($sample_email);
+$dkim->CLOSE;
+
+ok($dkim->signature, "signature() works");

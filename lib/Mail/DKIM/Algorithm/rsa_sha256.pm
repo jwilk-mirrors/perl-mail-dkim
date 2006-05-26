@@ -12,21 +12,21 @@ use warnings;
 
 use Mail::DKIM::PrivateKey;
 
-package Mail::DKIM::Algorithm::rsa_sha1;
+package Mail::DKIM::Algorithm::rsa_sha256;
 use base "Mail::DKIM::Algorithm::Base";
 use Carp;
 use MIME::Base64;
-use Digest::SHA1;
+use Digest::SHA;
 
 sub init_digests
 {
 	my $self = shift;
 
-	# initialize a SHA-1 Digest
-	$self->{header_digest} = new Digest::SHA1;
+	# initialize a SHA-256 Digest
+	$self->{header_digest} = new Digest::SHA(256);
 	if ($self->{draft_version} eq "01")
 	{
-		$self->{body_digest} = new Digest::SHA1;
+		$self->{body_digest} = new Digest::SHA(256);
 	}
 	else
 	{
@@ -41,7 +41,7 @@ sub sign
 	my ($private_key) = @_;
 
 	my $digest = $self->{header_digest}->digest;
-	my $signature = $private_key->sign_sha1_digest($digest);
+	my $signature = $private_key->sign_digest("SHA-256", $digest);
 
 	return encode_base64($signature, "");
 }
@@ -54,7 +54,7 @@ sub verify
 
 	my $digest = $self->{header_digest}->digest;
 	my $sig = decode_base64($base64);
-	return unless $public_key->verify_sha1_digest($digest, $sig);
+	return unless $public_key->verify_digest("SHA-256", $digest, $sig);
 	return $self->check_body_hash;
 }
 
@@ -64,13 +64,13 @@ __END__
 
 =head1 NAME
 
-Mail::DKIM::Algorithm::rsa_sha1 - implements the rsa-sha1 signing algorithm for DKIM
+Mail::DKIM::Algorithm::rsa_sha256 - implements the rsa-sha256 signing algorithm for DKIM
 
 =head1 CONSTRUCTOR
 
-=head2 new() - create an object for the DKIM signing algorithm "rsa-sha1"
+=head2 new() - create an object for the DKIM signing algorithm "rsa-sha256"
 
-  my $algorithm = new Mail::DKIM::Algorithm::rsa_sha1(
+  my $algorithm = new Mail::DKIM::Algorithm::rsa_sha256(
                       Signature => $dkim_signature
                   );
 

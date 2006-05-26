@@ -32,7 +32,10 @@ Mail::DKIM::Signer - generates a DKIM signature for a message
                   KeyFile => "private.key");
              );
 
-  # read an email from stdin, pass it into the signer
+  # read an email from a file handle
+  $dkim->load(*STDIN);
+
+  # or read an email and pass it into the signer, one line at a time
   while (<STDIN>)
   {
       # remove local line terminators

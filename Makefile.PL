@@ -10,6 +10,7 @@ WriteMakefile(
 			Crypt::OpenSSL::RSA => 0,
 			Crypt::RSA => 0,
 			Digest::SHA1 => 0,
+			Digest::SHA => 0,
 			Error => 0,
 			Mail::Address => 0,
 			MIME::Base64 => 0,

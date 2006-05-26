@@ -13,6 +13,7 @@ use warnings;
 package Mail::DKIM::PublicKey;
 
 use base ("Mail::DKIM::KeyValueList", "Mail::DKIM::Key");
+*calculate_EM = \&Mail::DKIM::Key::calculate_EM;
 
 sub new {
 	my $type = shift;
@@ -110,16 +111,6 @@ sub check
 	# check public key granularity
 	my $g = $self->granularity;
 
-	# check hash algorithm
-	if (my $h = $self->get_tag("h"))
-	{
-		my @list = split(/:/, $h);
-		unless (grep { $_ eq "sha1" } @list)
-		{
-			die "public key: no supported hash algorithm\n";
-		}
-	}
-
 	# check key type
 	if (my $k = $self->get_tag("k"))
 	{
@@ -154,6 +145,23 @@ sub check
 		}
 	}
 
+	return 1;
+}
+
+sub check_hash_algorithm
+{
+	my $self = shift;
+	my ($hash_algorithm) = @_;
+
+	# check hash algorithm
+	if (my $h = $self->get_tag("h"))
+	{
+		my @list = split(/:/, $h);
+		unless (grep { $_ eq $hash_algorithm } @list)
+		{
+			die "public key: does not support hash algorithm '$hash_algorithm'\n";
+		}
+	}
 	return 1;
 }
 
@@ -289,6 +297,13 @@ sub verify_sha1_digest
 {
 	my $self = shift;
 	my ($digest, $signature) = @_;
+	return $self->verify_digest("SHA-1", $digest, $signature);
+}
+
+sub verify_digest
+{
+	my $self = shift;
+	my ($digest_algorithm, $digest, $signature) = @_;
 
     my ($kn, $ke) = $self->cork->get_key_parameters;
     my $key = bless { }, "Crypt::RSA::Key::Public";
@@ -306,11 +321,29 @@ sub verify_sha1_digest
 			Key => $key,
 			Signature => $s)
 		or die "core_verify failed";
-    my $verify_result = i2osp($m, $k - 1)
+    my $verify_result = i2osp($m, $k)
 		or die "i2osp failed";
-	my $expected = substr($verify_result, -20);
 
-	return ($expected eq $digest);
+	my $expected = calculate_EM($digest_algorithm, $digest, $k);
+	return 1 if ($verify_result eq $expected);
+
+	# well, the RSA verification failed; I wonder if the RSA signing
+	# was performed on a different digest value? I think we can check...
+
+	# basically, if the $verify_result has the same prefix as $expected,
+	# then only the digest was different
+
+	my $digest_len = length $digest;
+	my $prefix_len = length($expected) - $digest_len;
+	if (substr($verify_result, 0, $prefix_len)
+		eq substr($expected, 0, $prefix_len))
+	{
+		$@ = "headers have been altered";
+		return;
+	}
+
+	$@ = "bad RSA signature";
+	return;
 }
 
 1;

@@ -1,8 +1,9 @@
-Mail-DKIM version 0.12
+Mail-DKIM version 0.17
 ======================
 
 This module implements the various components of the DKIM message-signing
-and verifying standard for Internet mail.
+and verifying standard for Internet mail. It currently implements
+Internet Draft draft-allman-dkim-base-01.
 
 INSTALLATION
 
@@ -20,6 +21,7 @@ This module requires these other modules and libraries:
   Crypt::OpenSSL::Bignum
   Crypt::OpenSSL::RSA
   Crypt::RSA
+  Digest::SHA
   Digest::SHA1
   Mail::Address (part of the MailTools package)
   MIME::Base64
@@ -31,6 +33,13 @@ Crypt::Random package through CPAN, which seems to stall in the test phase.
 It may help to `force install Crypt::Random' and press Ctrl+C if it gets
 stuck on the test phase.
 
+BUGS
+
+The current draft as of this writing, draft-ietf-dkim-base-01.txt of
+April 2006, is not yet supported.
+
+Report bugs to Jason Long <jlong@messiah.edu>.
+
 COPYRIGHT AND LICENCE
 
 Copyright (C) 2006 by Messiah College
@@ -39,4 +48,6 @@ This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.6 or,
 at your option, any later version of Perl 5 you may have available.
 
+SEE ALSO
 
+The DKIM proxy home page, http://jason.long.name/dkimproxy/.

@@ -4,7 +4,9 @@ MANIFEST
 README
 HACKING.DKIM
 lib/Mail/DKIM.pm
+lib/Mail/DKIM/Algorithm/Base.pm
 lib/Mail/DKIM/Algorithm/rsa_sha1.pm
+lib/Mail/DKIM/Algorithm/rsa_sha256.pm
 lib/Mail/DKIM/Policy.pm
 lib/Mail/DKIM/Key.pm
 lib/Mail/DKIM/Canonicalization/Base.pm
@@ -27,7 +29,6 @@ scripts/dkimverify.pl
 scripts/test_bare_rsa_sha1.pl
 scripts/test_canonicalization.pl
 scripts/test_signing_filter.pl
-scripts/test.txt
 scripts/test_nowsp_rsa_sha1.pl
 t/Mail-DKIM.t
 t/policy.t
@@ -37,4 +38,18 @@ t/signer.t
 t/verifier.t
 t/test.key
 t/test5.txt
+t/corpus/good_ietf00_1.txt
+t/corpus/good_ietf00_2.txt
+t/corpus/good_ietf00_3.txt
+t/corpus/good_ietf00_4.txt
+t/corpus/good_ietf00_5.txt
+t/corpus/good_ietf01_1.txt
+t/corpus/good_ietf01_2.txt
+t/corpus/bad_ietf01_1.txt
+t/corpus/bad_ietf01_2.txt
+t/corpus/bad_ietf01_3.txt
+t/corpus/mine_ietf01_1.txt
+t/corpus/mine_ietf01_2.txt
+t/corpus/mine_ietf01_3.txt
+t/corpus/mine_ietf01_4.txt
 META.yml                                 Module meta-data (added by MakeMaker)

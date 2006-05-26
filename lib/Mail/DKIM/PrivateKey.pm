@@ -12,6 +12,7 @@ use warnings;
 
 package Mail::DKIM::PrivateKey;
 use base "Mail::DKIM::Key";
+*calculate_EM = \&Mail::DKIM::Key::calculate_EM;
 
 sub load {
 	my $type = shift;
@@ -93,13 +94,20 @@ sub sign
 }
 
 use Crypt::RSA::Primitives;
-use Crypt::RSA::DataFormat ("os2ip", "octet_len", "i2osp", "h2osp");
+use Crypt::RSA::DataFormat ("os2ip", "octet_len", "i2osp");
 use Crypt::RSA::Key::Private;
 
 sub sign_sha1_digest
 {
 	my $self = shift;
 	my ($digest) = @_;
+	return $self->sign_digest("SHA-1", $digest);
+}
+
+sub sign_digest
+{
+	my $self = shift;
+	my ($digest_algorithm, $digest) = @_;
 
 	my ($kn, $ke, $kd) = $self->cork->get_key_parameters;
 	my $private = bless { }, "Crypt::RSA::Key::Private";
@@ -113,25 +121,11 @@ sub sign_sha1_digest
 	my $rsa = new Crypt::RSA::Primitives;
 	my $k = octet_len($private->n);
 	my $m = $rsa->core_sign(
-			Message => os2ip(encode_sha1_digest($digest, $k - 1)),
+			Message => os2ip(calculate_EM($digest_algorithm, $digest, $k)),
 			Key => $private);
 	my $m1 = i2osp($m, $k)
 		or die "i2osp failed";
 	return $m1;
-}
-
-sub encode_sha1_digest
-{ 
-    my ($digest, $emlen) = @_;
-
-    my $alg = h2osp("0x 30 21 30 09 06 05 2B 0E 03 02 1A 05 00 04 14");
-    my $T = $alg . $digest;
-    die("Intended encoded message length too short.")
-		if ($emlen < length($T) + 10);
-    my $pslen = $emlen - length($T) - 2;
-    my $PS = chr(0xff) x $pslen;
-    my $em = chr(1) . $PS . chr(0) . $T; 
-    return $em;
 }
 
 1;

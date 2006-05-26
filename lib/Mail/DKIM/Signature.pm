@@ -122,8 +122,10 @@ sub wantheader {
 
 =head2 algorithm() - get or set the algorithm (a=) field
 
-The algorithm used to generate the signature. Should be "rsa-sha1",
-an RSA-signed SHA-1 digest.
+The algorithm used to generate the signature. Should be either "rsa-sha1",
+an RSA-signed SHA-1 digest, or "rsa-sha256", an RSA-signed SHA-256 digest.
+
+See also hash_algorithm().
 
 =cut
 
@@ -219,6 +221,33 @@ sub body_count
 		$self->set_tag("l", shift);
 
 	return $self->get_tag("l");
+}
+
+=head2 body_hash() - get or set the body hash (bh=) field
+
+  my $bh = $signature->body_hash;
+
+The hash of the body part of the message. Whitespace is ignored in this
+value. This tag is required.
+
+When accessing this value, whitespace is stripped from the tag for you.
+
+=cut
+
+sub body_hash
+{
+	my $self = shift;
+
+	# set new body hash if provided
+	(@_) and
+		$self->set_tag("bh", shift);
+
+	my $result = $self->get_tag("bh");
+	if (defined $result)
+	{
+		$result =~ s/\s+//gs;
+	}
+	return $result;
 }
 
 =head2 canonicalization() - get or set the canonicalization (c=) field
@@ -358,6 +387,28 @@ sub get_public_key
 		$self->{public} = $pubk;
 	}
 	return $self->{public};
+}
+
+=head2 hash_algorithm() - access the hash algorithm specified in this signature
+
+  my $hash = $signature->hash_algorithm;
+
+Determines what hashing algorithm is used as part of the signature's
+specified algorithm.
+
+For algorithm "rsa-sha1", the hash algorithm is "sha1". Likewise, for
+algorithm "rsa-sha256", the hash algorithm is "sha256". If the algorithm
+is not recognized, undef is returned.
+
+=cut
+
+sub hash_algorithm
+{
+	my $self = shift;
+	my $algorithm = $self->algorithm;
+
+	return $algorithm eq "rsa-sha1" ? "sha1" :
+		$algorithm eq "rsa-sha256" ? "sha256" : undef;
 }
 
 =head2 headerlist() - get or set the signed header fields (h=) field

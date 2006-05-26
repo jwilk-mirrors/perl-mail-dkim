@@ -11,12 +11,12 @@ use strict;
 use warnings;
 
 use Mail::DKIM::Algorithm::rsa_sha1;
+use Mail::DKIM::Algorithm::rsa_sha256;
 use Mail::DKIM::Signature;
 
 package Mail::DKIM::Common;
 use base "Mail::DKIM::MessageParser";
 use Carp;
-our $VERSION = "0.12";
 
 sub new
 {
@@ -30,7 +30,9 @@ sub get_algorithm_class
 	croak "wrong number of arguments" unless (@_ == 1);
 	my ($algorithm) = @_;
 
-	my $class = $algorithm eq "rsa-sha1" ? "Mail::DKIM::Algorithm::rsa_sha1" :
+	my $class =
+		$algorithm eq "rsa-sha1" ? "Mail::DKIM::Algorithm::rsa_sha1" :
+		$algorithm eq "rsa-sha256" ? "Mail::DKIM::Algorithm::rsa_sha256" :
 		die "unknown algorithm $algorithm\n";
 	return $class;
 }

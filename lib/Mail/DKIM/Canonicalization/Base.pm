@@ -24,6 +24,13 @@ sub init
 {
 	my $self = shift;
 	$self->SUPER::init;
+
+	unless ($self->{output} || $self->{output_fh} || $self->{output_digest}
+		|| $self->{buffer})
+	{
+		$self->{result} = "";
+		$self->{buffer} = \$self->{result};
+	}
 }
 
 sub output
@@ -36,13 +43,17 @@ sub output
 	{
 		print $out_fh $output;
 	}
-	elsif (my $out_obj = $self->{output})
+	if (my $digest = $self->{output_digest})
+	{
+		$digest->add($output);
+	}
+	if (my $out_obj = $self->{output})
 	{
 		$out_obj->PRINT($output);
 	}
-	else
+	if (my $buffer = $self->{buffer})
 	{
-		$self->{result} .= $output;
+		${$self->{buffer}} .= $output;
 	}
 }
 
@@ -78,6 +89,47 @@ Mail::DKIM::Canonicalization::Base - base class for canonicalization methods
 
   # this adds the signature to the end
   $method->finish_message;
+
+=head1 CONSTRUCTOR
+
+Use the new() method of the desired canonicalization implementation class
+to construct a canonicalization object. E.g.
+
+  my $method = new Mail::DKIM::Canonicalization::nowsp(
+                    output_fh => *STDOUT,
+                    Signature => $dkim_signature);
+
+The constructors accept these arguments:
+
+=over
+
+=item Signature
+
+(Required) Provide the DKIM signature being constructed (if the message is
+being signed), or the DKIM signature being verified (if the message is
+being verified). The canonicalization method either writes parameters to
+the signature, or reads parameters from the signature (e.g. the h= tag).
+
+=item output
+
+If specified, the canonicalized message will be passed to this object with
+the PRINT method.
+
+=item output_digest
+
+If specified, the canonicalized message will be added to this digest.
+(Uses the add() method.)
+
+=item output_fh
+
+If specified, the canonicalized message will be written to this file
+handle.
+
+=back
+
+If none of the output parameters are specified, then the canonicalized
+message is appended to an internal buffer. The contents of this buffer
+can be accessed using the result() method.
 
 =head1 METHODS
 
