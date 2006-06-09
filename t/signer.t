@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::Simple tests => 4;
+use Test::Simple tests => 5;
 
 use Mail::DKIM::Signer;
 
@@ -28,7 +28,9 @@ $dkim->CLOSE;
 my $signature = $dkim->signature;
 ok($signature, "signature() works");
 
-print "signature=" . $signature->as_string . "\n";
+print "# signature=" . $signature->as_string . "\n";
+ok($signature->as_string =~ /6crwkSr7mdPW6iCMbtTYyimEgAAfZqFO/,
+	"got expected signature value");
 
 # now try a SHA256 signature
 $dkim = Mail::DKIM::Signer->new_object(

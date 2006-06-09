@@ -1,9 +1,9 @@
-Mail-DKIM version 0.17
+Mail-DKIM version 0.18
 ======================
 
 This module implements the various components of the DKIM message-signing
 and verifying standard for Internet mail. It currently implements
-Internet Draft draft-allman-dkim-base-01.
+Internet Draft draft-ietf-dkim-base-01.
 
 INSTALLATION
 
@@ -18,25 +18,17 @@ DEPENDENCIES
 
 This module requires these other modules and libraries:
 
-  Crypt::OpenSSL::Bignum
   Crypt::OpenSSL::RSA
-  Crypt::RSA
   Digest::SHA
   Digest::SHA1
   Mail::Address (part of the MailTools package)
   MIME::Base64
   Net::DNS
 
-The Crypt::RSA dependency is especially messy, since it in turn depends
-on many other libraries. I've had a particular problem installing the
-Crypt::Random package through CPAN, which seems to stall in the test phase.
-It may help to `force install Crypt::Random' and press Ctrl+C if it gets
-stuck on the test phase.
-
 BUGS
 
-The current draft as of this writing, draft-ietf-dkim-base-01.txt of
-April 2006, is not yet supported.
+The current draft as of this writing, draft-ietf-dkim-base-02.txt of
+May 2006, is not yet supported.
 
 Report bugs to Jason Long <jlong@messiah.edu>.
 

@@ -97,35 +97,6 @@ sub get_canonicalization_class
 	return $class;
 }
 
-#sub TIEHANDLE
-#{
-#	my $class = shift;
-#	return $class->new(@_);
-#}
-#
-## override this method, please...
-#sub PRINT
-#{
-#	my $self = shift;
-#
-#	if (my $debug = $self->{Debug_Canonicalization})
-#	{
-#		if (ref($debug) && ref($debug) eq "SCALAR")
-#		{
-#			$$debug .= join("", @_);
-#		}
-#		else
-#		{
-#			$self->{debug_buf} .= join("", @_);
-#		}
-#	}
-#}
-#
-#sub CLOSE
-#{
-#}
-
-
 =head1 NAME
 
 Mail::DKIM::Algorithm::Base - base class for DKIM "algorithms"

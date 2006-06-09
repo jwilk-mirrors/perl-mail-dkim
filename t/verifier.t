@@ -13,6 +13,10 @@ $dkim = Mail::DKIM::Verifier->new_object();
 ok($dkim, "new_object() works");
 
 my $srcfile = "t/test5.txt";
+unless (-f $srcfile)
+{
+	$srcfile = "test5.txt" if (-f "test5.txt");
+}
 my $sample_email = read_file($srcfile);
 ok($sample_email, "able to read sample email");
 ok($sample_email =~ /\015\012/, "sample has proper line endings");
@@ -49,7 +53,7 @@ ok($dkim->result_detail =~ /RSA/, "determined RSA failure");
 sub read_file
 {
 	my $srcfile = shift;
-	open my $fh, "<", $srcfile
+	open my $fh, "<:raw", $srcfile
 		or die "Error: can't open $srcfile: $!\n";
 	local $/;
 	my $content = <$fh>;
@@ -61,7 +65,12 @@ sub test_email
 {
 	my ($file, $expected_result) = @_;
 	$dkim = Mail::DKIM::Verifier->new();
-	my $email = read_file("t/corpus/" . $file);
+	my $path = "t/corpus/" . $file;
+	unless (-f $path)
+	{
+		$path = "corpus/$file" if (-f "corpus/$file");
+	}
+	my $email = read_file($path);
 	$dkim->PRINT($email);
 	$dkim->CLOSE;
 	my $result = $dkim->result;

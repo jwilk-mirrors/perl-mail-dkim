@@ -1,58 +1,23 @@
-2006-05-26: Jason Long <jlong@messiah.edu>
- * lib/Mail/DKIM/Algorithm/Base.pm: check_body_hash() - new method
-   that verifies the body hash against the bh= tag; format for
-   canonicalization debugging output has changed
- * lib/Mail/DKIM/Algorithm/rsa_sha1.pm: call check_body_hash() before
-   returning results to verify()
- * lib/Mail/DKIM/Algorithm/rsa_sha256.pm: call check_body_hash() before
-   returning results to verify()
- * lib/Mail/DKIM/Canonicalization/DkimCommon.pm: fixed bug where extra
-   CRLF was being canonicalized
- * lib/Mail/DKIM/Key.pm: moved calculate_EM function here from PrivateKey
-   after realizing that it would be needed when verifying
- * lib/Mail/DKIM/PublicKey.pm: now SHA256 hashes can be verified as well;
-   also, the verification can distinguish between wrong hash and a
-   bad signature
- * lib/Mail/DKIM/Verifier.pm: provide result details when verification
-   fails; added documentation for the result_detail() method
- * t/corpus/: added several sample signed messages for the testing routines
+This file summarizes what's changed between releases of Mail-DKIM.
+See the ChangeLog file for the details.
 
-2006-04-17: Jason Long <jlong@messiah.edu>
- * lib/Mail/DKIM/Algorithm/Base.pm: common class for DKIM algorithms
- * lib/Mail/DKIM/Algorithm/rsa_sha1.pm: now subclasses Algorithm::Base.
- * lib/Mail/DKIM/Algorithm/rsa_sha256.pm: new class for handling the
-   rsa-sha256 DKIM algorithm
- * lib/Mail/DKIM/Common.pm: recognize rsa-sha256 algorithm
- * lib/Mail/DKIM/PrivateKey.pm: implemented signing of a SHA-256 digest
- * lib/Mail/DKIM/PublicKey.pm: implemented verifying of a SHA-256 digest
- * lib/Mail/DKIM/Signature.pm: allows algorithm to be "rsa-sha256";
-   body_hash() - new method handling the bh tag;
-   hash_algorithm() - new method to determine what hash is being used;
- * lib/Mail/DKIM/Verifier.pm: check_public_key() - new method for checking
-   the validity of a fetched public key
- * Makefile.PL: added Digest::SHA as a dependency
+Version 0.18 - released 2006-06-09
 
-2006-03-26: Jason Long <jlong@messiah.edu>
- * lib/Mail/DKIM/Common.pm: remove version number from this file
- * lib/Mail/DKIM.pm: bump version to 0.17
- * README: bump version to 0.17
+ * no longer depends on Crypt::RSA or Crypt::OpenSSL::Bignum.
 
-2006-03-03: Jason Long <jlong@messiah.edu>
- * lib/Mail/DKIM/Policy.pm: new() and testing() are now warning-free
-   (thanks to jm@jmason.org for the patch)
- * t/policy.t: tests the Policy package
 
-2006-03-01: Jason Long <jlong@messiah.edu>
- * lib/Mail/DKIM/Signature.pm: correctly handle spaces around = character
- * t/signature.t: test for spaces around = character in signature
+Version 0.17 - released 2006-05-26
 
-2006-02-24: Jason Long <jlong@messiah.edu>
- * t/: wrote some tests and added them to the project
- * README, Makefile.PL: discovered additional dependency:
-   Crypt::OpenSSL::Bignum
- * lib/Mail/DKIM/Signature.pm: fixed a warning that could occur if
-   the h= tag was left undefined
+ * now implements Internet Draft draft-ietf-dkim-base-01, including:
+   * support for the body hash (bh=) tag
+   * support for SHA256 digests (uses the Digest::SHA module from CPAN)
+ * if a message fails to verify, it now distinguishes between:
+   * headers having been altered
+   * body having been altered
+   * RSA key failure (i.e. the signing key does not match the public key)
+ * added several sample messages to test against when doing `make test'.
 
-2006-02-23: Jason Long <jlong@messiah.edu>
- * converted to ExtUtils::MakeMaker package format,
-   see the dkimproxy project for revision history prior to 2006-02-23.
+
+Version 0.16 - released 2006-03-03
+
+ * first version for CPAN; implements draft-allman-dkim-base-01.

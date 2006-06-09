@@ -288,11 +288,6 @@ sub testing
 	return undef;
 }
 
-
-use Crypt::RSA::Primitives;
-use Crypt::RSA::DataFormat ("os2ip", "octet_len", "i2osp", "h2osp");
-use Crypt::RSA::Key::Private;
-
 sub verify_sha1_digest
 {
 	my $self = shift;
@@ -305,25 +300,11 @@ sub verify_digest
 	my $self = shift;
 	my ($digest_algorithm, $digest, $signature) = @_;
 
-    my ($kn, $ke) = $self->cork->get_key_parameters;
-    my $key = bless { }, "Crypt::RSA::Key::Public";
-	$key->e($ke->to_decimal);
-	$key->n($kn->to_decimal);
-	unless ($key->check)
-	{
-		die "Key check failed: " . $key->errstr . "\n";
-	}
+	my $rsa_pub = $self->cork;
+	$rsa_pub->use_no_padding;
+	my $verify_result = $rsa_pub->encrypt($signature);
 
-    my $rsa = new Crypt::RSA::Primitives;
-    my $k = octet_len($key->n);
-    my $s = os2ip($signature);
-    my $m = $rsa->core_verify(
-			Key => $key,
-			Signature => $s)
-		or die "core_verify failed";
-    my $verify_result = i2osp($m, $k)
-		or die "i2osp failed";
-
+	my $k = $rsa_pub->size;
 	my $expected = calculate_EM($digest_algorithm, $digest, $k);
 	return 1 if ($verify_result eq $expected);
 

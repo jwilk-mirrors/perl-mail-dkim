@@ -55,8 +55,6 @@ sub type {
 	$self->{'TYPE'};
 }
 
-use Crypt::RSA::DataFormat ("h2osp");
-
 sub calculate_EM
 { 
 	my ($digest_algorithm, $digest, $emLen) = @_;
@@ -71,10 +69,8 @@ sub calculate_EM
 
 	# RFC 3447, page 42, provides the following octet values:
 	my %digest_encoding = (
-		"SHA-1" => h2osp(
-			"0x 30 21 30 09 06 05 2B 0E 03 02 1A 05 00 04 14"),
-		"SHA-256" => h2osp(
-			"0x 30 31 30 0d 06 09 60 86 48 01 65 03 04 02 01 05 00 04 20"),
+		"SHA-1" =>   pack("H*", "3021300906052B0E03021A05000414"),
+		"SHA-256" => pack("H*", "3031300d060960864801650304020105000420"),
 		);
 
 	defined $digest_encoding{$digest_algorithm}

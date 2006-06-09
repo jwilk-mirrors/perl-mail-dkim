@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 package Mail::DKIM;
-our $VERSION = '0.17';
+our $VERSION = '0.18';
 
 1;
 __END__
@@ -64,12 +64,6 @@ specification.
 One feature that has not been implemented yet is the "sender signing policy".
 I.e. this library will tell you whether the signature is valid, but will
 not lookup the signing policy for the author of the message.
-
-This library uses two different crypto libraries: Crypt::OpenSSL::RSA and
-Crypt::RSA. This redundancy is undesirable, but so far I have not figured
-out how to load base64-encoded key data using Crypt::RSA, and I have not
-figured out to sign/verify an already-computed message digest using
-Crypt::OpenSSL::RSA.
 
 =head1 AUTHOR
 

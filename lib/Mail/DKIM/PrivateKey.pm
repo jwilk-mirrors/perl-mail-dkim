@@ -93,10 +93,6 @@ sub sign
 	return $self->cork->sign($mail);
 }
 
-use Crypt::RSA::Primitives;
-use Crypt::RSA::DataFormat ("os2ip", "octet_len", "i2osp");
-use Crypt::RSA::Key::Private;
-
 sub sign_sha1_digest
 {
 	my $self = shift;
@@ -109,23 +105,12 @@ sub sign_digest
 	my $self = shift;
 	my ($digest_algorithm, $digest) = @_;
 
-	my ($kn, $ke, $kd) = $self->cork->get_key_parameters;
-	my $private = bless { }, "Crypt::RSA::Key::Private";
-	$private->n($kn->to_decimal);
-	$private->d($kd->to_decimal);
-	unless ($private->check)
-	{
-		die "Key check failed: " . $private->errstr . "\n";
-	}
+	my $rsa_priv = $self->cork;
+	$rsa_priv->use_no_padding;
 
-	my $rsa = new Crypt::RSA::Primitives;
-	my $k = octet_len($private->n);
-	my $m = $rsa->core_sign(
-			Message => os2ip(calculate_EM($digest_algorithm, $digest, $k)),
-			Key => $private);
-	my $m1 = i2osp($m, $k)
-		or die "i2osp failed";
-	return $m1;
+	my $k = $rsa_priv->size;
+	my $EM = calculate_EM($digest_algorithm, $digest, $k);
+	return $rsa_priv->decrypt($EM);
 }
 
 1;
