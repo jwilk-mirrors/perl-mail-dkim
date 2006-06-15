@@ -53,8 +53,9 @@ ok($dkim->result_detail =~ /RSA/, "determined RSA failure");
 sub read_file
 {
 	my $srcfile = shift;
-	open my $fh, "<:raw", $srcfile
+	open my $fh, "<", $srcfile
 		or die "Error: can't open $srcfile: $!\n";
+	binmode $fh;
 	local $/;
 	my $content = <$fh>;
 	close $fh;

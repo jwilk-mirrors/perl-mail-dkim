@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 package Mail::DKIM;
-our $VERSION = '0.18';
+our $VERSION = '0.19';
 
 1;
 __END__

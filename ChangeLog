@@ -1,3 +1,8 @@
+2006-06-15: Jason Long <jlong@messiah.edu>
+ * Makefile.PL: change Perl version check to v5.6.1 instead of 5.8
+ * t/verifier.t: use binmode function instead of ":raw" layer, for
+   Perl 5.6.1 compatibility
+
 2006-06-09: Jason Long <jlong@messiah.edu>
  * t/verifier.t: open message in ":raw" mode to avoid CRLF->LF
    conversion (reported by Eugene Pivovarav)

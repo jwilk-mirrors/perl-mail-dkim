@@ -1,6 +1,11 @@
 This file summarizes what's changed between releases of Mail-DKIM.
 See the ChangeLog file for the details.
 
+Version 0.19 - released 2006-06-15
+
+ * now supports earlier versions of Perl (5.6.1 and up).
+
+
 Version 0.18 - released 2006-06-09
 
  * no longer depends on Crypt::RSA or Crypt::OpenSSL::Bignum.

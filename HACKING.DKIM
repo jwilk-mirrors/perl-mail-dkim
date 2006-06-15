@@ -20,6 +20,8 @@ http://mipassoc.org/mass/specs/draft-allman-dkim-base-00-10dc.html
 
 New version - update version numbers in these files:
   lib/Mail/DKIM.pm
+  lib/Mail/DKIM/Verifier.pm
+  lib/Mail/DKIM/Signer.pm
   README
 
 --
@@ -32,3 +34,60 @@ New algorithm:
       the name of your new algorithm class
     add a "use" line at the top of this file so that your algorithm class
       gets imported
+
+--
+
+How the Verifier Works:
+
+First, the message headers are fed into the verifier object, where they
+are stored into a buffer until all headers have been seen.
+
+  message +----------+
+  ------> | Verifier |
+          +----------+
+
+When the blank line separating the header from the body has been seen,
+the verifier looks at the headers, and picks out the DKIM signature it
+is going to verify. The signature specifies which algorithm and
+canonicalization method the verifier should use. The verifier creates
+an algorithm object. It also creates two canonicalizer objects and two
+digest objects, one each for the header, and one each for the body.
+
+Now the verifier feeds the message headers from its buffer into the
+newly constructed algorithm object, which in turn feeds the headers into
+the header canonicalizer, which canonicalizes the headers and feeds the
+result into a Digest object, which will compute the SHA-1 or SHA-256
+digest.
+
+  +----------+         +-----------+     +---------+   can.  +--------+
+  | Verifier | headers | Algorithm |     | Canoni- | headers | Header |
+  |          | ------> |           | --> | calizer | ------> | Digest |
+  +----------+         +-----------+     +---------+         +--------+
+
+Now the verifier accepts the rest of the message (i.e. the body). The
+body is not buffered in memory; it gets piped through the algorithm,
+the body canonicalizer, and into the body digest.
+
+  message +----------+   +-----------+   +---------+ can. +--------+
+  body    | Verifier |   | Algorithm |   | Canoni- | body |  Body  |
+  ------> |          | > |           | > | calizer | ---> | Digest |
+          +----------+   +-----------+   +---------+      +--------+
+
+Now the whole message has been read.
+
+The DKIM signature, minus the contents of the b= tag, is fed into the
+header canonicalizer, which gets fed into the header digest.
+
+            modified DKIM +---------+  can.  +--------+
+              signature   | Canoni- | header | Header |
+            ------------> | calizer | -----> | Digest |
+                          +---------+        +--------+
+
+The header digest is computed, and the algorithm verifies it against
+the value of the b= tag in the signature. If it fails to match, the
+signature has "failed".
+
+Next, the body digest is computed, and compared with that in the
+signature. If it fails to match, the signature has "failed".
+
+Otherwise, the signature has "passed".
