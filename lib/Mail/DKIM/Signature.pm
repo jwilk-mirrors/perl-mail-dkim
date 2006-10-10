@@ -433,8 +433,18 @@ sub hash_algorithm
 
 =head2 headerlist() - get or set the signed header fields (h=) field
 
+  $signature->headerlist("a:b:c");
+
+  my $headerlist = $signature->headerlist;
+
+  my @headers = $signature->headerlist;
+
 Signed header fields. A colon-separated list of header field names
 that identify the header fields presented to the signing algorithm.
+
+In scalar context, the list of header field names will be returned
+as a single string, with the names joined together with colons.
+In list context, the header field names will be returned as a list.
 
 =cut
 
