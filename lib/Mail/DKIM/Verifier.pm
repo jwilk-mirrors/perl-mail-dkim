@@ -140,12 +140,13 @@ sub check_signature
 	croak "wrong number of arguments" unless (@_ == 1);
 	my ($signature) = @_;
 
-#	unless ($signature->algorithm && $signature->algorithm eq "rsa-sha1")
-#	{
-#		# unsupported algorithm
-#		$self->{signature_reject_reason} = "unsupported algorithm";
-#		return 0;
-#	}
+	unless ($signature->algorithm
+		&& $self->get_algorithm_class($signature->algorithm))
+	{
+		# unsupported algorithm
+		$self->{signature_reject_reason} = "unsupported algorithm";
+		return 0;
+	}
 
 	unless ($signature->check_canonicalization)
 	{

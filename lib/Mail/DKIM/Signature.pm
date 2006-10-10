@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2005 Messiah College. All rights reserved.
+# Copyright 2005-2006 Messiah College. All rights reserved.
 # Jason Long <jlong@messiah.edu>
 
 # Copyright (c) 2004 Anthony D. Urso. All rights reserved.
@@ -42,12 +42,14 @@ sub new {
 	my $self = {};
 	bless $self, $type;
 
+	#$self->version("0.5");
 	$self->algorithm($prms{'Algorithm'} || "rsa-sha1");
 	$self->signature($prms{'Signature'});
 	$self->method($prms{'Method'} || "simple");
 	$self->domain($prms{'Domain'});
 	$self->headerlist($prms{'Headers'});
 	$self->protocol($prms{'Query'} || "dns");
+	#$self->protocol($prms{'Query'} || "dns/txt");
 	$self->selector($prms{'Selector'});
 
 	return $self;
@@ -91,9 +93,14 @@ sub parse
 	my $self = $class->SUPER::parse($string);
 	$self->{prefix} = $prefix;
 
-	if (defined $self->get_tag("v"))
+	# TODO: check version
+	if (my $version = $self->version)
 	{
-		die "detected forbidden v= tag\n";
+		my @ALLOWED_VERSIONS = ("0.5");
+		unless (grep {$_ eq $version} @ALLOWED_VERSIONS)
+		{
+			die "unsupported v=$version tag\n";
+		}
 	}
 
 	return $self;
@@ -352,12 +359,25 @@ sub check_canonicalization
 	return 1;
 }
 
+# checks whether the protocol found on this subject is valid for
+# fetching the public key
+# returns a true value if protocol is "dns/txt", false otherwise
+#
 sub check_protocol
 {
 	my $self = shift;
 
 	my ($type, $options) = split(/\//, $self->protocol, 2);
-	return ($type eq "dns");
+	return unless ($type eq "dns");
+	return if ($options && $options ne "txt");
+
+	my $v = $self->version;
+	if ($v && $v eq "0.5")
+	{
+		# in v=0.5 signatures, the /txt option is REQUIRED
+		return unless ($options && $options eq "txt");
+	}
+	return 1;
 }
 
 sub get_public_key
@@ -580,6 +600,23 @@ sub timestamp
 		$self->set_tag("t", shift);
 	
 	return $self->get_tag("t");
+}
+
+=head2 version() - get or set the DKIM specification version (v=) field
+
+This is the version of the DKIM specification that applies to this
+signature record.
+
+=cut
+
+sub version
+{
+	my $self = shift;
+
+	(@_) and
+		$self->set_tag("v", shift);
+
+	return $self->get_tag("v");
 }
 
 1;

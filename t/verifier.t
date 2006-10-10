@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::Simple tests => 22;
+use Test::Simple tests => 29;
 
 use Mail::DKIM::Verifier;
 
@@ -36,6 +36,7 @@ test_email("mine_ietf01_1.txt", "pass");
 test_email("mine_ietf01_2.txt", "pass");
 test_email("mine_ietf01_3.txt", "pass");
 test_email("mine_ietf01_4.txt", "pass");
+test_email("mine_ietf05_1.txt", "pass");
 test_email("good_ietf00_1.txt", "pass");
 test_email("good_ietf00_2.txt", "pass");
 test_email("good_ietf00_3.txt", "pass");
@@ -49,6 +50,13 @@ test_email("bad_ietf01_2.txt", "fail");
 ok($dkim->result_detail =~ /header/, "determined header had been altered");
 test_email("bad_ietf01_3.txt", "fail");
 ok($dkim->result_detail =~ /RSA/, "determined RSA failure");
+
+test_email("ignore_1.txt", "invalid");
+test_email("ignore_2.txt", "invalid");
+test_email("ignore_3.txt", "invalid");
+test_email("ignore_4.txt", "invalid");
+test_email("ignore_5.txt", "invalid");
+test_email("ignore_6.txt", "invalid");
 
 sub read_file
 {

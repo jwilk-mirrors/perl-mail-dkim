@@ -1,0 +1,10 @@
+DKIM-Signature:
+ - allow version tag (DONE)
+ - accept q=dns/txt (DONE)
+
+DKIM Public Key Records:
+ - enforce t=s option (if present)
+
+Verifier:
+ - verify multiple signatures (ietf05 6.1)
+ - check that From header is signed (ietf05 6.1.1)

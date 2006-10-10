@@ -49,6 +49,10 @@ sub PRINT
 	my $self = shift;
 	my $buf = $self->{buf} . join("", @_);
 
+	# FIXME - at some point I decided these non-ASCII characters could
+	# mess things up. I need to figure out how non-ASCII characters
+	# should be handled here
+
 #	if ($buf =~ /[^\t\015\012\040-\377]/)
 	if ($buf =~ /[^\t\015\012\040-\777]/)
 	{

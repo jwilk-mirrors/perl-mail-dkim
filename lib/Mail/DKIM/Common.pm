@@ -34,7 +34,7 @@ sub get_algorithm_class
 	my $class =
 		$algorithm eq "rsa-sha1" ? "Mail::DKIM::Algorithm::rsa_sha1" :
 		$algorithm eq "rsa-sha256" ? "Mail::DKIM::Algorithm::rsa_sha256" :
-		die "unknown algorithm $algorithm\n";
+		undef;
 	return $class;
 }
 
