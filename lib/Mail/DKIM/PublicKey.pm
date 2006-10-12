@@ -319,7 +319,7 @@ sub verify_digest
 	if (substr($verify_result, 0, $prefix_len)
 		eq substr($expected, 0, $prefix_len))
 	{
-		$@ = "headers have been altered";
+		$@ = "message has been altered";
 		return;
 	}
 

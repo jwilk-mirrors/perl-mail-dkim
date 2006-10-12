@@ -12,6 +12,7 @@ use warnings;
 
 use Mail::DKIM::Canonicalization::nowsp;
 use Mail::DKIM::Signature;
+use Mail::DKIM::DkSignature;
 use Mail::Address;
 
 =head1 NAME
@@ -114,6 +115,11 @@ sub handle_header
 	{
 		$self->add_signature($line);
 	}
+
+	if (lc($field_name) eq "domainkey-signature")
+	{
+		$self->add_signature_dk($line);
+	}
 }
 
 sub add_signature
@@ -134,6 +140,25 @@ sub add_signature
 	}
 }
 
+# parses a DomainKeys-type signature
+sub add_signature_dk
+{
+	my $self = shift;
+	croak "wrong number of arguments" unless (@_ == 1);
+	my ($contents) = @_;
+
+	eval
+	{
+		my $signature = Mail::DKIM::DkSignature->parse($contents);
+		push @{$self->{signatures}}, $signature;
+	};
+	if ($@)
+	{
+		chomp (my $E = $@);
+		$self->{signature_reject_reason} = $E;
+	}
+}
+
 sub check_signature
 {
 	my $self = shift;
@@ -141,7 +166,7 @@ sub check_signature
 	my ($signature) = @_;
 
 	unless ($signature->algorithm
-		&& $self->get_algorithm_class($signature->algorithm))
+		&& $signature->get_algorithm_class($signature->algorithm))
 	{
 		# unsupported algorithm
 		$self->{signature_reject_reason} = "unsupported algorithm";
@@ -289,7 +314,7 @@ sub finish_header
 	}
 
 	# create a canonicalization filter and algorithm
-	my $algorithm_class = $self->get_algorithm_class(
+	my $algorithm_class = $self->{signature}->get_algorithm_class(
 				$self->{signature}->algorithm);
 	$self->{algorithm} = $algorithm_class->new(
 				Signature => $self->{signature},

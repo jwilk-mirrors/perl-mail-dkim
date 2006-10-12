@@ -1,3 +1,26 @@
+2006-10-12: Jason Long <jlong@messiah.edu>
+ * t/verifier: added two new DomainKeys messages to test
+   - t/corpus/good_dk_yahoo.txt
+   - t/corpus/good_dk_gmail.txt
+ * lib/Mail/DKIM/Canonicalization/dk_nofws.pm: added support for the
+   DomainKeys "nofws" canonicalization method
+ * lib/Mail/DKIM/Verifier.pm: recognize DomainKeys signatures;
+   signatures now determine which algorithm class to use
+ * lib/Mail/DKIM/Algorithm/Base.pm: refactored a few things to better
+   accomodate non-DKIM algorithms
+ * lib/Mail/DKIM/Algorithm/dk_rsa_sha1.pm: implements the DomainKeys
+   rsa-sha1 algorithm
+ * lib/Mail/DKIM/DkSignature.pm: handles DomainKeys signatures
+ * lib/Mail/DKIM/Signer.pm: signature now determines which algorithm class
+   to use
+ * lib/Mail/DKIM/PublicKey.pm: change an error message from "headers have
+   been alterered" to "message has been altered" (if the headers have been
+   altered, we really cannot imply that the body is still intact)
+ * lib/Mail/DKIM/Common.pm: removed get_algorithm_class (this is now a
+   signature method)
+ * lib/Mail/DKIM/Signature.pm: added get_algorithm_class; documented
+   get_public_key method
+
 2006-09-28: Jason Long <jlong@messiah.edu>
  * README: include "Error" in the list of dependencies
  * lib/Mail/DKIM/Common.pm (get_algorithm_class): return undef instead of

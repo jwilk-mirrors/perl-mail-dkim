@@ -10,8 +10,6 @@
 use strict;
 use warnings;
 
-use Mail::DKIM::Algorithm::rsa_sha1;
-use Mail::DKIM::Algorithm::rsa_sha256;
 use Mail::DKIM::Signature;
 
 package Mail::DKIM::Common;
@@ -23,19 +21,6 @@ sub new
 {
 	my $class = shift;
 	return $class->new_object(@_);
-}
-
-sub get_algorithm_class
-{
-	my $self = shift;
-	croak "wrong number of arguments" unless (@_ == 1);
-	my ($algorithm) = @_;
-
-	my $class =
-		$algorithm eq "rsa-sha1" ? "Mail::DKIM::Algorithm::rsa_sha1" :
-		$algorithm eq "rsa-sha256" ? "Mail::DKIM::Algorithm::rsa_sha256" :
-		undef;
-	return $class;
 }
 
 sub add_header

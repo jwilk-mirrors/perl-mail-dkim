@@ -202,7 +202,8 @@ sub finish_header
 		);
 
 	# create a canonicalization filter and algorithm
-	my $algorithm_class = $self->get_algorithm_class($self->{"Algorithm"});
+	my $algorithm_class = $self->{signature}->get_algorithm_class(
+			$self->{"Algorithm"});
 	$self->{algorithm} = $algorithm_class->new(
 				Signature => $self->{signature},
 				Debug_Canonicalization => $self->{Debug_Canonicalization},

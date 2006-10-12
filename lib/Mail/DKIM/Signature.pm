@@ -11,6 +11,8 @@ use strict;
 use warnings;
 
 use Mail::DKIM::PublicKey;
+use Mail::DKIM::Algorithm::rsa_sha1;
+use Mail::DKIM::Algorithm::rsa_sha256;
 
 package Mail::DKIM::Signature;
 use base "Mail::DKIM::KeyValueList";
@@ -379,6 +381,29 @@ sub check_protocol
 	}
 	return 1;
 }
+
+# allows the type of signature to determine what "algorithm" gets used
+sub get_algorithm_class
+{
+	my $self = shift;
+	croak "wrong number of arguments" unless (@_ == 1);
+	my ($algorithm) = @_;
+
+	my $class =
+		$algorithm eq "rsa-sha1" ? "Mail::DKIM::Algorithm::rsa_sha1" :
+		$algorithm eq "rsa-sha256" ? "Mail::DKIM::Algorithm::rsa_sha256" :
+		undef;
+	return $class;
+}
+
+=head2 get_public_key() - fetches the public key referenced by this signature
+
+  my $pubkey = $signature->get_public_key;
+
+Public key to fetch is determined by the protocol, selector, and domain
+fields.
+
+=cut
 
 sub get_public_key
 {

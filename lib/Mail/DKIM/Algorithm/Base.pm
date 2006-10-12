@@ -34,46 +34,41 @@ sub init
 
 	$self->{debug_buf} = "";
 
-	if ($self->{Signature})
+	die "no signature" unless $self->{Signature};
+
+	$self->{mode} = $self->{Signature}->signature ? "verify" : "sign";
+	$self->{draft_version} ||=
+		($self->{mode} eq "sign" ? "01" :
+		 $self->{Signature}->body_hash ? "01" : "00");
+
+	# allows subclasses to set the header_digest and body_digest
+	# properties
+	$self->init_digests;
+
+	my ($header_method, $body_method)
+		= $self->{Signature}->canonicalization;
+
+	my ($header_buffer, $body_buffer);
+	if ($self->{Debug_Canonicalization})
 	{
-		$self->{mode} = $self->{Signature}->signature ? "verify" : "sign";
-		$self->{draft_version} ||=
-			($self->{mode} eq "sign" ? "01" :
-			 $self->{Signature}->body_hash ? "01" : "00");
-
-		# allows subclasses to set the header_digest and body_digest
-		# properties
-		$self->init_digests;
-
-		my ($header_method, $body_method)
-			= $self->{Signature}->canonicalization;
-
-		my ($header_buffer, $body_buffer);
-		if ($self->{Debug_Canonicalization})
-		{
-			$self->{debug_buf} = "";
-			$header_buffer = \$self->{debug_buf};
-			$self->{debug_body_buf} = "";
-			$body_buffer = \$self->{debug_body_buf};
-		}
-
-		my $header_class = $self->get_canonicalization_class($header_method);
-		my $body_class = $self->get_canonicalization_class($body_method);
-		$self->{canon} = $header_class->new(
-				buffer => $header_buffer,
-				output_digest => $self->{header_digest},
-				draft_version => $self->{draft_version},
-				Signature => $self->{Signature});
-		$self->{body_canon} = $body_class->new(
-				buffer => $body_buffer,
-				output_digest => $self->{body_digest},
-				draft_version => $self->{draft_version},
-				Signature => $self->{Signature});
+		$self->{debug_buf} = "";
+		$header_buffer = \$self->{debug_buf};
+		$self->{debug_body_buf} = "";
+		$body_buffer = \$self->{debug_body_buf};
 	}
-	else
-	{
-		die "no signature";
-	}
+
+	my $header_class = $self->get_canonicalization_class($header_method);
+	my $body_class = $self->get_canonicalization_class($body_method);
+	$self->{canon} = $header_class->new(
+			buffer => $header_buffer,
+			output_digest => $self->{header_digest},
+			draft_version => $self->{draft_version},
+			Signature => $self->{Signature});
+	$self->{body_canon} = $body_class->new(
+			buffer => $body_buffer,
+			output_digest => $self->{body_digest},
+			draft_version => $self->{draft_version},
+			Signature => $self->{Signature});
 }
 
 # override this method, please...
@@ -83,7 +78,7 @@ sub init_digests
 	die "not implemented";
 }
 
-# private method
+# private method - DKIM-specific
 sub get_canonicalization_class
 {
 	my $self = shift;
@@ -140,7 +135,8 @@ of the DKIM algorithm implementation classes, such as rsa_sha1:
 sub add_body
 {
 	my $self = shift;
-	$self->{body_canon}->add_body(@_);
+	my $canon = $self->{body_canon} || $self->{canon};
+	$canon->add_body(@_);
 }
 
 =head2 add_header() - feeds a header field into the algorithm/canonicalization
@@ -172,7 +168,8 @@ from the algorithm.
 sub finish_body
 {
 	my $self = shift;
-	$self->{body_canon}->finish_body;
+	my $body_canon = $self->{body_canon} || $self->{canon};
+	$body_canon->finish_body;
 	$self->finish_message;
 }
 
