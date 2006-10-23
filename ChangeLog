@@ -1,3 +1,71 @@
+2006-10-23: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Signer.pm: bugfix - signatures weren't setup correctly when
+   policy built the signature
+ * lib/Mail/DKIM/Signature.pm: bugfix - empty headerlist should return empty
+   list
+ * lib/Mail/DKIM/Canonicalization/Base.pm: moved support for Debug_Canonicalization
+   here from Algorithm/*
+ * lib/Mail/DKIM/Algorithm/Base.pm: removed Debug_Canonicalization support
+ * lib/Mail/DKIM/Algorithm/dk_rsa_sha1.pm: removed Debug_Canonicalization support
+
+2006-10-23: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Signer.pm, lib/Mail/DKIM/Verifier.pm: use new() instead of
+   new_object(); new_object() still supported; documented
+   Debug_Canonicalization option
+
+2006-10-20: Jason Long <jlong@messiah.edu>
+ * t/signer_policy.t: added test for creating DomainKeys signature;
+   added test for creating multiple signatures
+ * lib/Mail/DKIM/SigningFilter.pm: removed (obsolete)
+ * scripts/test_signing_filter.pl: removed (obsolete)
+ * lib/Mail/DKIM/Signer.pm: added signatures method
+
+2006-10-20: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM.pm, lib/Mail/DKIM/Signer.pm, lib/Mail/DKIM/Verifier.pm:
+   various documentation fixes
+ * lib/Mail/DKIM/Verifier.pm: set signature property when result is determined
+ * lib/Mail/DKIM/Signer.pm: support addition of multiple signatures;
+   changed default canonicalization method to "relaxed"
+
+2006-10-20: Jason Long <jlong@messiah.edu>
+ * t/signer_policy.t: tests different forms of signing policies
+ * lib/Mail/DKIM/Signer.pm: support code references as a signing policy;
+   removed support for build_signature (I'm gonna do this a different way)
+
+2006-10-20: Jason Long <jlong@messiah.edu>
+ * t/verifier: added a message containing multiple signatures, only one of
+   which is valid
+   - t/corpus/multiple_1.txt: the new message
+ * lib/Mail/DKIM/Algorithm/Base.pm: added signature method; changed method
+   signature of verify method (no parameters needed any more)
+ * lib/Mail/DKIM/Algorithm/rsa_sha1.pm,
+   lib/Mail/DKIM/Algorithm/rsa_sha256.pm,
+   lib/Mail/DKIM/Algorithm/dk_rsa_sha1.pm: updated verify method
+ * lib/Mail/DKIM/Verifier.pm: support verification of multiple signatures
+ * lib/Mail/DKIM/Signer.pm: documented use of policy _function_ rather than
+   policy object; but no implementation yet
+ * lib/Mail/DKIM/Common.pm (add_body): support multiple algorithms (needed
+   to verify multiple signatures)
+ * lib/Mail/DKIM/Signature.pm: renamed signature() to data(); signature still
+   available for backwards compatibility
+
+2006-10-19: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/SignerPolicy.pm: document mechanism for users to
+   construct the signature themselves
+ * lib/Mail/DKIM/Canonicalization/DkCommon.pm,
+ * lib/Mail/DKIM/Canonicalization/dk_simple.pm,
+   lib/Mail/DKIM/Canonicalization/dk_nofws.pm: implemented DomainKeys'
+   canonicalization methods
+ * lib/Mail/DKIM/Canonicalization/Base.pm: clarify use of add_body method
+ * lib/Mail/DKIM/Algorithm/Base.pm: clarify use of add_body method
+ * lib/Mail/DKIM/DkSignature.pm: implements DomainKeys signatures
+ * lib/Mail/DKIM/Signer.pm: allow policy to construct the signature, if
+   it implements the build_signature method; allow policy access to
+   header field names (headers method)
+ * lib/Mail/DKIM/Signature.pm: replace use of obsolete method() with
+   canonicalization()
+ * scripts/dkimsign.pl: allow user to specify signature type
+
 2006-10-12: Jason Long <jlong@messiah.edu>
  * t/verifier: added two new DomainKeys messages to test
    - t/corpus/good_dk_yahoo.txt

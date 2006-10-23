@@ -10,7 +10,6 @@
 use strict;
 use warnings;
 
-use Mail::DKIM::Canonicalization::nowsp;
 use Mail::DKIM::Algorithm::rsa_sha1;
 use Mail::DKIM::Signature;
 use Mail::Address;
@@ -24,9 +23,9 @@ Mail::DKIM::Signer - generates a DKIM signature for a message
   use Mail::DKIM::Signer;
 
   # create a signer object
-  my $dkim = Mail::DKIM::Signer->new_object(
+  my $dkim = Mail::DKIM::Signer->new(
                   Algorithm => "rsa-sha1",
-                  Method => "nowsp",
+                  Method => "relaxed",
                   Domain => "example.org",
                   Selector => "selector1",
                   KeyFile => "private.key");
@@ -52,19 +51,21 @@ Mail::DKIM::Signer - generates a DKIM signature for a message
 
 =head1 CONSTRUCTOR
 
-=head2 new_object() - construct an object-oriented signer
+=head2 new() - construct an object-oriented signer
 
-  my $dkim = Mail::DKIM::Signer->new_object(
+  # create a signer using the default policy
+  my $dkim = Mail::DKIM::Signer->new(
                   Algorithm => "rsa-sha1",
-                  Method => "nowsp",
+                  Method => "relaxed",
                   Domain => "example.org",
                   Selector => "selector1",
-                  KeyFile => "private.key"
+                  KeyFile => "private.key",
              );
 
-  my $dkim = Mail::DKIM::Signer->new_object(
-                  Policy => $signer_policy,
-                  KeyFile => "private.key"
+  # create a signer using a custom policy
+  my $dkim = Mail::DKIM::Signer->new(
+                  Policy => $policyfn,
+                  KeyFile => "private.key",
              );
 
 You must always specify the name of a private key file. In addition,
@@ -98,7 +99,7 @@ our $VERSION = '0.18';
 #
 # $dkim->{Method}
 #   identifies what canonicalization method to use when signing
-#   the message. default is "nowsp"
+#   the message. default is "relaxed"
 #
 # $dkim->{Policy}
 #   a signing policy (of type Mail::DKIM::SigningPolicy)
@@ -108,8 +109,9 @@ our $VERSION = '0.18';
 #
 # private:
 #
-# $dkim->{algorithm}
-#   the algorithm object
+# $dkim->{algorithms} = []
+#   an array of algorithm objects... an algorithm object is created for
+#   each signature being added to the message
 #
 # $dkim->{private}
 #   the loaded private key
@@ -145,7 +147,7 @@ sub init
 	unless ($self->{"Method"})
 	{
 		# use default canonicalization method
-		$self->{"Method"} = "nowsp";
+		$self->{"Method"} = "relaxed";
 	}
 	unless ($self->{"Domain"})
 	{
@@ -163,73 +165,93 @@ sub finish_header
 {
 	my $self = shift;
 
-	if ($self->{"Policy"})
+	$self->{algorithms} = [];
+
+	my $policy = $self->{Policy};
+	if (UNIVERSAL::isa($policy, "CODE"))
 	{
-		my $should_sign = $self->{"Policy"}->apply($self);
-		unless ($should_sign)
+		unless ($policy->($self))
+		{
+			$self->{"result"} = "skipped";
+			return;
+		}
+	}
+	elsif ($policy && $policy->can("apply"))
+	{
+		my $default_sig = $policy->apply($self);
+		unless (@{$self->{algorithms}} || $default_sig)
 		{
 			$self->{"result"} = "skipped";
 			return;
 		}
 	}
 
-	# check properties
-	unless ($self->{"Algorithm"})
+	unless (@{$self->{algorithms}})
 	{
-		die "invalid algorithm property";
-	}
-	unless ($self->{"Method"})
-	{
-		die "invalid method property";
-	}
-	unless ($self->{"Domain"})
-	{
-		die "invalid header property";
-	}
-	unless ($self->{"Selector"})
-	{
-		die "invalid selector property";
+		# no algorithms were created yet, so construct a signature
+		# using the current signature properties
+
+		# check properties
+		unless ($self->{"Algorithm"})
+		{
+			die "invalid algorithm property";
+		}
+		unless ($self->{"Method"})
+		{
+			die "invalid method property";
+		}
+		unless ($self->{"Domain"})
+		{
+			die "invalid header property";
+		}
+		unless ($self->{"Selector"})
+		{
+			die "invalid selector property";
+		}
+
+		$self->add_signature(
+			new Mail::DKIM::Signature(
+				Algorithm => $self->{"Algorithm"},
+				Method => $self->{"Method"},
+				Headers => $self->headers,
+				Domain => $self->{"Domain"},
+				Selector => $self->{"Selector"},
+			));
 	}
 
-	# create a signature
+	foreach my $algorithm (@{$self->{algorithms}})
+	{
+		# output header as received so far into canonicalization
+		foreach my $header (@{$self->{headers}})
+		{
+			$algorithm->add_header($header);
+		}
+		$algorithm->finish_header;
+	}
+}
+
+sub headers
+{
+	my $self = shift;
+	croak "unexpected argument" if @_;
 	my @headers = @{$self->{header_field_names}};
-	$self->{signature} = new Mail::DKIM::Signature(
-			Algorithm => $self->{"Algorithm"},
-			Method => $self->{"Method"},
-			Headers => join(":", @headers),
-			Domain => $self->{"Domain"},
-			Selector => $self->{"Selector"},
-		);
-
-	# create a canonicalization filter and algorithm
-	my $algorithm_class = $self->{signature}->get_algorithm_class(
-			$self->{"Algorithm"});
-	$self->{algorithm} = $algorithm_class->new(
-				Signature => $self->{signature},
-				Debug_Canonicalization => $self->{Debug_Canonicalization},
-			);
-
-	# output header as received so far into canonicalization
-	foreach my $header (@{$self->{headers}})
-	{
-		$self->{algorithm}->add_header($header);
-	}
-	$self->{algorithm}->finish_header;
+	return join(":", @headers);
 }
 
 sub finish_body
 {
 	my $self = shift;
 
-	if ($self->{algorithm})
+	foreach my $algorithm (@{$self->{algorithms}})
 	{
 		# finished canonicalizing
-		$self->{algorithm}->finish_body;
+		$algorithm->finish_body;
 
 		# compute signature value
-		my $signb64 = $self->{algorithm}->sign($self->{private});
-		$self->{signature}->signature($signb64);
+		my $signb64 = $algorithm->sign($self->{private});
+		$algorithm->signature->data($signb64);
 
+		$self->{signature} = $algorithm->signature;
 		$self->{result} = "signed";
 	}
 }
@@ -250,6 +272,32 @@ to be read into memory at once.
 
 This method finishes the canonicalization process, computes a hash,
 and generates a signature.
+
+=head2 add_signature() - used by signer policy to create a new signature
+
+  $dkim->add_signature(new Mail::DKIM::Signature(...));
+
+Signer policies can use this method to specify complete parameters for
+the signature to add, including what type of signature. For more information,
+see Mail::DKIM::SignerPolicy.
+
+=cut
+
+sub add_signature
+{
+	my $self = shift;
+	my $signature = shift;
+
+	# create a canonicalization filter and algorithm
+	my $algorithm_class = $signature->get_algorithm_class(
+			$self->{"Algorithm"});
+	my $algorithm = $algorithm_class->new(
+			Signature => $signature,
+			Debug_Canonicalization => $self->{Debug_Canonicalization},
+		);
+	push @{$self->{algorithms}}, $algorithm;
+	return;
+}
 
 =head2 algorithm() - get or set the selected algorithm
 
@@ -369,15 +417,84 @@ sub selector
   my $signature = $dkim->signature;
 
 Returns the generated signature. The signature is an object of type
-Mail::DKIM::Signature.
+Mail::DKIM::Signature. If multiple signatures were generated, this method
+returns the last one.
+
+=head2 signatures() - access list of generated signature objects
+
+  my @signatures = $dkim->signatures;
+
+Returns all generated signatures, as a list.
 
 =cut
+
+sub signatures
+{
+	my $self = shift;
+	croak "no arguments allowed" if @_;
+	return map { $_->signature } @{$self->{algorithms}};
+}
+
+=head1 SIGNER POLICIES
+
+The new() constructor takes an optional Policy argument. This
+can be a Perl object or class with an apply() method, or just a simple
+subroutine reference. The method/subroutine will be called with the
+signer object as an argument. The policy is responsible for checking the
+message and specifying signature parameters. The policy must return a
+nonzero value to create the signature, otherwise no signature will be
+created. E.g.,
+
+  my $policyfn = sub {
+      my $dkim = shift;
+
+      # specify signature parameters
+      $dkim->algorithm("rsa-sha1");
+      $dkim->method("relaxed");
+      $dkim->domain("example.org");
+      $dkim->selector("mx1");
+
+      # return true value to create the signature
+      return 1;
+  };
+
+Or the policy object can actually create the signature, using the
+add_signature method within the policy object.
+If you add a signature, you do not need to return a nonzero value.
+This mechanism can be utilized to create multiple signatures.
+
+  my $policyfn = sub {
+      my $dkim = shift;
+      $dkim->add_signature(
+              new Mail::DKIM::Signature(
+                      Algorithm => "rsa-sha1",
+                      Method => "relaxed",
+                      Headers => $dkim->headers,
+                      Domain => "example.org",
+                      Selector => "mx1",
+              ));
+      return;
+  };
+
+If no policy is specified, the default policy is used. The default policy
+signs every message using the domain, algorithm, method, and selector
+specified in the new() constructor.
 
 =head1 SEE ALSO
 
 Mail::DKIM::SignerPolicy
 
-Mail::DKIM::SigningFilter
+=head1 AUTHOR
+
+Jason Long, E<lt>jlong@messiah.eduE<gt>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2006 by Messiah College
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.6 or,
+at your option, any later version of Perl 5 you may have available.
 
 =cut
 

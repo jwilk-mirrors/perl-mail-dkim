@@ -11,6 +11,7 @@ use strict;
 use warnings;
 
 use Mail::DKIM::PrivateKey;
+use Mail::DKIM::Canonicalization::dk_simple;
 use Mail::DKIM::Canonicalization::dk_nofws;
 
 package Mail::DKIM::Algorithm::dk_rsa_sha1;
@@ -26,7 +27,7 @@ sub get_canonicalization_class
 	my ($method) = @_;
 
 	my $class = $method eq "nofws" ? "Mail::DKIM::Canonicalization::dk_nofws" :
-			$method eq "simple" ? "Mail::DKIM::Canonicalization::simple" :
+			$method eq "simple" ? "Mail::DKIM::Canonicalization::dk_simple" :
 		die "unknown method $method\n";
 	return $class;
 }
@@ -34,8 +35,6 @@ sub get_canonicalization_class
 sub init
 {
 	my $self = shift;
-
-	$self->{debug_buf} = "";
 
 	die "no signature" unless $self->{Signature};
 
@@ -47,18 +46,11 @@ sub init
 
 	my $method = $self->{Signature}->canonicalization;
 
-	my $buffer;
-	if ($self->{Debug_Canonicalization})
-	{
-		$self->{debug_buf} = "";
-		$buffer = \$self->{debug_buf};
-	}
-
 	my $canon_class = $self->get_canonicalization_class($method);
 	$self->{canon} = $canon_class->new(
-			buffer => $buffer,
 			output_digest => $self->{header_digest},
-			Signature => $self->{Signature});
+			Signature => $self->{Signature},
+			Debug_Canonicalization => $self->{Debug_Canonicalization});
 }
 
 sub init_digests
@@ -85,8 +77,10 @@ sub sign
 sub verify
 {
 	my $self = shift;
-	croak "wrong number of arguments" unless (@_ == 2);
-	my ($base64, $public_key) = @_;
+	croak "wrong number of arguments" unless (@_ == 0);
+
+	my $base64 = $self->signature->data;
+	my $public_key = $self->signature->get_public_key;
 
 	my $digest = $self->{header_digest}->digest;
 	my $sig = decode_base64($base64);
@@ -95,20 +89,6 @@ sub verify
 
 sub finish_message
 {
-	my $self = shift;
-
-	if (my $debug = $self->{Debug_Canonicalization})
-	{
-		unless (ref $debug)
-		{
-			my $filename = $debug;
-			open my $fh, ">", $filename
-				or die "Error: cannot write to $filename: $!\n";
-			print $fh $self->{debug_buf};
-			close $fh;
-			print STDERR "Debug: wrote canonicalized message to $filename\n";
-		}
-	}
 }
 
 1;

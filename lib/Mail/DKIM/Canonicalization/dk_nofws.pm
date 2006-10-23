@@ -10,74 +10,25 @@ use strict;
 use warnings;
 
 package Mail::DKIM::Canonicalization::dk_nofws;
-use base "Mail::DKIM::Canonicalization::Base";
+use base "Mail::DKIM::Canonicalization::dk_simple";
 use Carp;
 
-sub add_header
-{
-	my $self = shift;
-	my ($line) = @_;
-
-	#croak "header parse error \"$line\"" unless ($line =~ /:/);
-
-	if ($line =~ /^domainkey-signature:/i)
-	{
-		# DomainKeys never includes headers that precede the
-		# DomainKey-Signature header
-		$self->{myheaders} = [];
-	}
-	else
-	{
-		$line =~ s/[\t\n\r\ ]//g;
-		push @{$self->{myheaders}}, $line . "\015\012";
-	}
-}
-
-sub finish_header
-{
-	my $self = shift;
-
-	# check if signature specifies a list of headers
-	my @sigheaders = $self->{Signature}->headerlist;
-
-	# iterate through each header, in the same order they appear in
-	# the message
-	foreach my $line (@{$self->{myheaders}})
-	{
-		if (@sigheaders)
-		{
-			# if signature specifies a list of headers, we filter the
-			# canonicalized headers according to headers that are named
-			# in the signature
-
-			my $field_name = "";
-			if ($line =~ /^([^\s:]+)\s*:/)
-			{
-				$field_name = lc $1;
-			}
-			next unless (grep {lc($_) eq $field_name} @sigheaders);
-		}
-		$self->output($line);
-	}
-
-	$self->output("\015\012");
-}
-
-sub add_body
+sub canonicalize_header
 {
 	my $self = shift;
 	my ($line) = @_;
 
 	$line =~ s/[\t\n\r\ ]//g;
-	$self->output($line . "\015\012");
+	return $self->SUPER::canonicalize_header($line . "\015\012");
 }
 
-sub finish_body
+sub canonicalize_body
 {
-}
+	my $self = shift;
+	my ($line) = @_;
 
-sub finish_message
-{
+	$line =~ s/[\t\n\r\ ]//g;
+	return $self->SUPER::canonicalize_header($line . "\015\012");
 }
 
 1;

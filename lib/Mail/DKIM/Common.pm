@@ -44,6 +44,10 @@ sub add_body
 	{
 		$self->{algorithm}->add_body(@_);
 	}
+	foreach my $algorithm (@{$self->{algorithms}})
+	{
+		$algorithm->add_body(@_);
+	}
 }
 
 sub handle_header

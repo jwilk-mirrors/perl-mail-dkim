@@ -49,8 +49,7 @@ Mail::DKIM::Verifier class. Simple, eh?
 
 =head1 SEE ALSO
 
-Mail::DKIM::Signer
-
+Mail::DKIM::Signer,
 Mail::DKIM::Verifier
 
 http://jason.long.name/dkimproxy/

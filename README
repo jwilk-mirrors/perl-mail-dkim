@@ -26,6 +26,12 @@ This module requires these other modules and libraries:
   MIME::Base64
   Net::DNS
 
+USAGE
+
+Decide whether you want to "sign" or "verify" messages.
+To sign, see the Mail::DKIM::Signer module.
+To verify, see the Mail::DKIM::Verifier module.
+
 BUGS
 
 The current draft as of this writing, draft-ietf-dkim-base-02.txt of

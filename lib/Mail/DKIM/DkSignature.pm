@@ -33,7 +33,7 @@ sub new {
 
 	$self->algorithm($prms{'Algorithm'} || "rsa-sha1");
 	$self->signature($prms{'Signature'});
-	$self->method($prms{'Method'} || "simple");
+	$self->canonicalization($prms{'Method'} || "simple");
 	$self->domain($prms{'Domain'});
 	$self->headerlist($prms{'Headers'});
 	$self->protocol($prms{'Query'} || "dns");
@@ -108,7 +108,7 @@ sub as_string
 
 	my $prefix = $self->{prefix} || "DomainKey-Signature:";
 
-	return $prefix . $self->SUPER::as_string;
+	return $prefix . $self->Mail::DKIM::KeyValueList::as_string;
 }
 
 sub as_string_without_data

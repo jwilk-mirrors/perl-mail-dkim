@@ -6,5 +6,11 @@ DKIM Public Key Records:
  - enforce t=s option (if present)
 
 Verifier:
- - verify multiple signatures (ietf05 6.1)
+ - verify multiple signatures (ietf05 6.1) (DONE)
  - check that From header is signed (ietf05 6.1.1)
+
+Signer:
+ - allow DomainKeys signatures without using a policy object
+ - allow adding chained signatures in one pass
+   (e.g. allow adding a DomainKeys signature, and a DKIM signature,
+   with the new DKIM signature signing the new DomainKeys signature)

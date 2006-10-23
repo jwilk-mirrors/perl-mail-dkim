@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::Simple tests => 31;
+use Test::Simple tests => 32;
 
 use Mail::DKIM::Verifier;
 
@@ -44,6 +44,8 @@ test_email("good_ietf00_4.txt", "pass");
 test_email("good_ietf00_5.txt", "pass");
 test_email("good_ietf01_1.txt", "pass");
 test_email("good_ietf01_2.txt", "pass");
+test_email("multiple_1.txt", "pass");
+
 test_email("bad_ietf01_1.txt", "fail");
 ok($dkim->result_detail =~ /body/, "determined body had been altered");
 test_email("bad_ietf01_2.txt", "fail");

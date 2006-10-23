@@ -49,11 +49,13 @@ sub sign
 sub verify
 {
 	my $self = shift;
-	croak "wrong number of arguments" unless (@_ == 2);
-	my ($base64, $public_key) = @_;
+	croak "wrong number of arguments" unless (@_ == 0);
 
-	my $digest = $self->{header_digest}->digest;
+	my $base64 = $self->signature->data;
+	my $public_key = $self->signature->get_public_key;
+
 	my $sig = decode_base64($base64);
+	my $digest = $self->{header_digest}->digest;
 	return unless $public_key->verify_sha1_digest($digest, $sig);
 	return $self->check_body_hash;
 }

@@ -13,12 +13,14 @@ use Mail::DKIM::Signer;
 use Getopt::Long;
 use Pod::Usage;
 
+my $type = "dkim";
 my $selector = "selector1";
 my $algorithm = "rsa-sha1";
 my $method = "simple";
 my $debug_canonicalization;
 my $help;
 GetOptions(
+		"type=s" => \$type,
 		"algorithm=s" => \$algorithm,
 		"method=s" => \$method,
 		"selector=s" => \$selector,
@@ -30,13 +32,21 @@ pod2usage(1) if $help;
 pod2usage("Error: unrecognized argument(s)")
 	unless (@ARGV == 0);
 
+my $debugfh;
+if (defined $debug_canonicalization)
+{
+	open $debugfh, ">", $debug_canonicalization
+		or die "Error: cannot write $debug_canonicalization: $!\n";
+}
+
 my $dkim = new Mail::DKIM::Signer(
 		Policy => "MySignerPolicy",
 		Algorithm => $algorithm,
 		Method => $method,
 		Selector => $selector,
 		KeyFile => "private.key",
-		Debug_Canonicalization => $debug_canonicalization);
+		Debug_Canonicalization => $debugfh,
+		);
 
 while (<STDIN>)
 {
@@ -45,9 +55,16 @@ while (<STDIN>)
 }
 $dkim->CLOSE;
 
+if ($debugfh)
+{
+	close $debugfh;
+	print STDERR "wrong canonicalized message to $debug_canonicalization\n";
+}
+
 print $dkim->signature->as_string . "\n";
 
 package MySignerPolicy;
+use Mail::DKIM::DkSignature;
 use Mail::DKIM::SignerPolicy;
 use base "Mail::DKIM::SignerPolicy";
 
@@ -57,6 +74,22 @@ sub apply
 
 	$signer->domain($signer->message_sender->host);
 	return 1;
+}
+
+sub build_signature
+{
+	my $self = shift;
+	my $signer = shift;
+
+	my $class = $type eq "domainkeys" ? "Mail::DKIM::DkSignature"
+		: "Mail::DKIM::Signature";
+	return $class->new(
+			Algorithm => $signer->algorithm,
+			Method => $signer->method,
+			Headers => $signer->headers,
+			Domain => $signer->domain,
+			Selector => $signer->selector,
+	);
 }
 
 __END__

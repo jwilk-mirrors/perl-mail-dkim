@@ -18,8 +18,14 @@ GetOptions(
 		)
 	or die "Error: invalid argument(s)\n";
 
+my $debugfh;
+if (defined $debug_canonicalization)
+{
+	open $debugfh, ">", $debug_canonicalization
+		or die "Error: cannot write to $debug_canonicalization: $!\n";
+}
 my $dkim = new Mail::DKIM::Verifier(
-		Debug_Canonicalization => $debug_canonicalization,
+		Debug_Canonicalization => $debugfh,
 	);
 while (<STDIN>)
 {
@@ -29,6 +35,11 @@ while (<STDIN>)
 }
 $dkim->CLOSE;
 
+if ($debugfh)
+{
+	close $debugfh;
+	print STDERR "wrong canonicalized message to $debug_canonicalization\n";
+}
 
 print "originator address: " . $dkim->message_originator->address . "\n";
 if ($dkim->signature)

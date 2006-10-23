@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2005 Messiah College. All rights reserved.
+# Copyright 2005-2006 Messiah College. All rights reserved.
 # This program is free software; you can redistribute it and/or
 # modify it under the same terms as Perl itself.
 #
@@ -58,5 +58,43 @@ parameter...
                   Policy => "MySignerPolicy",
                   KeyFile => "private.key"
              );
+
+=head1 ADVANCED
+
+You can also have the policy actually build the signature for the Signer
+to use. To do this, call the signer's add_signature() method from within
+your apply() callback. E.g.,
+
+  sub apply
+  {
+      my $self = shift;
+      my $signer = shift;
+  
+      $signer->add_signature(
+              new Mail::DKIM::Signature(
+                  Algorithm => $signer->algorithm,
+                  Method => $signer->method,
+                  Headers => $signer->headers,
+                  Domain => $signer->domain,
+                  Selector => $signer->selector,
+              ));
+      return;
+  }
+
+Again, if you do not want any signatures, return zero or undef. If you
+use add_signature() to create a signature, the default signature will
+not be created, even if you return nonzero.
+
+=head1 AUTHOR
+
+Jason Long, E<lt>jlong@messiah.eduE<gt>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2006 by Messiah College
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.6 or,
+at your option, any later version of Perl 5 you may have available.
 
 =cut

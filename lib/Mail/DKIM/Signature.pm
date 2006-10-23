@@ -29,7 +29,7 @@ Mail::DKIM::Signature - encapsulates a DKIM signature header
   my $signature = new Mail::DKIM::Signature(
                       [ Algorithm => "rsa-sha1", ]
                       [ Signature => $base64, ]
-                      [ Method => "nowsp", ]
+                      [ Method => "relaxed", ]
                       [ Domain => "example.org", ]
                       [ Headers => "from:subject:date:message-id", ]
                       [ Query => "dns", ]
@@ -47,7 +47,7 @@ sub new {
 	#$self->version("0.5");
 	$self->algorithm($prms{'Algorithm'} || "rsa-sha1");
 	$self->signature($prms{'Signature'});
-	$self->method($prms{'Method'} || "simple");
+	$self->canonicalization($prms{'Method'} || "simple");
 	$self->domain($prms{'Domain'});
 	$self->headerlist($prms{'Headers'});
 	$self->protocol($prms{'Query'} || "dns");
@@ -60,7 +60,7 @@ sub new {
 =head2 parse() - create a new signature from a DKIM-Signature header
 
   my $sig = parse Mail::DKIM::Signature(
-                  "DKIM-Signature: a=rsa-sha1; b=yluiJ7+0=; c=nowsp"
+                  "DKIM-Signature: a=rsa-sha1; b=yluiJ7+0=; c=relaxed"
             );
 
 Constructs a signature by parsing the provided DKIM-Signature header
@@ -156,7 +156,7 @@ sub algorithm
 
 outputs
 
-  DKIM-Signature: a=rsa-sha1; b=yluiJ7+0=; c=nowsp
+  DKIM-Signature: a=rsa-sha1; b=yluiJ7+0=; c=relaxed
 
 As shown in the example, the as_string method can be used to generate
 the DKIM-Signature that gets prepended to a signed message.
@@ -188,7 +188,7 @@ sub as_string_debug
 
 outputs
 
-  DKIM-Signature: a=rsa-sha1; b=; c=nowsp
+  DKIM-Signature: a=rsa-sha1; b=; c=relaxed
 
 This is similar to the as_string() method, but it always excludes the "data"
 part. This is used by the DKIM canonicalization methods, which require
@@ -493,6 +493,10 @@ sub headerlist
 		@list = map { s/^\s+|\s+$//g; $_ } @list;
 		return @list;
 	}
+	elsif (wantarray)
+	{
+		return ();
+	}
 
 	return $h;
 }	
@@ -595,14 +599,17 @@ sub selector {
 	return $self->get_tag("s");
 }	
 
-=head2 signature() - get or set the signature data (b=) field
+=head2 data() - get or set the signature data (b=) field
+
+  my $base64 = $signature->data;
+  $signature->data($base64);
 
 The signature data. Whitespace is automatically stripped from the
-returned value.
+returned value. The data is Base64-encoded.
 
 =cut
 
-sub signature
+sub data
 {
 	my $self = shift;
 
@@ -618,6 +625,8 @@ sub signature
 	}
 	return $b;
 }	
+
+*signature = \*data;
 
 =head2 timestamp() - get or set the signature timestamp (t=) field
 
@@ -653,5 +662,19 @@ sub version
 
 	return $self->get_tag("v");
 }
+
+=head1 AUTHOR
+
+Jason Long, E<lt>jlong@messiah.eduE<gt>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2006 by Messiah College
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.6 or,
+at your option, any later version of Perl 5 you may have available.
+
+=cut
 
 1;
