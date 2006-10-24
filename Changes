@@ -1,6 +1,18 @@
 This file summarizes what's changed between releases of Mail-DKIM.
 See the ChangeLog file for the details.
 
+Version 0.20 - released 2006-10-24
+
+ * now supports verifying multiple signatures (the result returned is based
+   on the "best" available signature)
+ * now supports adding multiple signatures in one pass (to use this, you
+   need to create a "signer policy"; see scripts/dkimsign.pl for an example)
+ * now supports signing/verifying signatures for the older DomainKeys standard
+ * now implements Internet Draft draft-ietf-dkim-base-05, including:
+   * support for the version (v=) tag
+ * eliminated "control character detected in message" error message
+
+
 Version 0.19 - released 2006-06-15
 
  * now supports earlier versions of Perl (5.6.1 and up).

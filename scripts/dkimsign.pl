@@ -40,7 +40,7 @@ if (defined $debug_canonicalization)
 }
 
 my $dkim = new Mail::DKIM::Signer(
-		Policy => "MySignerPolicy",
+		Policy => \&signer_policy,
 		Algorithm => $algorithm,
 		Method => $method,
 		Selector => $selector,
@@ -63,33 +63,25 @@ if ($debugfh)
 
 print $dkim->signature->as_string . "\n";
 
-package MySignerPolicy;
-use Mail::DKIM::DkSignature;
-use Mail::DKIM::SignerPolicy;
-use base "Mail::DKIM::SignerPolicy";
-
-sub apply
+sub signer_policy
 {
-	my ($self, $signer) = @_;
+	my $dkim = shift;
 
-	$signer->domain($signer->message_sender->host);
-	return 1;
-}
+	use Mail::DKIM::DkSignature;
 
-sub build_signature
-{
-	my $self = shift;
-	my $signer = shift;
+	$dkim->domain($dkim->message_sender->host);
 
 	my $class = $type eq "domainkeys" ? "Mail::DKIM::DkSignature"
 		: "Mail::DKIM::Signature";
-	return $class->new(
-			Algorithm => $signer->algorithm,
-			Method => $signer->method,
-			Headers => $signer->headers,
-			Domain => $signer->domain,
-			Selector => $signer->selector,
-	);
+	my $sig = $class->new(
+			Algorithm => $dkim->algorithm,
+			Method => $dkim->method,
+			Headers => $dkim->headers,
+			Domain => $dkim->domain,
+			Selector => $dkim->selector,
+		);
+	$dkim->add_signature($sig);
+	return;
 }
 
 __END__
@@ -102,6 +94,7 @@ dkimsign.pl - computes a DKIM signature for an email message
 
   dkimsign.pl [options] < original_email.txt
     options:
+      --type=TYPE
       --method=METHOD
       --selector=SELECTOR
       --debug-canonicalization=FILE
@@ -112,6 +105,11 @@ dkimsign.pl - computes a DKIM signature for an email message
 =head1 OPTIONS
 
 =over
+
+=item B<--type>
+
+Determines the desired signature. Use dkim for a DKIM-Signature, or
+domainkeys for a DomainKey-Signature.
 
 =item B<--method>
 

@@ -3,6 +3,8 @@
  * lib/Mail/DKIM/Algorithm/Base.pm: allow debugging body canonicalization
  * lib/Mail/DKIM/MessageParser.pm: removed problematic check for
    "control characters"
+ * scripts/dkimsign.pl: document --type argument; replace signer policy class
+   with signer policy subroutine
 
 2006-10-23: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Signer.pm: bugfix - signatures weren't setup correctly when
