@@ -14,3 +14,4 @@ Signer:
  - allow adding chained signatures in one pass
    (e.g. allow adding a DomainKeys signature, and a DKIM signature,
    with the new DKIM signature signing the new DomainKeys signature)
+ - allow creation of i=, l=, t=, x=, and z= tags
