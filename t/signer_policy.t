@@ -143,7 +143,7 @@ sub sign_sample_using_args
 {
 	my %args = @_;
 
-	my $dkim = Mail::DKIM::Signer->new_object(%args)
+	my $dkim = Mail::DKIM::Signer->new(%args)
 		or die "couldn't create signer object";
 
 	my $sample_email = <<END_OF_SAMPLE;

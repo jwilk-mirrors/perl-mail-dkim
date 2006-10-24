@@ -6,13 +6,13 @@ use Test::Simple tests => 5;
 
 use Mail::DKIM::Signer;
 
-my $dkim = Mail::DKIM::Signer->new_object(
+my $dkim = Mail::DKIM::Signer->new(
 		Algorithm => "rsa-sha1",
 		Method => "relaxed",
 		Domain => "example.org",
 		Selector => "test",
 		KeyFile => "t/test.key");
-ok($dkim, "new_object() works");
+ok($dkim, "new() works");
 
 my $sample_email = <<END_OF_SAMPLE;
 From: jason <jason\@example.org>
@@ -33,13 +33,13 @@ ok($signature->as_string =~ /6crwkSr7mdPW6iCMbtTYyimEgAAfZqFO/,
 	"got expected signature value");
 
 # now try a SHA256 signature
-$dkim = Mail::DKIM::Signer->new_object(
+$dkim = Mail::DKIM::Signer->new(
 		Algorithm => "rsa-sha256",
 		Method => "relaxed",
 		Domain => "example.org",
 		Selector => "test",
 		KeyFile => "t/test.key");
-ok($dkim, "new_object() works");
+ok($dkim, "new() works");
 
 $dkim->PRINT($sample_email);
 $dkim->CLOSE;

@@ -56,7 +56,8 @@ sub init
 	$self->{body_canon} = $body_class->new(
 			output_digest => $self->{body_digest},
 			draft_version => $self->{draft_version},
-			Signature => $self->{Signature});
+			Signature => $self->{Signature},
+			Debug_Canonicalization => $self->{Debug_Canonicalization});
 }
 
 # override this method, please...
@@ -230,7 +231,8 @@ sub finish_message
 		$canonicalized = "\015\012" . $canonicalized;
 	}
 
-	$self->{header_digest}->add($canonicalized);
+	$self->{canon}->output($canonicalized);
+	#$self->{header_digest}->add($canonicalized);
 }
 
 =head2 sign() - generates a signature using a private key

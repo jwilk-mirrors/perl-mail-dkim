@@ -1,3 +1,9 @@
+2006-10-24: Jason Long <jlong@messiah.edu>
+ * t/signer_policy.t, t/signer.t: use new() instead of new_object()
+ * lib/Mail/DKIM/Algorithm/Base.pm: allow debugging body canonicalization
+ * lib/Mail/DKIM/MessageParser.pm: removed problematic check for
+   "control characters"
+
 2006-10-23: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Signer.pm: bugfix - signatures weren't setup correctly when
    policy built the signature
