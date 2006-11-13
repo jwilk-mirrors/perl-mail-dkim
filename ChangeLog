@@ -1,3 +1,9 @@
+2006-11-13: Jason Long <jlong@messiah.edu>
+ * t/verifier.t: test invalid signature length
+ * lib/Mail/DKIM/Verifier.pm: fixed bug where OpenSSL error was not
+   reported by moved "local $@" outside try block, thanks to Mark Martinec
+   for finding this; detect OpenSSL error and clean up the error message
+
 2006-10-24: Jason Long <jlong@messiah.edu>
  * t/signer_policy.t, t/signer.t: use new() instead of new_object()
  * lib/Mail/DKIM/Algorithm/Base.pm: allow debugging body canonicalization

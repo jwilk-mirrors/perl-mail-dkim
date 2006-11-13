@@ -58,6 +58,7 @@ t/corpus/multiple_1.txt
 t/corpus/bad_ietf01_1.txt
 t/corpus/bad_ietf01_2.txt
 t/corpus/bad_ietf01_3.txt
+t/corpus/bad_1.txt
 t/corpus/mine_ietf01_1.txt
 t/corpus/mine_ietf01_2.txt
 t/corpus/mine_ietf01_3.txt

@@ -366,9 +366,9 @@ sub finish_body
 		# verify signature
 		my $result;
 		my $details;
+		local $@ = undef;
 		try
 		{
-			local $@ = undef;
 			$result = $algorithm->verify() ? "pass" : "fail";
 			$details = $algorithm->{verification_details} || $@;
 		}
@@ -378,6 +378,10 @@ sub finish_body
 			$result = "fail";
 			$details = $E;
 			chomp $details;
+			if ($details =~ /(OpenSSL error: .*?) at /)
+			{
+				$details = $1;
+			}
 		};
 
 		# collate results ... ignore failed signatures if we already got
