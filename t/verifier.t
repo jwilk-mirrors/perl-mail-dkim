@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::Simple tests => 34;
+use Test::Simple tests => 35;
 
 use Mail::DKIM::Verifier;
 
@@ -65,6 +65,7 @@ test_email("ignore_6.txt", "invalid");
 # test older DomainKeys messages, from Gmail and Yahoo!
 test_email("good_dk_gmail.txt", "pass");
 test_email("good_dk_yahoo.txt", "pass");
+test_email("good_dk_1.txt", "pass");
 
 sub read_file
 {

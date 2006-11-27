@@ -28,7 +28,7 @@ sub canonicalize_body
 	my ($line) = @_;
 
 	$line =~ s/[\t\n\r\ ]//g;
-	return $self->SUPER::canonicalize_header($line . "\015\012");
+	return $self->SUPER::canonicalize_body($line . "\015\012");
 }
 
 1;
