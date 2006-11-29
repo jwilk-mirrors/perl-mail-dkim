@@ -80,7 +80,7 @@ package Mail::DKIM::Verifier;
 use base "Mail::DKIM::Common";
 use Carp;
 use Error ":try";
-our $VERSION = '0.18';
+our $VERSION = '0.21';
 
 sub init
 {
