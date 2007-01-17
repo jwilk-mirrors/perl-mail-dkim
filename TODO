@@ -8,6 +8,7 @@ DKIM Public Key Records:
 Verifier:
  - verify multiple signatures (ietf05 6.1) (DONE)
  - check that From header is signed (ietf05 6.1.1)
+ - check public key "granularity"
 
 Signer:
  - allow DomainKeys signatures without using a policy object
@@ -15,3 +16,21 @@ Signer:
    (e.g. allow adding a DomainKeys signature, and a DKIM signature,
    with the new DKIM signature signing the new DomainKeys signature)
  - allow creation of i=, l=, t=, x=, and z= tags
+ - do header-wrapping to signature before signing
+
+Testing (some of this may already be implemented):
+ - test public key errors:
+   - DNS timeout
+   - NXDOMAIN
+   - SERVFAIL
+   - syntax error in public key record
+ - test DNS timeout for signing policy
+ - test signature options:
+   - unspecified query type
+   - query type of "dns/"
+   - bad query type
+   - bad algorithm
+   - unspecified algorithm
+   - bad canonicalization
+   - unspecified canonicalization
+   - test presence of version tag in signature

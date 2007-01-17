@@ -1,4 +1,4 @@
-Mail-DKIM version 0.20
+Mail-DKIM version 0.22
 ======================
 
 This module implements the various components of the DKIM message-signing

@@ -47,14 +47,14 @@ are stored into a buffer until all headers have been seen.
           +----------+
 
 When the blank line separating the header from the body has been seen,
-the verifier looks at the headers, and picks out the DKIM signature it
-is going to verify. The signature specifies which algorithm and
-canonicalization method the verifier should use. The verifier creates
-an algorithm object. It also creates two canonicalizer objects and two
-digest objects, one each for the header, and one each for the body.
+the verifier looks at the headers, picking out and parsing each DKIM
+and DomainKey signature for verification. The signature specifies which
+algorithm and canonicalization method the verifier should use. The
+verifier creates an "algorithm object" corresponding to each signature.
+Each algorithm object will perform the verification for one signature.
 
-Now the verifier feeds the message headers from its buffer into the
-newly constructed algorithm object, which in turn feeds the headers into
+Now the verifier feeds the message headers from its buffer into each
+newly-constructed algorithm object, which in turn feeds the headers into
 the header canonicalizer, which canonicalizes the headers and feeds the
 result into a Digest object, which will compute the SHA-1 or SHA-256
 digest.
