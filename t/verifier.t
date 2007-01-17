@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::Simple tests => 35;
+use Test::More tests => 35;
 
 use Mail::DKIM::Verifier;
 
@@ -53,7 +53,15 @@ ok($dkim->result_detail =~ /message/, "determined message had been altered");
 test_email("bad_ietf01_3.txt", "fail");
 ok($dkim->result_detail =~ /RSA/, "determined RSA failure");
 test_email("bad_1.txt", "fail");
-ok($dkim->result_detail =~ /data too small/, "reported failure correctly");
+SKIP:
+{
+	skip "test does not support your version of Crypt::OpenSSL::RSA", 1
+		unless ($Crypt::OpenSSL::RSA::VERSION == 0.22
+			|| $Crypt::OpenSSL::RSA::VERSION == 0.23);
+	like($dkim->result_detail,
+		qr/date too small|negative strlen/,
+		"determined OpenSSL error");
+}
 
 test_email("ignore_1.txt", "invalid");
 test_email("ignore_2.txt", "invalid");

@@ -382,6 +382,10 @@ sub finish_body
 			{
 				$details = $1;
 			}
+			elsif ($details =~ /^(panic:.*?) at /)
+			{
+				$details = "OpenSSL $1";
+			}
 		};
 
 		# collate results ... ignore failed signatures if we already got

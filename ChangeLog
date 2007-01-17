@@ -1,3 +1,10 @@
+2007-01-17: Jason Long <jlong@messiah.edu>
+ * t/verifier.t: fixed testing bug that was too strict about what
+   error message OpenSSL generates
+ * lib/Mail/DKIM/Verifier.pm: handle OpenSSL panic message better
+
+ -- VERSION 0.21 --
+
 2006-11-27: Jason Long <jlong@messiah.edu>
  * t/verifier.t: test domainkey message with trailing blank line
  * lib/Mail/DKIM/Canonicalization/dk_nofws.pm: fixed bug where DomainKey-

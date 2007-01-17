@@ -1,6 +1,13 @@
 This file summarizes what's changed between releases of Mail-DKIM.
 See the ChangeLog file for the details.
 
+Version 0.22
+
+Version 0.21 - released 2006-11-29
+
+ * fixes two bugs, see ChangeLog for details
+
+
 Version 0.20 - released 2006-10-24
 
  * now supports verifying multiple signatures (the result returned is based
