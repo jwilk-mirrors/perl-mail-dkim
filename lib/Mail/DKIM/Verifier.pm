@@ -182,6 +182,10 @@ sub check_signature
 	{
 		# unsupported algorithm
 		$self->{signature_reject_reason} = "unsupported algorithm";
+		if ($signature->algorithm)
+		{
+			$self->{signature_reject_reason} .= " " . $signature->algorithm;
+		}
 		return 0;
 	}
 
@@ -189,6 +193,10 @@ sub check_signature
 	{
 		# unsupported canonicalization method
 		$self->{signature_reject_reason} = "unsupported canonicalization";
+		if ($signature->method)
+		{
+			$self->{signature_reject_reason} .= " " . $signature->method;
+		}
 		return 0;
 	}
 
@@ -196,6 +204,10 @@ sub check_signature
 	{
 		# unsupported protocol
 		$self->{signature_reject_reason} = "unsupported protocol";
+		if ($signature->protocol)
+		{
+			$self->{signature_reject_reason} .= " " . $signature->protocol;
+		}
 		return 0;
 	}
 

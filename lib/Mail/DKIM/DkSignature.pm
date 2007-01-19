@@ -200,7 +200,9 @@ sub check_protocol
 {
 	my $self = shift;
 
-	return ($self->protocol eq "dns");
+	my $protocol = $self->protocol;
+	return unless $protocol;
+	return ($protocol eq "dns");
 }
 
 sub get_algorithm_class
