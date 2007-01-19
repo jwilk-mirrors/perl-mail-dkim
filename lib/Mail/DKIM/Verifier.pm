@@ -80,7 +80,7 @@ package Mail::DKIM::Verifier;
 use base "Mail::DKIM::Common";
 use Carp;
 use Error ":try";
-our $VERSION = '0.21';
+our $VERSION = '0.22';
 
 sub init
 {
@@ -447,11 +447,13 @@ sub fetch_author_policy
 {
 	my $self = shift;
 	use Mail::DKIM::Policy;
-	if ($self->message_originator)
+	my $originator = $self->message_originator;
+	if ($originator && $originator->host)
 	{
+		# TODO - be prepared to handle key protocols != dns
 		return fetch Mail::DKIM::Policy(
 				Protocol => "dns",
-				Domain => $self->message_originator->host);
+				Domain => $originator->host);
 	}
 	return undef;
 }

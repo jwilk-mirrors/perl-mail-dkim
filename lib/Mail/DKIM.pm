@@ -11,7 +11,7 @@ __END__
 
 =head1 NAME
 
-Mail::DKIM - Signs/verifies Internet mail using DKIM message signatures
+Mail::DKIM - Signs/verifies Internet mail with DKIM/DomainKey signatures
 
 =head1 SYNOPSIS
 
@@ -60,9 +60,10 @@ The DKIM standard is still in development, so by the time you read this,
 this module may already be broken with regards to the latest DKIM
 specification.
 
-One feature that has not been implemented yet is the "sender signing policy".
-I.e. this library will tell you whether the signature is valid, but will
-not lookup the signing policy for the author of the message.
+The "sender signing policy" component is still under construction. The
+sender signing policy is supposed to identify the practice of the message
+author, so you could for example reject a message from an author who claims
+they always sign their messages. See Mail::DKIM::Policy.
 
 =head1 AUTHOR
 
@@ -70,7 +71,7 @@ Jason Long, E<lt>jlong@messiah.eduE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2006 by Messiah College
+Copyright (C) 2006-2007 by Messiah College
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.6 or,

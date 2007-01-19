@@ -22,6 +22,7 @@ New version - update version numbers in these files:
   lib/Mail/DKIM.pm
   lib/Mail/DKIM/Verifier.pm
   lib/Mail/DKIM/Signer.pm
+  lib/Mail/DKIM/Common.pm
   README
 
 --

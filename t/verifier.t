@@ -53,13 +53,13 @@ ok($dkim->result_detail =~ /message/, "determined message had been altered");
 test_email("bad_ietf01_3.txt", "fail");
 ok($dkim->result_detail =~ /RSA/, "determined RSA failure");
 test_email("bad_1.txt", "fail");
+diag($dkim->result_detail);
 SKIP:
 {
-	skip "test does not support your version of Crypt::OpenSSL::RSA", 1
-		unless ($Crypt::OpenSSL::RSA::VERSION == 0.22
-			|| $Crypt::OpenSSL::RSA::VERSION == 0.23);
+	skip "did not recognize OpenSSL error", 1
+		unless ($dkim->result_detail =~ /OpenSSL/i);
 	like($dkim->result_detail,
-		qr/date too small|negative strlen/,
+		qr/OpenSSL/i,
 		"determined OpenSSL error");
 }
 

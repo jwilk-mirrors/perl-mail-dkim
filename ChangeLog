@@ -1,4 +1,9 @@
 2007-01-19: Jason Long <jlong@messiah.edu>
+ * t/verifiter.t: relaxed the OpenSSL check a little more
+ * DKIM.pm, README, others: updated copyright to include 2007;
+   updated abstract to include DomainKeys; updated version number
+
+2007-01-19: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Verifier.pm: in case of unsupported algorithm,
    canonicalization method, or key protocol, list the bad protocol
    in the error message to make diagnosing easier

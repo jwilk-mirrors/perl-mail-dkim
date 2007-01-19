@@ -16,6 +16,11 @@ package Mail::DKIM::Policy;
 
 Mail::DKIM::Policy - represents a DKIM sender signing policy
 
+=head1 DESCRIPTION
+
+A sender signing policy, according to DKIM, is a record published
+in the message author's DNS that describes how they sign messages.
+
 =head1 CONSTRUCTORS
 
 =head2 fetch() - fetch a sender signing policy from DNS
