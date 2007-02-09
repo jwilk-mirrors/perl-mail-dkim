@@ -214,7 +214,7 @@ sub check_signature
 		# no domain specified
 		$self->{signature_reject_reason} =
 			!defined($signature->domain) ? "missing d tag"
-			: "invalid domain in d tag"
+			: "invalid domain in d tag";
 		return 0;
 	}
 
