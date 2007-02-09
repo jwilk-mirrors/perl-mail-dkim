@@ -53,7 +53,7 @@ ok($dkim->result_detail =~ /message/, "determined message had been altered");
 test_email("bad_ietf01_3.txt", "fail");
 ok($dkim->result_detail =~ /RSA/, "determined RSA failure");
 test_email("bad_1.txt", "fail");
-diag($dkim->result_detail);
+print "# " . $dkim->result_detail . "\n";
 SKIP:
 {
 	skip "did not recognize OpenSSL error", 1
