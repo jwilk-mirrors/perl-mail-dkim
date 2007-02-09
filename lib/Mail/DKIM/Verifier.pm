@@ -182,7 +182,7 @@ sub check_signature
 	{
 		# unsupported algorithm
 		$self->{signature_reject_reason} = "unsupported algorithm";
-		if ($signature->algorithm)
+		if (defined $signature->algorithm)
 		{
 			$self->{signature_reject_reason} .= " " . $signature->algorithm;
 		}
@@ -193,7 +193,7 @@ sub check_signature
 	{
 		# unsupported canonicalization method
 		$self->{signature_reject_reason} = "unsupported canonicalization";
-		if ($signature->method)
+		if (defined $signature->method)
 		{
 			$self->{signature_reject_reason} .= " " . $signature->method;
 		}
@@ -202,26 +202,26 @@ sub check_signature
 
 	unless ($signature->check_protocol)
 	{
-		# unsupported protocol
-		$self->{signature_reject_reason} = "unsupported protocol";
-		if ($signature->protocol)
-		{
-			$self->{signature_reject_reason} .= " " . $signature->protocol;
-		}
+		# unsupported query protocol
+		$self->{signature_reject_reason} =
+			!defined($signature->protocol) ? "missing q tag"
+			: "unsupported query protocol, q=" . $signature->protocol;
 		return 0;
 	}
 
-	unless ($signature->domain)
+	unless ($signature->domain ne '')
 	{
 		# no domain specified
-		$self->{signature_reject_reason} = "missing d= parameter";
+		$self->{signature_reject_reason} =
+			!defined($signature->domain) ? "missing d tag"
+			: "invalid domain in d tag"
 		return 0;
 	}
 
 	unless ($signature->selector)
 	{
 		# no selector specified
-		$self->{signature_reject_reason} = "missing s= parameter";
+		$self->{signature_reject_reason} = "missing s tag";
 		return 0;
 	}
 
@@ -545,9 +545,11 @@ The following are possible results from the result_detail() method:
   fail (headers have been altered)
   fail (body has been altered)
   invalid (unsupported canonicalization)
-  invalid (unsupported protocol)
-  invalid (missing d= parameter)
-  invalid (missing s= parameter)
+  invalid (unsupported query protocol)
+  invalid (invalid domain in d tag)
+  invalid (missing q tag)
+  invalid (missing d tag)
+  invalid (missing s tag)
   invalid (unsupported v=0.1 tag)
   invalid (no public key available)
   invalid (public key has been revoked)

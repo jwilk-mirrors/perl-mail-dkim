@@ -1,3 +1,11 @@
+2007-02-09: Jason Long <jlong@messiah.edu>
+
+ * lib/Mail/DKIM/Verifier.pm, DkSignature.pm: better diagnostic messages;
+   allow missing q= tag for domainkey signatures
+   (thanks to mark.martinec@ijs.si for the patch)
+
+ -- VERSION 0.22 --
+
 2007-01-19: Jason Long <jlong@messiah.edu>
  * t/verifiter.t: relaxed the OpenSSL check a little more
  * DKIM.pm, README, others: updated copyright to include 2007;
