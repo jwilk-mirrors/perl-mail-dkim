@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 35;
+use Test::More tests => 36;
 
 use Mail::DKIM::Verifier;
 
@@ -74,6 +74,7 @@ test_email("ignore_6.txt", "invalid");
 test_email("good_dk_gmail.txt", "pass");
 test_email("good_dk_yahoo.txt", "pass");
 test_email("good_dk_1.txt", "pass");
+test_email("good_dk_2.txt", "pass");
 
 sub read_file
 {

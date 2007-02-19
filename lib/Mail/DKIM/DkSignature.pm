@@ -126,6 +126,25 @@ sub body_hash
 	croak "body_hash not implemented";
 }
 
+=head2 algorithm() - get or set the algorithm (a=) field
+
+The algorithm used to generate the signature.
+Defaults to "rsa-sha1", an RSA-signed SHA-1 digest.
+
+=cut
+
+sub algorithm
+{
+	my $self = shift;
+
+	if (@_)
+	{
+		$self->set_tag("a", shift);
+	}
+
+	return lc $self->get_tag("a") || 'rsa-sha1';
+}	
+
 =head2 canonicalization() - get or set the canonicalization (c=) field
 
   $signature->canonicalization("nofws");

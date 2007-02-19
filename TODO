@@ -9,6 +9,7 @@ Verifier:
  - verify multiple signatures (ietf05 6.1) (DONE)
  - check that From header is signed (ietf05 6.1.1)
  - check public key "granularity"
+ - handle first DNS not responding (should go to second DNS server)
 
 Signer:
  - allow DomainKeys signatures without using a policy object
