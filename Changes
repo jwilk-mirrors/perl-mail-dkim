@@ -3,6 +3,10 @@ See the ChangeLog file for the details.
 
 Version 0.23
 
+ * fixes some issues with verifying DomainKeys signatures
+ * generate newer-style DKIM signatures (with v=0.5 tag)
+ * fixed some bugs related to handling messages with no body
+
 
 Version 0.22 - released 2007-01-19
 
