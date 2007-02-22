@@ -44,14 +44,14 @@ sub new {
 	my $self = {};
 	bless $self, $type;
 
-	#$self->version("0.5");
+	$self->version("0.5");
 	$self->algorithm($prms{'Algorithm'} || "rsa-sha1");
 	$self->signature($prms{'Signature'});
 	$self->canonicalization($prms{'Method'} || "simple");
 	$self->domain($prms{'Domain'});
 	$self->headerlist($prms{'Headers'});
-	$self->protocol($prms{'Query'} || "dns");
-	#$self->protocol($prms{'Query'} || "dns/txt");
+	#$self->protocol($prms{'Query'} || "dns");
+	$self->protocol($prms{'Query'} || "dns/txt");
 	$self->selector($prms{'Selector'});
 
 	return $self;

@@ -18,6 +18,7 @@ my $selector = "selector1";
 my $algorithm = "rsa-sha1";
 my $method = "simple";
 my $debug_canonicalization;
+my $binary;
 my $help;
 GetOptions(
 		"type=s" => \$type,
@@ -25,6 +26,7 @@ GetOptions(
 		"method=s" => \$method,
 		"selector=s" => \$selector,
 		"debug-canonicalization=s" => \$debug_canonicalization,
+		"binary" => \$binary,
 		"help|?" => \$help,
 		)
 	or pod2usage(2);
@@ -38,6 +40,10 @@ if (defined $debug_canonicalization)
 	open $debugfh, ">", $debug_canonicalization
 		or die "Error: cannot write $debug_canonicalization: $!\n";
 }
+if ($binary)
+{
+	binmode STDIN;
+}
 
 my $dkim = new Mail::DKIM::Signer(
 		Policy => \&signer_policy,
@@ -50,8 +56,12 @@ my $dkim = new Mail::DKIM::Signer(
 
 while (<STDIN>)
 {
-	chomp;
-	$dkim->PRINT("$_\015\012");
+	unless ($binary)
+	{
+		chomp $_;
+		$_ .= "\015\012";
+	}
+	$dkim->PRINT($_);
 }
 $dkim->CLOSE;
 
