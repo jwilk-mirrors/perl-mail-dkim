@@ -170,7 +170,9 @@ sub finish_header
 	my $policy = $self->{Policy};
 	if (UNIVERSAL::isa($policy, "CODE"))
 	{
-		unless ($policy->($self))
+		# policy is a subroutine ref
+		my $default_sig = $policy->($self);
+		unless (@{$self->{algorithms}} || $default_sig)
 		{
 			$self->{"result"} = "skipped";
 			return;
@@ -178,6 +180,7 @@ sub finish_header
 	}
 	elsif ($policy && $policy->can("apply"))
 	{
+		# policy is a Perl object or class
 		my $default_sig = $policy->apply($self);
 		unless (@{$self->{algorithms}} || $default_sig)
 		{

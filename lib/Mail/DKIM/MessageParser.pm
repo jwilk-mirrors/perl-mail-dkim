@@ -86,6 +86,11 @@ sub CLOSE
 	{
 		if (length $buf)
 		{
+			# A line of header text ending CRLF would not have been
+			# processed yet since before we couldn't tell if it was
+			# the complete header. Now that we're in CLOSE, we can
+			# finish the header...
+			$buf =~ s/\015\012$//s;
 			$self->add_header("$buf\015\012");
 		}
 		$self->finish_header;

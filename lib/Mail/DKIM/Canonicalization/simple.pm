@@ -60,16 +60,18 @@ sub canonicalize_body
 	{
 		$line = $self->{canonicalize_body_buf} . $line;
 		$self->{canonicalize_body_buf} = "";
+		$self->{canonicalize_body_started} = 1;
 	}
 
 	return $line;
 }
 
-#sub finish_body
-#{
-#	my $self = shift;
-#	$self->output("\015\012");
-#	$self->SUPER::finish_body;
-#}
+sub finish_body
+{
+	my $self = shift;
+	$self->{canonicalize_body_started}
+		or $self->output("\015\012");
+	$self->SUPER::finish_body;
+}
 
 1;
