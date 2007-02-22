@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 36;
+use Test::More tests => 39;
 
 use Mail::DKIM::Verifier;
 
@@ -75,6 +75,11 @@ test_email("good_dk_gmail.txt", "pass");
 test_email("good_dk_yahoo.txt", "pass");
 test_email("good_dk_1.txt", "pass");
 test_email("good_dk_2.txt", "pass");
+
+# test empty/missing body - simple canonicalization
+test_email("no_body_1.txt", "pass");
+test_email("no_body_2.txt", "pass");
+test_email("no_body_3.txt", "pass");
 
 sub read_file
 {

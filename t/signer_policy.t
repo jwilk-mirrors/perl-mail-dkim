@@ -84,6 +84,7 @@ $policy = sub {
 				Domain => "different-domain.example",
 				Selector => "beta",
 			));
+		return;
 	};
 $dkim = sign_sample_using_args(
 		Policy => $policy,
