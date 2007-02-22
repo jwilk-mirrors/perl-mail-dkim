@@ -9,7 +9,10 @@ Verifier:
  - verify multiple signatures (ietf05 6.1) (DONE)
  - check that From header is signed (ietf05 6.1.1)
  - check public key "granularity"
- - handle first DNS not responding (should go to second DNS server)
+ - handle no response from first DNS server listed in resolv.conf
+   (currently it goes to the second server after 5 seconds,
+   but it does this for EVERY signature, so this will badly affect
+   overall throughput)
 
 Signer:
  - allow DomainKeys signatures without using a policy object
@@ -25,6 +28,7 @@ Testing (some of this may already be implemented):
    - NXDOMAIN
    - SERVFAIL
    - syntax error in public key record
+   - revoked key
  - test DNS timeout for signing policy
  - test signature options:
    - unspecified query type
@@ -35,3 +39,20 @@ Testing (some of this may already be implemented):
    - bad canonicalization
    - unspecified canonicalization
    - test presence of version tag in signature
+ - allow verification tests to succeed without querying live DNS server
+
+Possible issues in base-10 draft:
+ - 6.1.2 - NXDOMAIN for public key => PERMFAIL (no key for signature)
+ - 6.1.2 - check g= tag of public key against i= tag of signature
+ - 6.1.2 - check h= tag of public key against a= tag of signature
+ - 6.1.2 - treat empty p= tag as PERMFAIL (key revoked)
+ - 3.4.3 - test canonicalization of an empty body
+ - 3.5 - t= tag, create it when signing messages, check it when verifying
+ - 3.5 - x= tag, create it when signing messages, check it when verifying
+ - 3.6.1 - check s= tag of public key
+ - 5.4 - allow better control of which headers to sign
+ - 5.5 - recommended headers to sign and NOT to sign
+ - 3.3.1 - what's an RSA exponent?
+ - 6.1.1 - configurable list of unacceptable signing domains,
+       e.g. "com" and "co.uk"
+

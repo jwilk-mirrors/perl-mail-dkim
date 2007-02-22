@@ -1,4 +1,18 @@
-2007-02-99: Jason Long <jlong@messiah.edu>
+2007-02-21: Jason Long <jlong@messiah.edu>
+ * t/signer_policy.t: signature should still work even if no value is
+   returned from signer policy
+ * t/signer.t: now uses v=0.5 signature, which changes the signature
+ * t/verifier.t: added three tests of empty body messages
+ * lib/Mail/DKIM/Signer.pm: fixed bug where if signer policy was a
+   sub ref, and didn't return a true value, the message would get skipped
+ * lib/Mail/DKIM/Canonicalization/simple.pm: argh, hack for handling
+   empty body
+ * lib/Mail/DKIM/MessageParser.pm: fixed bug in handling of messages
+   without bodies
+ * lib/Mail/DKIM/Signature.pm: output v=0.5 signatures now
+ * scripts/dkimsign.pl: new --binary option to disable line-ending conversion
+
+2007-02-19: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/DkSignature: provide default value for a= tag
    (thanks to mark.martinec@ijs.si for the patch)
  * t/corpus/good_dk_2.txt: test for missing q= and a= tags on DomainKey
