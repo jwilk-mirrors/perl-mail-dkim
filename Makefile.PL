@@ -13,6 +13,7 @@ WriteMakefile(
 			Mail::Address => 0,
 			MIME::Base64 => 0,
 			Net::DNS => 0,
+			Test::Simple => 0,  # only needed for `make test'
 		},
 	ABSTRACT_FROM  => 'lib/Mail/DKIM.pm', # retrieve abstract from module
 	AUTHOR         => 'Jason Long <jlong@messiah.edu>',

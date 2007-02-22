@@ -386,18 +386,18 @@ sub finish_body
 		}
 		otherwise
 		{
-			my $E = shift;
+			# see also add_signature
+			chomp (my $E = shift);
+			if ($E =~ /(OpenSSL error: .*?) at /)
+			{
+				$E = $1;
+			}
+			elsif ($E =~ /^(panic:.*?) at /)
+			{
+				$E = "OpenSSL $1";
+			}
 			$result = "fail";
 			$details = $E;
-			chomp $details;
-			if ($details =~ /(OpenSSL error: .*?) at /)
-			{
-				$details = $1;
-			}
-			elsif ($details =~ /^(panic:.*?) at /)
-			{
-				$details = "OpenSSL $1";
-			}
 		};
 
 		# collate results ... ignore failed signatures if we already got
@@ -552,7 +552,13 @@ The following are possible results from the result_detail() method:
   invalid (missing s tag)
   invalid (unsupported v=0.1 tag)
   invalid (no public key available)
-  invalid (public key has been revoked)
+  invalid (public key: does not support email)
+  invalid (public key: does not support hash algorithm 'sha1')
+  invalid (public key: unsupported key type)
+  invalid (public key: missing p= tag)
+  invalid (public key: revoked)
+  invalid (public key: invalid data)
+  invalid (public key: OpenSSL error: ...)
   none
 
 =head2 signature() - access the message's DKIM signature

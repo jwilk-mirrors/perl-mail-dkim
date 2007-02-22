@@ -417,16 +417,14 @@ sub get_public_key
 			Domain => $self->domain);
 		unless ($pubk)
 		{
-			#$self->status("no key"),
-			#$self->errorstr("no public key available"),
 			die "no public key available\n";
 		}
 
 		if ($pubk->revoked)
 		{
-			#$self->status("revoked"),
-			#$self->errorstr("public key has been revoked"),
-			die "public key has been revoked\n";
+			# FIXME- the key was checked in fetch(), so if the
+			# key was really revoked, we shouldn't have gotten here
+			die "public key: revoked\n";
 		}
 
 		$self->{public} = $pubk;

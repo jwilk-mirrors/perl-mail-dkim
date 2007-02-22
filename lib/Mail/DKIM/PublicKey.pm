@@ -134,14 +134,34 @@ sub check
 	{
 		die "public key: invalid data\n";
 	}
-	
+
+	# have OpenSSL load the key
+	eval
+	{
+		$self->cork;
+	};
+	if ($@)
+	{
+		# see also finish_body
+		chomp (my $E = $@);
+		if ($E =~ /(OpenSSL error: .*?) at /)
+		{
+			$E = "public key: $1";
+		}
+		elsif ($E =~ /^(panic:.*?) at /)
+		{
+			$E = "public key: OpenSSL $1";
+		}
+		die "$E\n";
+	}
+
 	# check service type
 	if (my $s = $self->get_tag("s"))
 	{
 		my @list = split(/:/, $s);
 		unless (grep { $_ eq "*" || $_ eq "email" } @list)
 		{
-			die "public key: does not support email authentication\n";
+			die "public key: does not support email\n";
 		}
 	}
 
@@ -185,18 +205,8 @@ sub convert
 
 	$cert .= "-----END PUBLIC KEY-----\n";
 
-	my $cork;
-	
-	eval {
-		$cork = new_public_key Crypt::OpenSSL::RSA($cert);
-	};
-
-	$@ and
-		$self->errorstr($@),
-		return;
-
-	$cork or
-		return;
+	my $cork = Crypt::OpenSSL::RSA->new_public_key($cert)
+		or die "unable to generate public key object";
 
 	# segfaults on my machine
 #	$cork->check_key or
@@ -301,6 +311,13 @@ sub verify_digest
 	my ($digest_algorithm, $digest, $signature) = @_;
 
 	my $rsa_pub = $self->cork;
+	unless ($rsa_pub)
+	{
+		# FIXME- is this code path reachable?
+		$@ = "bad key s=$self->{Selector} d=$self->{Domain}";
+		return;
+	}
+
 	$rsa_pub->use_no_padding;
 	my $verify_result = $rsa_pub->encrypt($signature);
 
