@@ -5,7 +5,6 @@ MANIFEST
 README
 TODO
 HACKING.DKIM
-META.yml                                 Module meta-data (added by MakeMaker)
 lib/Mail/DKIM.pm
 lib/Mail/DKIM/Algorithm/Base.pm
 lib/Mail/DKIM/Algorithm/dk_rsa_sha1.pm

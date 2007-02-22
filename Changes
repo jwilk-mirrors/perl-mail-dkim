@@ -1,11 +1,15 @@
 This file summarizes what's changed between releases of Mail-DKIM.
 See the ChangeLog file for the details.
 
-Version 0.23
+Version 0.24
+
+
+Version 0.23 - released 2007-02-22
 
  * fixes some issues with verifying DomainKeys signatures
  * generate newer-style DKIM signatures (with v=0.5 tag)
  * fixed some bugs related to handling messages with no body
+ * improved diagnostic messages for certain cases
 
 
 Version 0.22 - released 2007-01-19
