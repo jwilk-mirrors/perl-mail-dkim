@@ -3,6 +3,8 @@
    lib/Mail/DKIM/KeyValueList.pm: fix for linebreaks in public key data;
    provided by Mark Martinec.
  * lib/Mail/DKIM/Signature.pm: fix default value q=dns/txt
+ * t/verifier.t: added six new tests that test problems with the public key
+   (e.g. revoked, syntax, etc.)
 
  -- VERSION 0.23 --
 
