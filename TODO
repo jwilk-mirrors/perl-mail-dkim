@@ -13,6 +13,10 @@ Verifier:
    (currently it goes to the second server after 5 seconds,
    but it does this for EVERY signature, so this will badly affect
    overall throughput)
+ - **minor bug**- when Debug_Canonicalization=1 on a message with
+   multiple signatures, the canonicalized output is recorded multiple times.
+   Probably only the first valid signature should receive the
+   Debug_Canonicalization option
 
 Signer:
  - allow DomainKeys signatures without using a policy object
