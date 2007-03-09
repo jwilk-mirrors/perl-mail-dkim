@@ -617,10 +617,7 @@ sub data
 	}
 
 	my $b = $self->get_tag("b");
-	if (defined $b)
-	{
-		$b =~ s/\s+//g;
-	}
+	$b =~ tr/\015\012 \t//d  if defined $b;
 	return $b;
 }	
 

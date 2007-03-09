@@ -262,7 +262,10 @@ sub data
 	(@_) and 
 		$self->set_tag("p", shift);
 
-	return $self->get_tag("p");
+	my $p = $self->get_tag("p");
+	# remove whitespace (actually only LWSP is allowed)
+	$p =~ tr/\015\012 \t//d  if defined $p;
+	return $p;
 }
 
 sub flags
@@ -311,10 +314,9 @@ sub verify_digest
 	my ($digest_algorithm, $digest, $signature) = @_;
 
 	my $rsa_pub = $self->cork;
-	unless ($rsa_pub)
-	{
-		# FIXME- is this code path reachable?
-		$@ = "bad key s=$self->{Selector} d=$self->{Domain}";
+	if (!$rsa_pub) {
+		$@ = $@ ne '' ? "RSA failed: $@" : "RSA unknown problem";
+		$@ .= ", s=$self->{Selector} d=$self->{Domain}";
 		return;
 	}
 

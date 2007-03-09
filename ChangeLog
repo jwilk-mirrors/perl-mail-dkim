@@ -1,3 +1,8 @@
+2007-03-09: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/PublicKey.pm, lib/Mail/DKIM/Signature.pm,
+   lib/Mail/DKIM/KeyValueList.pm: fix for linebreaks in public key data;
+   provided by Mark Martinec.
+
  -- VERSION 0.23 --
 
 2007-02-22: Jason Long <jlong@messiah.edu>

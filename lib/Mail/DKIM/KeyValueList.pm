@@ -40,7 +40,7 @@ sub parse
 		push @{$self->{tags}}, $tag;
 
 		# strip preceding and trailing whitespace
-		$raw_tag =~ s/^\s*|\s*$//g;
+		$raw_tag =~ s/^\s+|\s*$//g;
 
 		next if ($raw_tag eq "");
 
