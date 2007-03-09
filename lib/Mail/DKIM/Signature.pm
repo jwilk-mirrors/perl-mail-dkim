@@ -570,7 +570,7 @@ sub protocol {
 	my $q = $self->get_tag("q");
 	if (not defined $q)
 	{
-		return "dns/";
+		return "dns/txt";
 	}
 	elsif ($q =~ m#/#)
 	{
