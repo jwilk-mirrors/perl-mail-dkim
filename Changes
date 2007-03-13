@@ -1,7 +1,11 @@
 This file summarizes what's changed between releases of Mail-DKIM.
 See the ChangeLog file for the details.
 
-Version 0.24
+Version 0.24 - released 2007-03-13
+
+ * fixes two bugs, see ChangeLog for details
+ * fixed a bug with public keys (in DNS) containing linebreak characters
+ * fixed a bug with DKIM signatures not including the optional q= tag
 
 
 Version 0.23 - released 2007-02-22

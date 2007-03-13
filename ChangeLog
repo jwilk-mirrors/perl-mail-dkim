@@ -1,8 +1,11 @@
+ -- VERSION 0.24 --
+
 2007-03-09: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/PublicKey.pm, lib/Mail/DKIM/Signature.pm,
    lib/Mail/DKIM/KeyValueList.pm: fix for linebreaks in public key data;
    provided by Mark Martinec.
- * lib/Mail/DKIM/Signature.pm: fix default value q=dns/txt
+ * lib/Mail/DKIM/Signature.pm: fix default value q=dns/txt; this fixes a bug
+   for DKIM signatures without q= tags
  * t/verifier.t: added six new tests that test problems with the public key
    (e.g. revoked, syntax, etc.)
 
