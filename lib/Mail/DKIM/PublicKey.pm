@@ -66,7 +66,7 @@ sub fetch
 		alarm 0;
 	};
 	my $E = $@;
-	alarm 0;
+	alarm 0; #FIXME- restore previous alarm?
 	if ($E)
 	{
 		chomp $E;
