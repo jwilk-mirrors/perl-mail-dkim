@@ -17,6 +17,12 @@ Verifier:
    multiple signatures, the canonicalized output is recorded multiple times.
    Probably only the first valid signature should receive the
    Debug_Canonicalization option
+ - provide semi-standard mechanism to report results of verification
+   (including what, if any, of header.from and header.sender can be trusted)
+ - provide mechanism in the API to run the DNS lookups in parallel with
+   other processing (e.g. the SpamAssassin plugin would want to start the
+   DNS queries as early as possible, but continue processing other aspects
+   of the message while waiting for the DNS queries to complete)
 
 Signer:
  - allow DomainKeys signatures without using a policy object
