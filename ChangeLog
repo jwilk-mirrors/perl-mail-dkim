@@ -1,3 +1,9 @@
+2007-04-15: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/PublicKey.pm: bug fix- if Net::DNS caused an exception,
+   there was a race condition for resetting the alarm
+ * lib/Mail/DKIM/Signer.pm: limit which headers are signed
+ * t/signer.t: test that undesirable headers are not signed
+
  -- VERSION 0.24 --
 
 2007-03-09: Jason Long <jlong@messiah.edu>

@@ -62,8 +62,20 @@ sub fetch
 		local $SIG{ALRM} = sub { die "DNS query timeout for $host\n" };
 		alarm 10;
 
-		$resp = $rslv->query($host, "TXT");
+		# the query itself could cause an exception, which would prevent
+		# us from resetting the alarm before leaving the eval {} block
+		# so we wrap the query in a nested eval {} block
+		eval
+		{
+			$resp = $rslv->query($host, "TXT");
+		};
+		my $E = $@;
 		alarm 0;
+		if ($E)
+		{
+			chomp $E;
+			die "$E\n";
+		}
 	};
 	my $E = $@;
 	alarm 0; #FIXME- restore previous alarm?
@@ -185,6 +197,9 @@ sub check_hash_algorithm
 	return 1;
 }
 
+# Create an OpenSSL public key object from the Base64-encoded data
+# found in this public key's DNS record. The OpenSSL object is saved
+# in the "cork" property.
 sub convert
 {
 	use Crypt::OpenSSL::RSA;

@@ -233,14 +233,6 @@ sub finish_header
 	}
 }
 
-sub headers
-{
-	my $self = shift;
-	croak "unexpected argument" if @_;
-	my @headers = @{$self->{header_field_names}};
-	return join(":", @headers);
-}
-
 sub finish_body
 {
 	my $self = shift;
@@ -347,6 +339,58 @@ feeding it into the signer.  The message must use <CRLF> line
 terminators (same as the SMTP protocol).
 
 =cut
+
+=head2 headers() - determine which headers to put in signature
+
+  my $headers = $dkim->headers;
+
+This is a string containing the names of the header fields that
+will be signed, separated by colons.
+
+=cut
+
+# these are headers that "should" be included in the signature,
+# according to the DKIM spec.
+my @DEFAULT_HEADERS = qw(From Sender Reply-To Subject Date
+	Message-ID To Cc MIME-Version
+	Content-Type Content-Transfer-Encoding Content-ID Content-Description
+	Resent-Date Resent-From Resent-Sender Resent-To Resent-cc
+	Resent-Message-ID
+	In-Reply-To References
+	List-Id List-Help List-Unsubscribe List-Subscribe
+	List-Post List-Owner List-Archive);
+
+sub headers
+{
+	my $self = shift;
+	croak "unexpected argument" if @_;
+
+	# these are the header fields we found in the message we're signing
+	my @found_headers = @{$self->{header_field_names}};
+
+	# these are the headers we actually want to sign
+	my @wanted_headers = @DEFAULT_HEADERS;
+	if ($self->{Headers})
+	{
+		push @wanted_headers, split /:/, $self->{Headers};
+	}
+
+	my @headers =
+		grep { my $a = $_;
+			scalar grep { lc($a) eq lc($_) } @wanted_headers }
+		@found_headers;
+	return join(":", @headers);
+}
+
+# return nonzero if this is header we should sign
+sub want_header
+{
+	my $self = shift;
+	my ($header_name) = @_;
+
+	#TODO- provide a way for user to specify which headers to sign
+	return scalar grep { lc($_) eq lc($header_name) } @DEFAULT_HEADERS;
+}
 
 =head2 method() - get or set the selected canonicalization method
 
