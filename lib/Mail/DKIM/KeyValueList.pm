@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2005 Messiah College. All rights reserved.
+# Copyright 2005-2007 Messiah College. All rights reserved.
 # Jason Long <jlong@messiah.edu>
 
 # Copyright (c) 2004 Anthony D. Urso. All rights reserved.
@@ -24,14 +24,14 @@ sub new
 
 sub parse
 {
-	my $class = shift;
+	my $self_or_class = shift;
 	croak "wrong number of arguments" unless (@_ == 1);
 	my ($string) = @_;
 
-	my $self = {};
-	bless $self, $class;	
+	my $self = ref($self_or_class) || $self_or_class->new;
 
 	$self->{tags} = [];
+	$self->{tags_by_name} = {};
 	foreach my $raw_tag (split /;/, $string, -1)
 	{
 		my $tag = {

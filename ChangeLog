@@ -1,3 +1,13 @@
+2007-04-16: Jason Long <jlong@messiah.edu>
+ * t/signature.t: test that prettify() doesn't choke
+ * lib/Mail/DKIM/Algorithm/Base.pm: call prettify() before hashing the
+   signature header
+ * lib/Mail/DKIM/Signer.pm: call prettify_safe() after generating the
+   signature data
+ * lib/Mail/DKIM/Signature.pm: stubs for prettify() and prettify_safe()
+ * lib/Mail/DKIM/KeyValueList.pm: parse() can now be called on an existing
+   key-value-list to regenerate the tag data from a string
+
 2007-04-15: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/PublicKey.pm: bug fix- if Net::DNS caused an exception,
    there was a race condition for resetting the alarm

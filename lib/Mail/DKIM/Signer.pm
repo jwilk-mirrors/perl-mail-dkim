@@ -246,6 +246,9 @@ sub finish_body
 		my $signb64 = $algorithm->sign($self->{private});
 		$algorithm->signature->data($signb64);
 
+		# insert linebreaks in signature data, if desired
+		$algorithm->signature->prettify_safe();
+
 		$self->{signature} = $algorithm->signature;
 		$self->{result} = "signed";
 	}

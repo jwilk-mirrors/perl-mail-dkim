@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -I../lib
 
 use strict;
 use warnings;
@@ -36,3 +36,6 @@ Content-Transfer-Encoding; s 	 = 	 foo;
 $signature = Mail::DKIM::Signature->parse($unparsed);
 ok($signature, "parse() works (II)");
 ok($signature->domain eq "example.org", "parse() correctly handles spaces");
+
+$signature->prettify;
+print "# " . $signature->as_string;
