@@ -637,7 +637,7 @@ sub prettify
 {
 	my $self = shift;
 	$self->wrap(
-		Start => length($self->{prefix} || ""),
+		Start => length($self->{prefix} || "DKIM-Signature:"),
 		Tags => {
 			b => "b64",
 			bh => "b64",
@@ -659,7 +659,7 @@ sub prettify_safe
 {
 	my $self = shift;
 	$self->wrap(
-		Start => length($self->{prefix}),
+		Start => length($self->{prefix} || "DKIM-Signature:"),
 		Tags => {
 			b => "b64",
 			},

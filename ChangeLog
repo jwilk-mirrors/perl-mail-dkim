@@ -5,6 +5,11 @@
  * lib/Mail/DKIM/KeyValueList.pm (wrap): new method to help wrap the
    signature
  * lib/Mail/DKIM/Signature.pm: wrap the signature
+ * lib/Mail/DKIM/Algorithm/Base.pm: oops, prettify() should only be called
+   when we're _making_ the signature
+ * lib/Mail/DKIM/KeyValueList.pm (wrap): only do something if TextWrap
+   has been loaded (no longer automatically load it)
+ * lib/Mail/DKIM/Signature.pm (prettify): better default value for Start
 
 2007-04-16: Jason Long <jlong@messiah.edu>
  * t/signature.t: test that prettify() doesn't choke

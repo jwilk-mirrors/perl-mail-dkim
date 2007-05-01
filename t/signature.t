@@ -5,6 +5,7 @@ use warnings;
 use Test::Simple tests => 9;
 
 use Mail::DKIM::Signature;
+use Mail::DKIM::TextWrap;
 
 my $signature = Mail::DKIM::Signature->new();
 ok($signature, "new() works");
