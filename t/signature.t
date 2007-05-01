@@ -37,5 +37,8 @@ $signature = Mail::DKIM::Signature->parse($unparsed);
 ok($signature, "parse() works (II)");
 ok($signature->domain eq "example.org", "parse() correctly handles spaces");
 
+print "#BEFORE->\n" . $signature->as_string . "\n";
+$signature->prettify_safe;
+print "#SAFE--->\n" . $signature->as_string . "\n";
 $signature->prettify;
-print "# " . $signature->as_string;
+print "#PRETTY->\n" . $signature->as_string . "\n";

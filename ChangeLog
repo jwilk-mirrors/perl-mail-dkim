@@ -1,3 +1,11 @@
+2007-05-01: Jason Long <jlong@messiah.edu>
+ * t/signature.t: test prettify_safe()
+ * lib/Mail/DKIM/TextWrap.pm: new wrapping module to help with prettifying
+   the signature
+ * lib/Mail/DKIM/KeyValueList.pm (wrap): new method to help wrap the
+   signature
+ * lib/Mail/DKIM/Signature.pm: wrap the signature
+
 2007-04-16: Jason Long <jlong@messiah.edu>
  * t/signature.t: test that prettify() doesn't choke
  * lib/Mail/DKIM/Algorithm/Base.pm: call prettify() before hashing the

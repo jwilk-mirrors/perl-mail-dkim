@@ -28,6 +28,7 @@ lib/Mail/DKIM/PrivateKey.pm
 lib/Mail/DKIM/SignerPolicy.pm
 lib/Mail/DKIM/Signer.pm
 lib/Mail/DKIM/Signature.pm
+lib/Mail/DKIM/TextWrap.pm
 lib/Mail/DKIM/Common.pm
 lib/Mail/DKIM/KeyValueList.pm
 scripts/dkimsign.pl

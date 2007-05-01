@@ -28,7 +28,7 @@ sub parse
 	croak "wrong number of arguments" unless (@_ == 1);
 	my ($string) = @_;
 
-	my $self = ref($self_or_class) || $self_or_class->new;
+	my $self = ref($self_or_class) ? $self_or_class : $self_or_class->new;
 
 	$self->{tags} = [];
 	$self->{tags_by_name} = {};
@@ -132,6 +132,69 @@ sub as_string
 {
 	my $self = shift;
 	return join(";", map { $_->{raw} } @{$self->{tags}});
+}
+
+# Start - length of the signature's prefix
+# Margin - how far to the right the text can go
+# Insert - characters to insert when wrapping a line
+# Tags - special processing for tags
+# Default - how to handle unspecified tags
+# PreserveNames - if set, the name= part of the tag will be preserved
+sub wrap
+{
+	my $self = shift;
+	my %args = @_;
+
+	my $result = "";
+	use Mail::DKIM::TextWrap;
+	my $wrap = Mail::DKIM::TextWrap->new(
+			Output => \$result,
+			Separator => $args{Insert} || "\n\t",
+			Margin => $args{Margin} || 72,
+			cur => $args{Start} || 0,
+			);
+	my $did_first;
+	foreach my $tag (@{$self->{tags}})
+	{
+		my $tagname = $tag->{name};
+		my $tagtype = $args{Tags}->{$tagname} || $args{Default} || "";
+		my ($raw_name, $raw_value) = split(/=/, $tag->{raw}, 2);
+		unless ($args{PreserveNames})
+		{
+			$raw_name =~ s/^\s*/ /;
+			$raw_name =~ s/\s+$//;
+		}
+
+		if ($tagtype eq "b64")
+		{
+			$raw_value =~ s/\s+//gs;   #removes all whitespace
+			$wrap->{Break} = qr/./;
+		}
+		elsif ($tagtype eq "list")
+		{
+			$raw_value =~ s/\s+/ /gs;   #reduces any whitespace to single space
+			$raw_value =~ s/^\s|\s$//g; #trims preceding/trailing spaces
+			$raw_value =~ s/\s*:\s*/:/g;
+			$wrap->{Break} = qr/:/;
+		}
+		elsif ($tagtype eq "")
+		{
+			$raw_value =~ s/\s+/ /gs;   #reduces any whitespace to single space
+			$raw_value =~ s/^\s|\s$//g; #trims preceding/trailing spaces
+			$wrap->{Break} = qr/\s/;
+		}
+		else
+		{
+			$wrap->{Break} = undef;
+		}
+
+		$did_first ? $wrap->add(";") : ($did_first = 1);
+		$wrap->add($raw_name . "=" . $raw_value);
+	}
+
+	$wrap->finish;
+	parse($self, $result);
+	return;
 }
 
 1;

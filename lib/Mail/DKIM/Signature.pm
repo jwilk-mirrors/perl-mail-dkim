@@ -636,11 +636,14 @@ fed to the canonicalization algorithm.
 sub prettify
 {
 	my $self = shift;
-	eval {
-		use Text::Wrap;
-		my $x = wrap($self->as_string);
-		$self->parse($x);
-	};
+	$self->wrap(
+		Start => length($self->{prefix} || ""),
+		Tags => {
+			b => "b64",
+			bh => "b64",
+			h => "list",
+			},
+		);
 }
 
 =head2 prettify_safe() - same as prettify() but only touches the b= part
@@ -655,6 +658,14 @@ of the signature.
 sub prettify_safe
 {
 	my $self = shift;
+	$self->wrap(
+		Start => length($self->{prefix}),
+		Tags => {
+			b => "b64",
+			},
+		PreserveNames => 1,
+		Default => "preserve", #preserves unknown tags
+		);
 }
 
 =head2 timestamp() - get or set the signature timestamp (t=) field
