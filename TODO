@@ -28,9 +28,10 @@ Signer:
  - allow DomainKeys signatures without using a policy object
  - allow adding chained signatures in one pass
    (e.g. allow adding a DomainKeys signature, and a DKIM signature,
-   with the new DKIM signature signing the new DomainKeys signature)
+   with the new DKIM signature signing the new DomainKeys signature) (REJECTED)
  - allow creation of i=, l=, t=, x=, and z= tags
  - do header-wrapping to signature before signing
+ - allow signer policy to change which private key is used
 
 Testing (some of this may already be implemented):
  - test public key errors:
