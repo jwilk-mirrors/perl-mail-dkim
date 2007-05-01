@@ -145,9 +145,11 @@ sub wrap
 	my $self = shift;
 	my %args = @_;
 
+	my $TEXTWRAP_CLASS = "Mail::DKIM::TextWrap";
+	return unless (UNIVERSAL::can($TEXTWRAP_CLASS, "new"));
+
 	my $result = "";
-	use Mail::DKIM::TextWrap;
-	my $wrap = Mail::DKIM::TextWrap->new(
+	my $wrap = $TEXTWRAP_CLASS->new(
 			Output => \$result,
 			Separator => $args{Insert} || "\n\t",
 			Margin => $args{Margin} || 72,

@@ -223,7 +223,11 @@ sub finish_message
 	#	}
 	}
 
-	$self->{Signature}->prettify;
+	if ($self->{mode} eq "sign")
+	{
+		$self->{Signature}->prettify;
+	}
+
 	my $sig_line = $self->{Signature}->as_string_without_data;
 	my $canonicalized = $self->{canon}->canonicalize_header($sig_line);
 
