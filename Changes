@@ -4,6 +4,7 @@ See the ChangeLog file for the details.
 Version 0.25
 
  * we now only sign headers that IETF recommends for signing
+ * it's now possible to "prettify" outgoing signatures
 
 
 Version 0.24 - released 2007-03-13

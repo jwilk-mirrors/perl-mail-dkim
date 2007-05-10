@@ -1,3 +1,9 @@
+2007-05-10: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/KeyValueList.pm: separator should be "\015\012" not "\n";
+   allow splitting on whitespace in a colon-separated list value
+ * Makefile.PL: it seems version 0.22 or better is required of
+   Crypt::OpenSSL::RSA
+
 2007-05-01: Jason Long <jlong@messiah.edu>
  * t/signature.t: test prettify_safe()
  * lib/Mail/DKIM/TextWrap.pm: new wrapping module to help with prettifying

@@ -6,7 +6,7 @@ WriteMakefile(
 	NAME           => 'Mail::DKIM',
 	VERSION_FROM   => 'lib/Mail/DKIM.pm', # finds $VERSION
 	PREREQ_PM      => {
-			Crypt::OpenSSL::RSA => 0,
+			Crypt::OpenSSL::RSA => 0.22,
 			Digest::SHA1 => 0,
 			Digest::SHA => 0,
 			Error => 0,

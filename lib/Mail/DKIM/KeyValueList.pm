@@ -151,7 +151,7 @@ sub wrap
 	my $result = "";
 	my $wrap = $TEXTWRAP_CLASS->new(
 			Output => \$result,
-			Separator => $args{Insert} || "\n\t",
+			Separator => $args{Insert} || "\015\012\t",
 			Margin => $args{Margin} || 72,
 			cur => $args{Start} || 0,
 			);
@@ -177,7 +177,7 @@ sub wrap
 			$raw_value =~ s/\s+/ /gs;   #reduces any whitespace to single space
 			$raw_value =~ s/^\s|\s$//g; #trims preceding/trailing spaces
 			$raw_value =~ s/\s*:\s*/:/g;
-			$wrap->{Break} = qr/:/;
+			$wrap->{Break} = qr/[\s:]/;
 		}
 		elsif ($tagtype eq "")
 		{
