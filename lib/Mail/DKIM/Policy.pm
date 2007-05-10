@@ -25,7 +25,7 @@ in the message author's DNS that describes how they sign messages.
 
 =head2 fetch() - fetch a sender signing policy from DNS
 
-  my $policy = fetch Mail::DKIM::Policy(
+  my $policy = Mail::DKIM::Policy->fetch(
                    Protocol => "dns",
                    Domain => "example.org",
                );
@@ -67,16 +67,20 @@ sub fetch
 		local $SIG{ALRM} = sub { die "DNS query timeout for $host\n" };
 		alarm 10;
 
-		$resp = $rslv->query($host, "TXT") or
+		# the query itself could cause an exception, which would prevent
+		# us from resetting the alarm before leaving the eval {} block
+		# so we wrap the query in a nested eval {} block
+		eval
+		{
+			$resp = $rslv->query($host, "TXT") or
+		};
+		my $E = $@;
 		alarm 0;
+		die $E if $E;
 	};
 	my $E = $@;
-	alarm 0;
-	if ($E)
-	{
-		chomp $E;
-		die "$E\n";
-	}
+	alarm 0; #FIXME- restore previous alarm?
+	die $E if $E;
 	unless ($resp)
 	{
 		# no response => NXDOMAIN, use default policy
@@ -102,7 +106,7 @@ sub fetch
 
 =head2 new() - construct a default policy object
 
-  my $policy = new Mail::DKIM::Policy;
+  my $policy = Mail::DKIM::Policy->new;
 
 =cut
 
@@ -153,7 +157,7 @@ sub parse
 
   my $result = $policy->apply($dkim_verifier);
 
-The caller must provide an instance of Mail::DKIM::Verifier, one which
+The caller must provide an instance of L<Mail::DKIM::Verifier>, one which
 has already been fed the message being verified.
 
 Possible results are:
@@ -355,7 +359,7 @@ Jason Long, E<lt>jlong@messiah.eduE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2006 by Messiah College
+Copyright (C) 2006-2007 by Messiah College
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.6 or,

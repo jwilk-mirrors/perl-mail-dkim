@@ -71,19 +71,11 @@ sub fetch
 		};
 		my $E = $@;
 		alarm 0;
-		if ($E)
-		{
-			chomp $E;
-			die "$E\n";
-		}
+		die $E if $E;
 	};
 	my $E = $@;
 	alarm 0; #FIXME- restore previous alarm?
-	if ($E)
-	{
-		chomp $E;
-		die "$E\n";
-	}
+	die $E if $E;
 	unless ($resp)
 	{
 		# no response => NXDOMAIN

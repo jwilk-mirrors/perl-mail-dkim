@@ -433,7 +433,7 @@ and verifies the signature.
   my $policy = $dkim->fetch_author_policy;
   my $policy_result = $policy->apply($dkim);
 
-See also the fetch() method of Mail::DKIM::Policy.
+See also the fetch() method of L<Mail::DKIM::Policy>.
 
 The "author" policy is the policy for the address found in the From header,
 i.e. the "originator" address.
@@ -451,7 +451,7 @@ sub fetch_author_policy
 	if ($originator && $originator->host)
 	{
 		# TODO - be prepared to handle key protocols != dns
-		return fetch Mail::DKIM::Policy(
+		return Mail::DKIM::Policy->fetch(
 				Protocol => "dns",
 				Domain => $originator->host);
 	}
@@ -578,7 +578,7 @@ Jason Long, E<lt>jlong@messiah.eduE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2006 by Messiah College
+Copyright (C) 2006-2007 by Messiah College
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.6 or,
