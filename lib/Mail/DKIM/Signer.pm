@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2005 Messiah College. All rights reserved.
+# Copyright 2005-2007 Messiah College. All rights reserved.
 # Jason Long <jlong@messiah.edu>
 
 # Copyright (c) 2004 Anthony D. Urso. All rights reserved.
@@ -81,7 +81,7 @@ See Mail::DKIM::SignerPolicy for more information about policy objects.
 package Mail::DKIM::Signer;
 use base "Mail::DKIM::Common";
 use Carp;
-our $VERSION = '0.25';
+our $VERSION = '0.26';
 
 # PROPERTIES
 #

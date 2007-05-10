@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2005-2006 Messiah College. All rights reserved.
+# Copyright 2005-2007 Messiah College. All rights reserved.
 # Jason Long <jlong@messiah.edu>
 
 # Copyright (c) 2004 Anthony D. Urso. All rights reserved.
@@ -80,7 +80,7 @@ package Mail::DKIM::Verifier;
 use base "Mail::DKIM::Common";
 use Carp;
 use Error ":try";
-our $VERSION = '0.25';
+our $VERSION = '0.26';
 
 sub init
 {

@@ -1,10 +1,16 @@
 This file summarizes what's changed between releases of Mail-DKIM.
 See the ChangeLog file for the details.
 
-Version 0.25
+Version 0.26
+
+
+Version 0.25 - released 2007-05-10
 
  * we now only sign headers that IETF recommends for signing
- * it's now possible to "prettify" outgoing signatures
+ * it's now possible to "prettify" outgoing signatures, but this feature
+   is not enabled by default. To enable, do a "use Mail::DKIM::TextWrap"
+   in your program that signs messages. (This may change in a future
+   release.)
 
 
 Version 0.24 - released 2007-03-13
