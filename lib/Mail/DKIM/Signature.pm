@@ -44,7 +44,7 @@ sub new {
 	my $self = {};
 	bless $self, $type;
 
-	$self->version("0.5");
+	$self->version("1");
 	$self->algorithm($prms{'Algorithm'} || "rsa-sha1");
 	$self->signature($prms{'Signature'});
 	$self->canonicalization($prms{'Method'} || "simple");
@@ -95,10 +95,10 @@ sub parse
 	my $self = $class->SUPER::parse($string);
 	$self->{prefix} = $prefix;
 
-	# TODO: check version
+	# check version
 	if (my $version = $self->version)
 	{
-		my @ALLOWED_VERSIONS = ("0.5");
+		my @ALLOWED_VERSIONS = ("0.5", "1");
 		unless (grep {$_ eq $version} @ALLOWED_VERSIONS)
 		{
 			die "unsupported v=$version tag\n";
@@ -374,9 +374,9 @@ sub check_protocol
 	return if ($options && $options ne "txt");
 
 	my $v = $self->version;
-	if ($v && $v eq "0.5")
+	if ($v)
 	{
-		# in v=0.5 signatures, the /txt option is REQUIRED
+		# in v=1 signatures, the /txt option is REQUIRED
 		return unless ($options && $options eq "txt");
 	}
 	return 1;
