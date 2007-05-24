@@ -1,3 +1,6 @@
+
+ -- VERSION 0.26 --
+
 2007-05-24: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Signature.pm: accept and use v=1 tag instead of v=0.5
  * lib/Mail/DKIM/Policy.pm: oops, left a syntax error in here
