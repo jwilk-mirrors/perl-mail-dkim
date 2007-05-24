@@ -1,5 +1,7 @@
 2007-05-24: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Signature.pm: accept and use v=1 tag instead of v=0.5
+ * lib/Mail/DKIM/Policy.pm: oops, left a syntax error in here
+ * t/signer.t: new expected signature value, since signature now has v=1
 
 2007-05-10: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/PublicKey.pm: simplify error handling in fetch()

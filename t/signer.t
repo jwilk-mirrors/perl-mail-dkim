@@ -6,7 +6,7 @@ use Test::Simple tests => 12;
 
 use Mail::DKIM::Signer;
 
-my $EXPECTED_RE = qr/Z8eOKAa79Wp7GSL1m6Ss/;
+my $EXPECTED_RE = qr/njTGkk8JIhv23OEV4VSokdvN5q/;
 
 my $keyfile = -f "t/test.key" ? "t/test.key" : "test.key";
 my $dkim = Mail::DKIM::Signer->new(

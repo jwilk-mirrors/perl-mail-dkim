@@ -72,7 +72,7 @@ sub fetch
 		# so we wrap the query in a nested eval {} block
 		eval
 		{
-			$resp = $rslv->query($host, "TXT") or
+			$resp = $rslv->query($host, "TXT");
 		};
 		my $E = $@;
 		alarm 0;
