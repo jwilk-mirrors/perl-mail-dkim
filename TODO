@@ -24,6 +24,9 @@ Verifier:
    DNS queries as early as possible, but continue processing other aspects
    of the message while waiting for the DNS queries to complete)
 
+Policy:
+ - make it possible to determine explicit vs implicit default policy
+
 Signer:
  - allow DomainKeys signatures without using a policy object
  - allow adding chained signatures in one pass

@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2005 Messiah College.
+# Copyright 2005-2007 Messiah College.
 # Jason Long <jlong@messiah.edu>
 
 # Copyright (c) 2004 Anthony D. Urso. All rights reserved.
@@ -11,6 +11,7 @@ use strict;
 use warnings;
 
 package Mail::DKIM::Policy;
+our $DEFAULT_POLICY;
 
 =head1 NAME
 
@@ -32,8 +33,12 @@ in the message author's DNS that describes how they sign messages.
 
 If a DNS error or timeout occurs, an exception is thrown.
 
-If the policy is not found, or a non-DNS error occurs,
-undef is returned instead of a policy.
+Otherwise, a policy object of some sort will be returned.
+If no policy is actually published,
+then the "default policy" will be returned.
+To check when this happens, use
+
+  my $is_default = $policy->is_implied_default_policy;
 
 =cut
 
@@ -44,17 +49,20 @@ sub fetch
 
 	my $strn;
 
-
-	($prms{'Protocol'} eq "dns") or
-		return;
-
-	my $host = "_policy._domainkey." . $prms{'Domain'};
+	($prms{'Protocol'} eq "dns")
+		or die "invalid protocol '$prms{Protocol}'\n";
 
 	use Net::DNS;
 
-	my $rslv = new Net::DNS::Resolver or
-		return;
+	my $rslv = Net::DNS::Resolver->new();
 	
+	# IETF seems poised to create policy records this way
+	#my $host = "_policy._domainkey." . $prms{Domain};
+
+	# but Yahoo! policy records are still much more common
+	# see historic RFC4870, section 3.6
+	my $host = "_domainkey." . $prms{Domain};
+
 	#
 	# perform DNS query for domain policy...
 	#   if the query takes too long, we should catch it and generate
@@ -84,7 +92,7 @@ sub fetch
 	unless ($resp)
 	{
 		# no response => NXDOMAIN, use default policy
-		return $class->new;
+		return $class->default;
 	}
 
 	foreach my $ans ($resp->answer) {
@@ -95,7 +103,7 @@ sub fetch
 	unless ($strn)
 	{
 		# empty record found in DNS, use default policy
-		return $class->new;
+		return $class->default;
 	}
 
 	return $class->parse(
@@ -118,7 +126,7 @@ sub new
 
 =head2 parse() - gets a policy object by parsing a string
 
-  my $policy = parse Mail::DKIM::Policy(
+  my $policy = Mail::DKIM::Policy->parse(
                    String => "o=~; t=y"
                );
 
@@ -149,6 +157,21 @@ sub parse
 
 	$prms{tags} = \%tags;
 	return bless \%prms, $class;	
+}
+
+=head1 CLASS METHODS
+
+=head2 default() - the policy to use when none is published
+
+  my $default_policy = Mail::DKIM::Policy->default();
+
+=cut
+
+sub default
+{
+	my $class = shift;
+	$DEFAULT_POLICY ||= $class->new;
+	return $DEFAULT_POLICY;
 }
 
 =head1 METHODS
@@ -239,6 +262,23 @@ sub flags
 		$self->{tags}->{t} = shift;
 
 	$self->{tags}->{t};
+}
+
+=head2 is_implied_default_policy() - is this policy implied?
+
+  my $is_implied = $policy->is_implied_default_policy;
+
+If you fetch the policy for a particular domain, but that domain
+does not have a policy published, then the "default policy" is
+in effect. Use this method to detect when that happens.
+
+=cut
+
+sub is_implied_default_policy
+{
+	my $self = shift;
+	my $default_policy = ref($self)->default;
+	return ($self == $default_policy);
 }
 
 =head2 note() - get or set the human readable notes (n=) tag

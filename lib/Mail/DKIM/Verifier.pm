@@ -455,6 +455,10 @@ sub fetch_author_policy
 				Protocol => "dns",
 				Domain => $originator->host);
 	}
+
+	#FIXME- the usual next step after fetch_author_policy() is
+	#the policy's apply() method... what to do when there is no From
+	#header?
 	return undef;
 }
 

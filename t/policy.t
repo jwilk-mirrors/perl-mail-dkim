@@ -1,8 +1,8 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -I../blib/lib
 
 use strict;
 use warnings;
-use Test::Simple tests => 9;
+use Test::Simple tests => 12;
 
 use Mail::DKIM::Policy;
 
@@ -17,6 +17,7 @@ $policy = Mail::DKIM::Policy->fetch(
 		Protocol => "dns",
 		Domain => "messiah.edu");
 ok($policy, "fetch() works (requires DNS)");
+ok(!$policy->is_implied_default_policy, "not the default policy");
 
 $policy = Mail::DKIM::Policy->parse(String => "");
 ok($policy, "parse() works (no tags)");
@@ -33,3 +34,9 @@ ok(!$policy->testing, "testing flag has default value");
 #$policy->testing(1);
 #ok($policy->testing, "testing flag has been changed");
 
+$policy = Mail::DKIM::Policy->fetch(
+		Protocol => "dns",
+		Domain => "nobody.messiah.edu"
+		);
+ok($policy, "fetch() returns policy for nonexistent domain");
+ok($policy->is_implied_default_policy, "yep, it's the default policy");

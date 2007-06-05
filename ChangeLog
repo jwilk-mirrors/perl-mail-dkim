@@ -1,3 +1,10 @@
+2007-06-05: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Policy.pm: create the default policy only once;
+   (is_implied_default_policy): new method to check whether the policy
+   was explicit or implied
+   (fetch): get policy record at the Yahoo!-DomainKeys-defined location,
+   rather than the location in the not-yet-finished DKIM SSP spec.
+ * t/policy.t: test is_implied_default_policy method
 
  -- VERSION 0.26 --
 
