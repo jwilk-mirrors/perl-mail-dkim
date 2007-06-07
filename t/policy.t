@@ -36,7 +36,29 @@ ok(!$policy->testing, "testing flag has default value");
 
 $policy = Mail::DKIM::Policy->fetch(
 		Protocol => "dns",
-		Domain => "nobody.messiah.edu"
+		Sender => 'alfred@nobody.messiah.edu',
 		);
 ok($policy, "fetch() returns policy for nonexistent domain");
 ok($policy->is_implied_default_policy, "yep, it's the default policy");
+
+debug_policies(qw(yahoo.com hotmail.com gmail.com));
+debug_policies(qw(paypal.com ebay.com));
+
+sub debug_policies
+{
+	foreach my $domain (@_)
+	{
+		my $policy = Mail::DKIM::Policy->fetch(
+			Protocol => "dns",
+			Domain => $domain);
+		print "# $domain: ";
+		if ($policy->is_implied_default_policy)
+		{
+			print "no policy\n";
+		}
+		else
+		{
+			print $policy->as_string . "\n";
+		}
+	}
+}

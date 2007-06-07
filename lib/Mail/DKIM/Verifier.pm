@@ -28,7 +28,7 @@ Mail::DKIM::Verifier - verifies a DKIM-signed message
   # read an email from a file handle
   $dkim->load(*STDIN);
 
-  # or read an email and pass it into the verifier, one line at a time
+  # or read an email and pass it into the verifier, incrementally
   while (<STDIN>)
   {
       # remove local line terminators
@@ -416,6 +416,8 @@ sub finish_body
 =head2 PRINT() - feed part of the message to the verifier
 
   $dkim->PRINT("a line of the message\015\012");
+  $dkim->PRINT("more of");
+  $dkim->PRINT(" the message\015\012bye\015\012");
 
 Feeds content of the message being verified into the verifier.
 The API is designed this way so that the entire message does NOT need
@@ -428,38 +430,50 @@ to be read into memory at once.
 This method finishes the canonicalization process, computes a hash,
 and verifies the signature.
 
-=head2 fetch_author_policy() - retrieves the "sender signing policy" from DNS
+=head2 fetch_policy() - retrieves the "sender signing policy" from DNS
 
-  my $policy = $dkim->fetch_author_policy;
+  my $policy = $dkim->fetch_policy;
   my $policy_result = $policy->apply($dkim);
 
 See also the fetch() method of L<Mail::DKIM::Policy>.
 
-The "author" policy is the policy for the address found in the From header,
-i.e. the "originator" address.
+The policy is for the addresses found in the From and Sender headers
+(i.e. the "originator" headers). Currently, only the older
+DomainKeys policies are supported, which are based on the domain of
+the first address found in the Sender and From headers.
 
-The result will be undef is there are no headers (i.e. From header) to
-indicate what policy to check.
+The IETF is working on a successor for DomainKeys policies, which will
+allow user-specific policies and policies that apply only to the From
+header.
+
+If the verified email has no From header (violating email standards),
+then the policy lookup will fail.
 
 =cut
+
+sub fetch_policy
+{
+	my $self = shift;
+	use Mail::DKIM::Policy;
+
+	# determine addresses found in the "From" and "Sender" headers
+	my $author = $self->message_originator;
+	$author &&= $author->address;
+	my $sender = $self->message_sender;
+	$sender &&= $sender->address;
+
+	# fetch the policy
+	return Mail::DKIM::Policy->fetch(
+			Protocol => "dns",
+			Author => $author,
+			Sender => $sender,
+			);
+}
 
 sub fetch_author_policy
 {
 	my $self = shift;
-	use Mail::DKIM::Policy;
-	my $originator = $self->message_originator;
-	if ($originator && $originator->host)
-	{
-		# TODO - be prepared to handle key protocols != dns
-		return Mail::DKIM::Policy->fetch(
-				Protocol => "dns",
-				Domain => $originator->host);
-	}
-
-	#FIXME- the usual next step after fetch_author_policy() is
-	#the policy's apply() method... what to do when there is no From
-	#header?
-	return undef;
+	return $self->fetch_policy(@_);
 }
 
 =head2 load() - load the entire message from a file handle

@@ -1,3 +1,14 @@
+2007-06-07: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Common.pm: change "parse Mail::Address" to my preferred
+   "Mail::Address->parse" style
+ * t/policy.t: test policy lookup by email address instead of domain;
+   test policy lookups on a few well known domains
+ * lib/Mail/DKIM/Verifier.pm: minor doc changes; renamed
+   fetch_author_policy() to fetch_policy(); fetch_author_policy still
+   works for backward compatibility
+ * lib/Mail/DKIM/Policy.pm: allow lookups given sender/from addresses
+   (location): new method to determine where the policy came from
+
 2007-06-05: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Policy.pm: create the default policy only once;
    (is_implied_default_policy): new method to check whether the policy

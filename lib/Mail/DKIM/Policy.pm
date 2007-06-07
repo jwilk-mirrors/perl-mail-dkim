@@ -28,8 +28,36 @@ in the message author's DNS that describes how they sign messages.
 
   my $policy = Mail::DKIM::Policy->fetch(
                    Protocol => "dns",
-                   Domain => "example.org",
+                   Sender => 'joe@example.org',
                );
+
+The following named arguments are accepted:
+
+=over
+
+=item Protocol
+
+always specify "dns"
+
+=item Author
+
+the "author" of the message for which policy is being checked.
+This is the first email address in the "From" header.
+According to RFC 2822, section 3.6.2, the "From" header lists
+who is responsible for writing the message.
+
+=item Sender
+
+the "sender" of the message for which policy is being checked.
+This is the first email address in the "Sender" header,
+or if there is not a "Sender" header, the "From" header.
+According to RFC 2822, section 3.6.2, the "Sender" header lists
+who is responsible for transmitting the message.
+
+=back
+
+Depending on what type of policy is being checked, both the
+Sender and Author fields may need to be specified.
 
 If a DNS error or timeout occurs, an exception is thrown.
 
@@ -51,6 +79,20 @@ sub fetch
 
 	($prms{'Protocol'} eq "dns")
 		or die "invalid protocol '$prms{Protocol}'\n";
+
+	if ($prms{Author} && !$prms{Sender})
+	{
+		$prms{Sender} = $prms{Author};
+	}
+	if ($prms{Sender} && !$prms{Domain})
+	{
+		(undef, $prms{Domain}) = split(/\@/, $prms{Sender}, 2);
+	}
+
+	unless ($prms{Domain})
+	{
+		die "no domain to fetch policy for\n";
+	}
 
 	use Net::DNS;
 
@@ -108,7 +150,7 @@ sub fetch
 
 	return $class->parse(
 			String => $strn,
-			Domain => $prms{Domain}
+			Domain => $prms{Domain},
 			);
 }
 
@@ -279,6 +321,19 @@ sub is_implied_default_policy
 	my $self = shift;
 	my $default_policy = ref($self)->default;
 	return ($self == $default_policy);
+}
+
+=head2 location() - where the policy was fetched from
+
+DomainKeys policies only have per-domain policies, so this will
+be the domain where the policy was published.
+
+=cut
+
+sub location
+{
+	my $self = shift;
+	return $self->{Domain};
 }
 
 =head2 note() - get or set the human readable notes (n=) tag
