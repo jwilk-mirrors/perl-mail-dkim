@@ -92,7 +92,7 @@ sub message_attributes
 
 	if ($self->{headers_by_name}->{sender})
 	{
-		my @list = parse Mail::Address($self->{headers_by_name}->{sender});
+		my @list = Mail::Address->parse($self->{headers_by_name}->{sender});
 		if ($list[0])
 		{
 			push @attributes, "sender=<" . $list[0]->address . ">";
@@ -100,7 +100,7 @@ sub message_attributes
 	}
 	elsif ($self->{headers_by_name}->{from})
 	{
-		my @list = parse Mail::Address($self->{headers_by_name}->{from});
+		my @list = Mail::Address->parse($self->{headers_by_name}->{from});
 		if ($list[0])
 		{
 			push @attributes, "from=<" . $list[0]->address . ">";
@@ -132,7 +132,7 @@ sub message_originator
 
 	if ($self->{headers_by_name}->{from})
 	{
-		my @list = parse Mail::Address($self->{headers_by_name}->{from});
+		my @list = Mail::Address->parse($self->{headers_by_name}->{from});
 		return $list[0];
 	}
 	return undef;
@@ -145,12 +145,12 @@ sub message_sender
 
 	if ($self->{headers_by_name}->{sender})
 	{
-		my @list = parse Mail::Address($self->{headers_by_name}->{sender});
+		my @list = Mail::Address->parse($self->{headers_by_name}->{sender});
 		return $list[0];
 	}
 	if ($self->{headers_by_name}->{from})
 	{
-		my @list = parse Mail::Address($self->{headers_by_name}->{from});
+		my @list = Mail::Address->parse($self->{headers_by_name}->{from});
 		return $list[0];
 	}
 	return undef;
