@@ -1,3 +1,8 @@
+2007-06-08: Jason Long <jlong@messiah.edu>
+ * policies.txt: some thoughts on dealing with two different types of
+   policy records
+ * lib/Mail/DKIM/Policy.pm: default() is now a private class method
+
 2007-06-07: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Common.pm: change "parse Mail::Address" to my preferred
    "Mail::Address->parse" style

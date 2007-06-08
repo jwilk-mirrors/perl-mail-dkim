@@ -11,7 +11,6 @@ use strict;
 use warnings;
 
 package Mail::DKIM::Policy;
-our $DEFAULT_POLICY;
 
 =head1 NAME
 
@@ -201,14 +200,8 @@ sub parse
 	return bless \%prms, $class;	
 }
 
-=head1 CLASS METHODS
-
-=head2 default() - the policy to use when none is published
-
-  my $default_policy = Mail::DKIM::Policy->default();
-
-=cut
-
+#undocumented private class method
+our $DEFAULT_POLICY;
 sub default
 {
 	my $class = shift;
