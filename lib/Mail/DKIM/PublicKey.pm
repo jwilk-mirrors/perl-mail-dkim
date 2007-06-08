@@ -15,6 +15,8 @@ package Mail::DKIM::PublicKey;
 use base ("Mail::DKIM::KeyValueList", "Mail::DKIM::Key");
 *calculate_EM = \&Mail::DKIM::Key::calculate_EM;
 
+use Mail::DKIM::DNS;
+
 sub new {
 	my $type = shift;
 	my %prms = @_;
@@ -30,10 +32,15 @@ sub new {
 	bless $self, $type;
 }
 
+# my $public_key = Mail::DKIM::PublicKey->fetch(
+#                     Protocol => "dns",
+#                   );
+# Protocol: from the q= tag of the signature, usually "dns"
+# Selector: from the s= tag of the signature
+# Domain: from the d= tag of the signature
+#
 sub fetch
 {
-	use Net::DNS;
-
 	my $class = shift;
 	my %prms = @_;
 
@@ -48,34 +55,11 @@ sub fetch
 
 	my $host = $prms{'Selector'} . "._domainkey." . $prms{'Domain'};
 
-	my $rslv = new Net::DNS::Resolver or
-		return;
-	
 	#
 	# perform DNS query for public key...
 	#   if the query takes too long, we should generate an error
 	#
-	my $resp;
-	eval
-	{
-		# set a 10 second timeout
-		local $SIG{ALRM} = sub { die "DNS query timeout for $host\n" };
-		alarm 10;
-
-		# the query itself could cause an exception, which would prevent
-		# us from resetting the alarm before leaving the eval {} block
-		# so we wrap the query in a nested eval {} block
-		eval
-		{
-			$resp = $rslv->query($host, "TXT");
-		};
-		my $E = $@;
-		alarm 0;
-		die $E if $E;
-	};
-	my $E = $@;
-	alarm 0; #FIXME- restore previous alarm?
-	die $E if $E;
+	my $resp = Mail::DKIM::DNS::query($host, "TXT");
 	unless ($resp)
 	{
 		# no response => NXDOMAIN

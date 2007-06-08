@@ -2,6 +2,9 @@
  * policies.txt: some thoughts on dealing with two different types of
    policy records
  * lib/Mail/DKIM/Policy.pm: default() is now a private class method
+ * lib/Mail/DKIM/PublicKey.pm: moved DNS query to DNS.pm
+ * lib/Mail/DKIM/Policy.pm: moved DNS query to DNS.pm
+ * lib/Mail/DKIM/DNS.pm: new module that does the common DNS lookups
 
 2007-06-07: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Common.pm: change "parse Mail::Address" to my preferred

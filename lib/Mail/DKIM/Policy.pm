@@ -12,6 +12,8 @@ use warnings;
 
 package Mail::DKIM::Policy;
 
+use Mail::DKIM::DNS;
+
 =head1 NAME
 
 Mail::DKIM::Policy - represents a DKIM sender signing policy
@@ -93,10 +95,6 @@ sub fetch
 		die "no domain to fetch policy for\n";
 	}
 
-	use Net::DNS;
-
-	my $rslv = Net::DNS::Resolver->new();
-	
 	# IETF seems poised to create policy records this way
 	#my $host = "_policy._domainkey." . $prms{Domain};
 
@@ -109,27 +107,7 @@ sub fetch
 	#   if the query takes too long, we should catch it and generate
 	#   an error
 	#
-	my $resp;
-	eval
-	{
-		# set a 10 second timeout
-		local $SIG{ALRM} = sub { die "DNS query timeout for $host\n" };
-		alarm 10;
-
-		# the query itself could cause an exception, which would prevent
-		# us from resetting the alarm before leaving the eval {} block
-		# so we wrap the query in a nested eval {} block
-		eval
-		{
-			$resp = $rslv->query($host, "TXT");
-		};
-		my $E = $@;
-		alarm 0;
-		die $E if $E;
-	};
-	my $E = $@;
-	alarm 0; #FIXME- restore previous alarm?
-	die $E if $E;
+	my $resp = Mail::DKIM::DNS::query($host, "TXT");
 	unless ($resp)
 	{
 		# no response => NXDOMAIN, use default policy
