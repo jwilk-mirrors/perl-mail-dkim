@@ -1,0 +1,64 @@
+Policy lookup
+
+Example A
+---------
+
+From:   Jason <jason@bigbank.com>
+Sender: Bad guy <badguy@example.org>
+
+In this case, bigbank.com wants to provide a way for recipients
+to recognize forgories or altered messages coming from their domain.
+
+They publish a draft-allman-dkim-ssp policy record in their DNS
+
+  bigbank.com.      DKIMP  "p=strict"
+
+With such a policy, bigbank.com's users cannot send mail through
+mungling mailing lists, or through their other ISPs mail servers.
+In the first case, the signature would become invalid. In the second
+case, the message won't have a signature. In both cases, the policy
+for bigbank.com says to reject the message.
+
+
+Example B
+---------
+
+From:   Jason <jlong@messiah.edu>
+Sender: My list <discuss@list.example.com>
+
+In this example, messiah.edu allows their users to send messages through
+mailing lists, so it has no need for a p=strict policy like example A.
+However, this means messages can be trivially forged.
+
+But maybe they could use a rfc4870(historical) policy to indicate that
+whenever the "sender" of the message is a messiah.edu address, the
+message will contain a messiah.edu signature. So...
+
+  _domainkey.messiah.edu.  TXT  "o=-"
+
+When this message comes through, it is allowed despite not having a valid
+messiah.edu signature because the message itself doesn't claim to have
+come from messiah.edu (although some recipients may not know this because
+their MUA doesn't show it).
+
+But if the only originator address found in the message was
+jlong@messiah.edu, the above policy would require a valid messiah.edu
+signature.
+
+
+Example C
+---------
+
+From:   George <george@example.com>
+Sender: Discuss <discuss@listserv.messiah.edu>
+
+This time I'm interested in the perspective of the Listserv operator.
+The Listserv operator wants to ensure that messages going out to the
+list have a listserv.messiah.edu signature, and wants to communicate
+to recipients that unsigned messages claiming to be from the list are
+forgories.
+
+Once again, a rfc4870(historical) policy seems the most useful:
+
+  _domainkey.listserv.messiah.edu.   TXT   "o=-"
+

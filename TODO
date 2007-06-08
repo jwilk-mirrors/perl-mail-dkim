@@ -25,7 +25,10 @@ Verifier:
    of the message while waiting for the DNS queries to complete)
 
 Policy:
- - make it possible to determine explicit vs implicit default policy
+ - make it possible to determine explicit vs implicit default policy (DONE)
+ - lookup BOTH draft-allman-dkim-ssp policy AND rfc4870(historical) policy
+ - this will probably be: lookup allman policy, and if not found, then try
+   rfc4870(historical) policy
 
 Signer:
  - allow DomainKeys signatures without using a policy object
@@ -33,7 +36,7 @@ Signer:
    (e.g. allow adding a DomainKeys signature, and a DKIM signature,
    with the new DKIM signature signing the new DomainKeys signature) (REJECTED)
  - allow creation of i=, l=, t=, x=, and z= tags
- - do header-wrapping to signature before signing
+ - do header-wrapping to signature before signing (DONE)
  - allow signer policy to change which private key is used
 
 Testing (some of this may already be implemented):
