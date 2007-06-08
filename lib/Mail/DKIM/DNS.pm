@@ -11,8 +11,6 @@ use warnings;
 package Mail::DKIM::DNS;
 use Net::DNS;
 
-my %query_results;
-
 sub query
 {
 	my ($domain, $type) = @_;
@@ -47,42 +45,6 @@ sub query
 	die $E if $E;
 
 	return $resp;
-}
-
-sub create_resolver
-{
-	use Net::DNS;
-	$RESOLVER ||= Net::DNS::Resolver->new();
-	return $RESOLVER;
-}
-
-my @uncollected;
-
-sub query_async
-{
-	my $self = shift;
-	my ($domain, $type, $class, $callback) = @_;
-
-	my $resolver = get_resolver();
-	my $socket = $resolver->bgsend($domain, $type, $class);
-	my $info = {
-		socket => $socket,
-		callback => $callback,
-		resolver => $resolver,
-		};
-	push @uncollected, $info;
-	return $info;
-}
-
-sub allow_queries_to_finish
-{
-	while (my $info = shift @uncollected)
-	{
-		my $resolver = $info->{resolver};
-		my $socket = $info->{socket};
-		my $answer_packet = $resolver->bgread($socket);
-		
-	}
 }
 
 1;
