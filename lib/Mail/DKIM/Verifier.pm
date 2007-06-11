@@ -102,10 +102,6 @@ sub init
 # $dkim->{signature}
 #   contains the selected Mail::DKIM::Signature object found in the header
 #
-# $dkim->{public_key}
-#   object of type Mail::DKIM::PublicKey, fetched using information
-#   found in the signature
-#
 # @{$dkim->{headers}}
 #   list of headers found in the header
 #
@@ -306,20 +302,21 @@ sub finish_header
 		next unless ($self->check_signature($signature));
 
 		# get public key
-		try
+		my $pkey;
+		eval
 		{
-			$self->{public_key} = $signature->get_public_key;
-		}
-		otherwise
+			$pkey = $signature->get_public_key;
+		};
+		if ($@)
 		{
-			my $E = shift;
+			my $E = $@;
 			chomp $E;
 			$self->{signature_reject_reason} = $E;
-		};
+		}
 
-		if ($self->{public_key})
+		if ($pkey)
 		{
-			$self->check_public_key($signature, $self->{public_key})
+			$self->check_public_key($signature, $pkey)
 				or next;
 		}
 		else
@@ -589,6 +586,25 @@ object is of type Mail::DKIM::Signature.
 In case of multiple signatures, the signature with the "best" result will
 be returned.
 Best is defined as "pass", followed by "fail", "invalid", and "none".
+
+=cut
+
+#EXPERIMENTAL
+# =head2 signatures() - access all of this message's signatures
+#
+#   my @all_signatures = $dkim->signatures;
+#
+# =cut
+#TODO
+# how would the caller get the verification results of each signature?
+# are they stored in the signature object?
+sub signatures
+{
+	my $self = shift;
+	croak "unexpected argument" if @_;
+
+	return map { $_->signature } @{$self->{algorithms}};
+}
 
 =head1 AUTHOR
 
