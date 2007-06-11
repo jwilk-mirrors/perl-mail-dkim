@@ -1,9 +1,11 @@
 DKIM-Signature:
  - allow version tag (DONE)
  - accept q=dns/txt (DONE)
+ - method to set/get "z" tag
 
 DKIM Public Key Records:
  - enforce t=s option (if present)
+ - provide method for caller to get (to check the "testing" flag)
 
 Verifier:
  - verify multiple signatures (ietf05 6.1) (DONE)

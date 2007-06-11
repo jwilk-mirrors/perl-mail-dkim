@@ -45,15 +45,25 @@ Mail::DKIM::Verifier - verifies a DKIM-signed message
 
 =cut
 
-#=head1 DESCRIPTION
-#
-#The verification process does the following, in order:
-#
-# 1. Reads all the headers.
-# 2. Select a valid signature to verify.
-# 3. Sets up an appropriate algorithm and canonicalization implementation.
-# 4. Feeds the headers into the algorithm/canonicalization implementation.
-# 5. Reads the body and feeds it into the body canonicalization.
+=head1 DESCRIPTION
+
+The verifier object allows an email message to be scanned for DKIM and
+DomainKeys signatures and those signatures to be verified. The verifier
+tracks the state of the message as it is read into memory. When the
+message has been completely read, the signatures are verified and the
+results of the verification can be accessed.
+
+To use the verifier, first create the verifier object. Then start
+"feeding" it the email message to be verified. When all the headers
+have been read, the verifier:
+
+ 1. checks whether any DomainKeys/DKIM signatures were found
+ 2. queries for the public keys needed to verify the signatures
+ 3. sets up the appropriate algorithms and canonicalization objects
+ 4. canonicalizes the headers and computes the header hash
+
+Then, when the body of the message has been completely fed into the
+verifier, the body hash is computed and the signatures are verified.
 
 =head1 CONSTRUCTOR
 
@@ -105,8 +115,7 @@ sub init
 # @{$dkim->{headers}}
 #   list of headers found in the header
 #
-# $dkim->{algorithm} - same as Signer
-# $dkim->{canon} - same as Signer
+# $dkim->{algorithms} - same as Signer
 #
 # $dkim->{result}
 #   result of the verification (see the result() method)
@@ -247,20 +256,20 @@ sub check_public_key
 	my ($signature, $public_key) = @_;
 
 	my $result = 0;
-	try
+	eval
 	{
 		# check public key's allowed hash algorithms
 		$result = $public_key->check_hash_algorithm(
 				$signature->hash_algorithm);
 
 		# TODO - check public key's granularity
-	}
-	otherwise
+	};
+	if ($@)
 	{
-		my $E = shift;
+		my $E = $@;
 		chomp $E;
 		$self->{signature_reject_reason} = $E;
-	};
+	}
 	return $result;
 }
 
@@ -376,15 +385,15 @@ sub finish_body
 		my $result;
 		my $details;
 		local $@ = undef;
-		try
+		eval
 		{
 			$result = $algorithm->verify() ? "pass" : "fail";
 			$details = $algorithm->{verification_details} || $@;
-		}
-		otherwise
+		};
+		if ($@)
 		{
 			# see also add_signature
-			chomp (my $E = shift);
+			chomp (my $E = $@);
 			if ($E =~ /(OpenSSL error: .*?) at /)
 			{
 				$E = $1;
@@ -395,7 +404,7 @@ sub finish_body
 			}
 			$result = "fail";
 			$details = $E;
-		};
+		}
 
 		# collate results ... ignore failed signatures if we already got
 		# one to pass

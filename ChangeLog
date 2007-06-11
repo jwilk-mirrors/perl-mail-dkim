@@ -2,6 +2,8 @@
  * lib/Mail/DKIM/Verifier.pm: public_key no longer available as a
    verifier property; use eval block instead of try...otherwise;
    experimental signatures() method
+ * lib/Mail/DKIM/Verifier.pm: added description section to Perldocs;
+   replaced a couple try...otherwise blocks with eval blocks
 
 2007-06-08: Jason Long <jlong@messiah.edu>
  * policies.txt: some thoughts on dealing with two different types of
