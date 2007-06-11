@@ -1,4 +1,33 @@
 Policy lookup
+=============
+
+With DomainKeys and DKIM you have two different ideas of
+sender signing policies. Luckily, they are published at slightly
+different locations in DNS, so it might work to have them complement
+each other. This text file is just a place to dump some ideas about
+this.
+
+Here is a description of the two different sender signing policies:
+* rfc4870(historical) - the DomainKeys policy
+   - this policy addresses emails in which the sender's domain appears
+     in the "Sender" header (or the "From" header if no Sender).
+     As such, it could be useful for mailing lists (which break the
+     author's signature but add a Sender header to indicate where
+     it's coming from) or third party mailers (which cannot sign for
+     the From address but can add a Sender address). The downside is
+     that most MUAs don't show the Sender header, so recipients still
+     think the message is coming from whatever address is in the From
+     header.
+
+* draft-allman-dkim-ssp - the work-in-progress IETF DKIM policy
+   - this policy addresses the "From" address only.
+     This would be useful for domains with low tolerances for forgeries.
+     They could ensure that whenever their domain appears in the From
+     field, DKIM-SSP-aware agents can throw away forgeries.
+     The downside is mailing lists and third-parties can't really use
+     it, and users of those critical domains can't participate in
+     mailing lists or use third-party mailers.
+
 
 Example A
 ---------

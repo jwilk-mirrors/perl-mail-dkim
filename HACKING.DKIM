@@ -92,3 +92,20 @@ Next, the body digest is computed, and compared with that in the
 signature. If it fails to match, the signature has "failed".
 
 Otherwise, the signature has "passed".
+
+--
+
+Asynchronous DNS lookups
+
+In the dkimproxy case, as the message is received it is being "fed"
+into the DKIM verifier. The DKIM verifier can emit the DNS queries
+as soon as the header is read and parsed. Each signature is assumed
+to have a valid public key. When the entire message is finished,
+the DKIM verifier will wait for any DNS queries that haven't finished,
+then verify the signatures.
+
+In the SpamAssassin case, the message is already in memory.
+SpamAssassin will want to create the DKIM verifier and give it the
+message header early so that the DNS queries can be emitted. Then
+when the DNS responses are received, it can come back and give the
+verifier the rest of the message.

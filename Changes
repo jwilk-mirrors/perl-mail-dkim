@@ -3,7 +3,10 @@ See the ChangeLog file for the details.
 
 Version 0.27
 
+ * Sender signing policies are now working much better.
+   (For now, only Yahoo! DomainKeys policies are supported.)
 
+   
 Version 0.26 - released 2007-05-24
 
  * recognize and generate v=1 signatures (DKIM is now RFC 4871)
