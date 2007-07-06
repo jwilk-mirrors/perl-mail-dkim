@@ -470,6 +470,10 @@ Returns the generated signature. The signature is an object of type
 Mail::DKIM::Signature. If multiple signatures were generated, this method
 returns the last one.
 
+The signature should be B<prepended> to the message to make the
+resulting message. At the very least, it should precede any headers
+that were signed.
+
 =head2 signatures() - access list of generated signature objects
 
   my @signatures = $dkim->signatures;
