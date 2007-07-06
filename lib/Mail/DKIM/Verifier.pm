@@ -100,8 +100,9 @@ sub init
 }
 
 # @{$dkim->{signatures}}
-#   list of syntactically valid signatures found in the header,
-#   from the top of the header to the bottom
+#   array of L<Mail::DKIM::Signature> objects, representing all
+#   syntactically valid signatures found in the header,
+#   ordered from the top of the header to the bottom.
 #
 # $dkim->{signature_reject_reason}
 #   simple string listing a reason, if any, for not using a signature.
@@ -110,15 +111,16 @@ sub init
 #   than one signatures that could not be used.
 #
 # $dkim->{signature}
-#   contains the selected Mail::DKIM::Signature object found in the header
+#   the L<Mail::DKIM::Signature> selected as the "best" signature.
 #
 # @{$dkim->{headers}}
-#   list of headers found in the header
+#   array of strings, each member is one header, in its original format.
 #
-# $dkim->{algorithms} - same as Signer
+# $dkim->{algorithms}
+#   array of algorithms, one for each signature being verified.
 #
 # $dkim->{result}
-#   result of the verification (see the result() method)
+#   string; the result of the verification (see the result() method)
 #
 
 sub handle_header
