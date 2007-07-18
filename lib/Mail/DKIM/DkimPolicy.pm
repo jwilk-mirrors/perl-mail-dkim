@@ -10,66 +10,24 @@
 use strict;
 use warnings;
 
-package Mail::DKIM::Policy;
+package Mail::DKIM::DkimPolicy;
+use base "Mail::DKIM::Policy";
+# base class is used for parse(), as_string()
 
 use Mail::DKIM::DNS;
 
 =head1 NAME
 
-Mail::DKIM::Policy - represents a DomainKeys sender signing policy
-
-=head1 DESCRIPTION
-
-DomainKeys sender signing policies are described in
-RFC4870(historical). It is a record published in the message
-sender's (i.e. the person who transmitted the message)
-DNS that describes how they sign messages.
+Mail::DKIM::DkimPolicy - implements DKIM Sender Signing Practices records
 
 =head1 CONSTRUCTORS
 
-=head2 fetch() - fetch a sender signing policy from DNS
+=head2 fetch() - lookup a DKIM signing practices record
 
-  my $policy = Mail::DKIM::Policy->fetch(
-                   Protocol => "dns",
-                   Sender => 'joe@example.org',
-               );
-
-The following named arguments are accepted:
-
-=over
-
-=item Protocol
-
-always specify "dns"
-
-=item Author
-
-the "author" of the message for which policy is being checked.
-This is the first email address in the "From" header.
-According to RFC 2822, section 3.6.2, the "From" header lists
-who is responsible for writing the message.
-
-=item Sender
-
-the "sender" of the message for which policy is being checked.
-This is the first email address in the "Sender" header,
-or if there is not a "Sender" header, the "From" header.
-According to RFC 2822, section 3.6.2, the "Sender" header lists
-who is responsible for transmitting the message.
-
-=back
-
-Depending on what type of policy is being checked, both the
-Sender and Author fields may need to be specified.
-
-If a DNS error or timeout occurs, an exception is thrown.
-
-Otherwise, a policy object of some sort will be returned.
-If no policy is actually published,
-then the "default policy" will be returned.
-To check when this happens, use
-
-  my $is_default = $policy->is_implied_default_policy;
+  my $policy = Mail::DKIM::DkimPolicy->fetch(
+            Protocol => "dns",
+            Author => 'jsmith@example.org',
+          );
 
 =cut
 
@@ -78,18 +36,12 @@ sub fetch
 	my $class = shift;
 	my %prms = @_;
 
-	my $strn;
-
 	($prms{'Protocol'} eq "dns")
 		or die "invalid protocol '$prms{Protocol}'\n";
 
-	if ($prms{Author} && !$prms{Sender})
+	if ($prms{Author} && !$prms{Domain})
 	{
-		$prms{Sender} = $prms{Author};
-	}
-	if ($prms{Sender} && !$prms{Domain})
-	{
-		(undef, $prms{Domain}) = split(/\@/, $prms{Sender}, 2);
+		(undef, $prms{Domain}) = split(/\@/, $prms{Author}, 2);
 	}
 
 	unless ($prms{Domain})
@@ -98,11 +50,7 @@ sub fetch
 	}
 
 	# IETF seems poised to create policy records this way
-	#my $host = "_policy._domainkey." . $prms{Domain};
-
-	# but Yahoo! policy records are still much more common
-	# see historic RFC4870, section 3.6
-	my $host = "_domainkey." . $prms{Domain};
+	my $host = "_policy._domainkey." . $prms{Domain};
 
 	#
 	# perform DNS query for domain policy...
@@ -116,6 +64,7 @@ sub fetch
 		return $class->default;
 	}
 
+	my $strn;
 	foreach my $ans ($resp->answer) {
 		next unless $ans->type eq "TXT";
 		$strn = join "", $ans->char_str_list;
@@ -135,7 +84,7 @@ sub fetch
 
 =head2 new() - construct a default policy object
 
-  my $policy = Mail::DKIM::Policy->new;
+  my $policy = Mail::DKIM::DkimPolicy->new;
 
 =cut
 
@@ -143,41 +92,6 @@ sub new
 {
 	my $class = shift;
 	return $class->parse(String => "o=~");
-}
-
-=head2 parse() - gets a policy object by parsing a string
-
-  my $policy = Mail::DKIM::Policy->parse(
-                   String => "o=~; t=y"
-               );
-
-=cut
-
-sub parse
-{
-	my $class = shift;
-	my %prms = @_;
-
-	my $text = $prms{"String"};
-	my %tags;
-	foreach my $tag (split /;/, $text)
-	{
-		# strip whitespace
-		$tag =~ s/^\s+|\s+$//g;
-
-		my ($tagname, $value) = split /=/, $tag, 2;
-		unless (defined $value)
-		{
-			die "policy syntax error\n";
-		}
-
-		$tagname =~ s/\s+$//;
-		$value =~ s/^\s+//;
-		$tags{$tagname} = $value;
-	}
-
-	$prms{tags} = \%tags;
-	return bless \%prms, $class;	
 }
 
 #undocumented private class method
@@ -209,11 +123,12 @@ The message is approved by the sender signing policy.
 =item reject
 
 The message is rejected by the sender signing policy.
+It can be considered very suspicious.
 
 =item neutral
 
 The message is neither approved nor rejected by the sender signing
-policy. It can be considered suspicious.
+policy. It can be considered somewhat suspicious.
 
 =back
 
@@ -224,8 +139,14 @@ sub apply
 	my $self = shift;
 	my ($dkim) = @_;
 
-	my $verify_result = $dkim->result;
+	# first_party indicates whether there is a DKIM signature with
+	# an i= tag matching the address in the From: header
 	my $first_party;
+
+	#FIXME - if there are multiple verified signatures, each one
+	# should be checked
+
+	my $verify_result = $dkim->result;
 	if ($dkim->message_originator && $dkim->signature)
 	{
 		my $oa = $dkim->message_originator->address;
@@ -237,29 +158,32 @@ sub apply
 		}
 	}
 
-	return "accept" if $first_party;
-	return "reject" if ($self->signall && !$self->testing);
+	return "accept" if ($first_party && $verify_result eq "pass");
+	return "reject" if ($self->signall_strict);
+
+	return "accept" if $verify_result eq "pass";
+	return "reject" if ($self->signall);
+
 	return "neutral";
-}
-
-=head2 as_string() - the policy as a string
-
-Note that the string returned by this method will not necessarily have
-the tags ordered the same as the text record found in DNS.
-
-=cut
-
-sub as_string
-{
-	my $self = shift;
-
-	return join("; ", map { "$_=" . $self->{tags}->{$_} }
-		keys %{$self->{tags}});
 }
 
 =head2 flags() - get or set the flags (t=) tag
 
-A vertical-bar separated list of flags.
+A colon-separated list of flags. Flag values are:
+
+=over
+
+=item y
+
+The entity is testing signing practices, and the Verifier
+SHOULD NOT consider a message suspicious based on the record.
+
+=item s
+
+The signing practices apply only to the named domain, and
+not to subdomains.
+
+=back
 
 =cut
 
@@ -292,8 +216,10 @@ sub is_implied_default_policy
 
 =head2 location() - where the policy was fetched from
 
-DomainKeys policies only have per-domain policies, so this will
-be the domain where the policy was published.
+If the policy is domain-wide, this will be domain where the policy was
+published.
+
+If the policy is user-specific, TBD.
 
 If nothing is published for the domain, and the default policy
 was returned instead, the location will be C<undef>.
@@ -306,23 +232,7 @@ sub location
 	return $self->{Domain};
 }
 
-=head2 note() - get or set the human readable notes (n=) tag
-
-Human readable notes regarding the record. Undef if no notes specified.
-
-=cut
-
-sub note
-{
-	my $self = shift;
-
-	(@_) and 
-		$self->{tags}->{n} = shift;
-
-	$self->{tags}->{n};
-}
-
-=head2 policy() - get or set the outbound signing policy (o=) tag
+=head2 policy() - get or set the outbound signing policy (dkim=) tag
 
   my $sp = $policy->policy;
 
@@ -330,13 +240,20 @@ Outbound signing policy for the entity. Possible values are:
 
 =over
 
-=item C<~>
+=item C<unknown>
 
-The default. The domain may sign some (but not all) email.
+The default. The entity may sign some or all email.
 
-=item C<->
+=item C<all>
 
-The domain signs all email.
+All mail from the entity is signed.
+(The DKIM signature can use any domain, not necessarily matching
+the From: address.)
+
+=item C<strict>
+
+All mail from the entity is signed with Originator signatures.
+(The DKIM signature uses a domain matching the From: address.)
 
 =back
 
@@ -347,26 +264,42 @@ sub policy
 	my $self = shift;
 
 	(@_) and
-		$self->{tags}->{o} = shift;
+		$self->{tags}->{dkim} = shift;
 
-	if (defined $self->{tags}->{o})
+	if (defined $self->{tags}->{dkim})
 	{
-		return $self->{tags}->{o};
+		return $self->{tags}->{dkim};
 	}
 	else
 	{
-		return "~"; # the default
+		return "unknown";
 	}
 }
 
-=head2 signall() - true if policy is "-"
+=head2 signall() - true if policy is "all"
 
 =cut
 
 sub signall
 {
 	my $self = shift;
-	return ($self->policy && $self->policy eq "-");
+
+	return $self->policy &&
+		($self->policy =~ /all/i
+		|| $self->policy eq "-"); # an older symbol for "all"
+}
+
+=head2 signall_strict() - true if policy is "strict"
+
+=cut
+
+sub signall_strict
+{
+	my $self = shift;
+
+	return $self->policy &&
+		($self->policy =~ /strict/i
+		|| $self->policy eq "!");  # "!" is an older symbol for "strict"
 }
 
 sub signsome
@@ -401,6 +334,18 @@ sub testing
 }
 
 1;
+
+=head1 BUGS
+
+=over
+
+=item *
+
+If a sender signing policy is not found for a given domain, the
+fetch() method should search the parent domains, according to
+section 4 of the dkim-ssp Internet Draft.
+
+=back
 
 =head1 AUTHOR
 

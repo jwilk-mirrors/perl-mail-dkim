@@ -438,28 +438,60 @@ to be read into memory at once.
 This method finishes the canonicalization process, computes a hash,
 and verifies the signature.
 
-=head2 fetch_policy() - retrieves the "sender signing policy" from DNS
+=head2 fetch_author_policy() - retrieves a signing policy from DNS
 
-  my $policy = $dkim->fetch_policy;
+  my $policy = $dkim->fetch_author_policy;
   my $policy_result = $policy->apply($dkim);
 
-See also the fetch() method of L<Mail::DKIM::Policy>.
+The "author" policy, as I call it, is the DKIM Sender Signing Practices
+record as described in Internet Draft draft-ietf-dkim-ssp-00-01dc.
+I call it the "author" policy because it is keyed to the email address
+in the From: header, i.e. the author of the message.
 
-The policy is for the addresses found in the From and Sender headers
-(i.e. the "originator" headers). Currently, only the older
-DomainKeys policies are supported, which are based on the domain of
-the first address found in the Sender and From headers.
+The IETF is still actively working on this Internet Draft, so the
+exact mechanisms are subject to change.
 
-The IETF is working on a successor for DomainKeys policies, which will
-allow user-specific policies and policies that apply only to the From
-header.
-
-If the verified email has no From header (violating email standards),
-then the policy lookup will die.
+If the email being verified has no From header at all
+(which violates email standards),
+then this method will C<die>.
 
 =cut
 
-sub fetch_policy
+sub fetch_author_policy
+{
+	my $self = shift;
+	use Mail::DKIM::DkimPolicy;
+
+	# determine address found in the "From"
+	my $author = $self->message_originator;
+	$author &&= $author->address;
+
+	# fetch the policy
+	return Mail::DKIM::DkimPolicy->fetch(
+			Protocol => "dns",
+			Author => $author,
+			);
+}
+
+=head2 fetch_sender_policy() - retrieves a signing policy from DNS
+
+  my $policy = $dkim->fetch_sender_policy;
+  my $policy_result = $policy->apply($dkim);
+
+The "sender" policy is the sender signing policy as described by the
+DomainKeys specification, now available in RFC4870(historical).
+I call it the "sender" policy because it is keyed to the email address
+in the Sender: header, or the From: header if there is no Sender header.
+This is the person whom the message claims as the "transmitter" of the
+message (not necessarily the author).
+
+If the email being verified has no From or Sender header from which to
+get an email address (which violates email standards),
+then this method will C<die>.
+
+=cut
+
+sub fetch_sender_policy
 {
 	my $self = shift;
 	use Mail::DKIM::Policy;
@@ -476,12 +508,6 @@ sub fetch_policy
 			Author => $author,
 			Sender => $sender,
 			);
-}
-
-sub fetch_author_policy
-{
-	my $self = shift;
-	return $self->fetch_policy(@_);
 }
 
 =head2 load() - load the entire message from a file handle
