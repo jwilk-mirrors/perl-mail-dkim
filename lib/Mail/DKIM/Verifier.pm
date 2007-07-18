@@ -455,7 +455,7 @@ allow user-specific policies and policies that apply only to the From
 header.
 
 If the verified email has no From header (violating email standards),
-then the policy lookup will fail.
+then the policy lookup will die.
 
 =cut
 
