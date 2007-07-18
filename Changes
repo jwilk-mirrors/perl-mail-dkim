@@ -4,7 +4,12 @@ See the ChangeLog file for the details.
 Version 0.27
 
  * Sender signing policies are now working much better.
-   (For now, only Yahoo! DomainKeys policies are supported.)
+ * Both Yahoo! DomainKeys signing policies and the under-development
+   IETF DKIM signing policies are supported
+    * Yahoo! DomainKeys policies can protect the Sender: header
+    * DKIM signing policies can protect the From: header
+   Look at Mail::DKIM::Verifier's fetch_author_policy() and
+   fetch_sender_policy() methods for hints.
 
    
 Version 0.26 - released 2007-05-24

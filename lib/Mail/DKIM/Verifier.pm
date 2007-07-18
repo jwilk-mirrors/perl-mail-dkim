@@ -460,6 +460,8 @@ If the email being verified has no From header at all
 (which violates email standards),
 then this method will C<die>.
 
+The result of the apply() method is one of: "accept", "reject", "neutral".
+
 =cut
 
 sub fetch_author_policy
@@ -493,6 +495,8 @@ message (not necessarily the author).
 If the email being verified has no From or Sender header from which to
 get an email address (which violates email standards),
 then this method will C<die>.
+
+The result of the apply() method is one of: "accept", "reject", "neutral".
 
 =cut
 
