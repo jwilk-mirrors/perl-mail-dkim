@@ -1,8 +1,14 @@
 2007-07-18: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Verifier.pm: changed fetch_policy() back to
-   fetch_author_policy(); added fetch_sender_policy()
+   fetch_author_policy(); added fetch_sender_policy();
+   save results for each signature
  * lib/Mail/DKIM/Policy.pm: now implements just Dk policies
  * lib/Mail/DKIM/DkimPolicy.pm: a new module for DKIM signing practices
+ * lib/Mail/DKIM/Signature.pm: can now get/set the verification result
+   for each signature
+ * scripts/dkimsign.pl: handle DOS-formated input
+ * scripts/dkimverify.pl: show multiple signatures' results; show
+   both policy results
 
 2007-06-11: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Verifier.pm: public_key no longer available as a

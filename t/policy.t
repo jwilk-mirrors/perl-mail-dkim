@@ -5,6 +5,7 @@ use warnings;
 use Test::Simple tests => 12;
 
 use Mail::DKIM::Policy;
+use Mail::DKIM::DkimPolicy;
 
 my $policy;
 $policy = Mail::DKIM::Policy->new();
@@ -41,24 +42,42 @@ $policy = Mail::DKIM::Policy->fetch(
 ok($policy, "fetch() returns policy for nonexistent domain");
 ok($policy->is_implied_default_policy, "yep, it's the default policy");
 
-debug_policies(qw(yahoo.com hotmail.com gmail.com));
-debug_policies(qw(paypal.com ebay.com));
+#debug_policies(qw(yahoo.com hotmail.com gmail.com));
+#debug_policies(qw(paypal.com ebay.com));
+#debug_policies(qw(cisco.com sendmail.com));
 
 sub debug_policies
 {
 	foreach my $domain (@_)
 	{
+		print "# $domain:\n";
+
+		print "#  DomainKeys: ";
 		my $policy = Mail::DKIM::Policy->fetch(
 			Protocol => "dns",
 			Domain => $domain);
-		print "# $domain: ";
 		if ($policy->is_implied_default_policy)
 		{
 			print "no policy\n";
 		}
 		else
 		{
-			print $policy->as_string . "\n";
+			print $policy->policy . " (";
+			print $policy->as_string . ")\n";
+		}
+
+		print "#  DKIM: ";
+		$policy = Mail::DKIM::DkimPolicy->fetch(
+			Protocol => "dns",
+			Domain => $domain);
+		if ($policy->is_implied_default_policy)
+		{
+			print "no policy\n";
+		}
+		else
+		{
+			print $policy->policy . " (";
+			print $policy->as_string . ")\n";
 		}
 	}
 }

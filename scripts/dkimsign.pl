@@ -59,7 +59,7 @@ while (<STDIN>)
 	unless ($binary)
 	{
 		chomp $_;
-		$_ .= "\015\012";
+		s/\015?$/\015\012/s;
 	}
 	$dkim->PRINT($_);
 }

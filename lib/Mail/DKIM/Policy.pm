@@ -224,16 +224,19 @@ sub apply
 	my $self = shift;
 	my ($dkim) = @_;
 
-	my $verify_result = $dkim->result;
 	my $first_party;
-	if ($dkim->message_originator && $dkim->signature)
+	foreach my $signature ($dkim->signatures)
 	{
-		my $oa = $dkim->message_originator->address;
-		my $id = $dkim->signature->identity;
+		next if $signature->result ne "pass";
 
-		if (substr($oa, -length($id)) eq $id)
+		my $oa = $dkim->message_sender->address;
+		my $id = $signature->identity;
+
+		if (lc(substr($oa, -length($id))) eq lc($id))
 		{
+			# found a first party signature
 			$first_party = 1;
+			last;
 		}
 	}
 

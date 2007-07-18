@@ -1,6 +1,6 @@
 #!/usr/bin/perl -I../lib
 #
-# Copyright (c) 2005-2006 Messiah College. This program is free software.
+# Copyright (c) 2005-2007 Messiah College. This program is free software.
 # You can redistribute it and/or modify it under the terms of the
 # GNU Public License as found at http://www.fsf.org/copyleft/gpl.html.
 #
@@ -42,11 +42,11 @@ if ($debugfh)
 }
 
 print "originator address: " . $dkim->message_originator->address . "\n";
-if ($dkim->signature)
+foreach my $signature ($dkim->signatures)
 {
-	print "signature identity: " . $dkim->signature->identity . "\n";
+	print "signature identity: " . $signature->identity . "\n";
+	print "verify result: " . $signature->result_detail . "\n";
 }
-print "verify result: " . $dkim->result_detail . "\n";
 
 my $author_policy = $dkim->fetch_author_policy;
 if ($author_policy)
@@ -56,4 +56,14 @@ if ($author_policy)
 else
 {
 	print "author policy result: not found\n";
+}
+
+my $dk_policy = $dkim->fetch_sender_policy;
+if ($dk_policy)
+{
+	print "sender policy result: " . $dk_policy->apply($dkim) . "\n";
+}
+else
+{
+	print "sender policy result: not found\n";
 }

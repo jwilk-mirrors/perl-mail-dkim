@@ -146,24 +146,34 @@ sub apply
 	#FIXME - if there are multiple verified signatures, each one
 	# should be checked
 
-	my $verify_result = $dkim->result;
-	if ($dkim->message_originator && $dkim->signature)
+	foreach my $signature ($dkim->signatures)
 	{
-		my $oa = $dkim->message_originator->address;
-		my $id = $dkim->signature->identity;
+		next if $signature->result ne "pass";
 
-		if (substr($oa, -length($id)) eq $id)
+		my $oa = $dkim->message_originator->address;
+		my $id = $signature->identity;
+
+		if (lc(substr($oa, -length($id))) eq lc($id))
 		{
+			# found a first party signature
 			$first_party = 1;
+			last;
 		}
 	}
 
-	return "accept" if ($first_party && $verify_result eq "pass");
-	return "reject" if ($self->signall_strict);
+	#TODO - consider testing flag
 
-	return "accept" if $verify_result eq "pass";
-	return "reject" if ($self->signall);
+	return "accept" if $first_party;
+	return "reject" if ($self->signall_strict && !$self->testing);
 
+	if ($self->signall)
+	{
+		# is there ANY valid signature?
+		my $verify_result = $dkim->result;
+		return "accept" if $verify_result eq "pass";
+	}
+
+	return "reject" if ($self->signall && !$self->testing);
 	return "neutral";
 }
 
@@ -269,6 +279,10 @@ sub policy
 	if (defined $self->{tags}->{dkim})
 	{
 		return $self->{tags}->{dkim};
+	}
+	elsif (defined $self->{tags}->{o})
+	{
+		return $self->{tags}->{o};
 	}
 	else
 	{

@@ -408,6 +408,11 @@ sub finish_body
 			$details = $E;
 		}
 
+		# save the results of this signature verification
+		$algorithm->{result} = $result;
+		$algorithm->{details} = $details;
+		$algorithm->signature->result($result, $details);
+
 		# collate results ... ignore failed signatures if we already got
 		# one to pass
 		if (!$self->{result} || $result eq "pass")

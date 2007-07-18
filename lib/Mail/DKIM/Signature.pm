@@ -582,6 +582,43 @@ sub protocol {
 	}
 }	
 
+=head2 result() - get or set the verification result
+
+  my $result = $signature->result;
+
+  $signature->result("pass");
+
+  # to set the result with details
+  $signature->result("invalid", "no public key");
+
+=cut
+
+sub result
+{
+	my $self = shift;
+	@_ and $self->{verify_result} = shift;
+	@_ and $self->{verify_details} = shift;
+	return $self->{verify_result};
+}
+
+=head2 result_detail() - access the result, plus details if available
+
+  my $detail = $signature->result_detail;
+
+=cut
+
+sub result_detail
+{
+	my $self = shift;
+	croak "wrong number of arguments" unless (@_ == 0);
+
+	if ($self->{verify_result} && $self->{verify_details})
+	{
+		return $self->{verify_result} . " (" . $self->{verify_details} . ")";
+	}
+	return $self->{verify_result};
+}
+
 =head2 selector() - get or set the selector (s=) field
 
 The selector subdivides the namespace for the "d=" (domain) tag.
