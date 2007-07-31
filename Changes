@@ -1,6 +1,11 @@
 This file summarizes what's changed between releases of Mail-DKIM.
 See the ChangeLog file for the details.
 
+Version 0.28
+
+ * fixed a bug with line-wrapping a signature at the wrong place
+
+
 Version 0.27 - released 2007-07-25
 
  * Sender signing policies are now better implemented

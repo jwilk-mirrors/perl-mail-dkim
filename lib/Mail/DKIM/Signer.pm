@@ -81,7 +81,7 @@ See Mail::DKIM::SignerPolicy for more information about policy objects.
 package Mail::DKIM::Signer;
 use base "Mail::DKIM::Common";
 use Carp;
-our $VERSION = '0.27';
+our $VERSION = '0.28';
 
 # PROPERTIES
 #
