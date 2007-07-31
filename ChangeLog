@@ -1,3 +1,12 @@
+2007-07-31: Jason Long <jlong@messiah.edu>
+ * Makefile.PL: OpenSSL 0.23 segfaults on certain signatures, so
+   the requirement is now Crypt::OpenSSL::RSA 0.24 or better
+
+2007-07-25: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Signature.pm (identity_matches): new method to help
+   comparing a From/Sender address with the signature identity
+ * lib/Mail/DKIM/DkimPolicy.pm, Policy.pm: use identity_matches function
+
 2007-07-18: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Verifier.pm: changed fetch_policy() back to
    fetch_author_policy(); added fetch_sender_policy();
