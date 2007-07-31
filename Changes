@@ -1,9 +1,9 @@
 This file summarizes what's changed between releases of Mail-DKIM.
 See the ChangeLog file for the details.
 
-Version 0.27
+Version 0.27 - released 2007-07-25
 
- * Sender signing policies are now working much better.
+ * Sender signing policies are now better implemented
  * Both Yahoo! DomainKeys signing policies and the under-development
    IETF DKIM signing policies are supported
     * Yahoo! DomainKeys policies can protect the Sender: header
