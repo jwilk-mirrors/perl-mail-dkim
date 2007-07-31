@@ -534,6 +534,23 @@ sub identity
 	}
 }
 
+sub identity_matches
+{
+	my $self = shift;
+	my ($addr) = @_;
+
+	my $id = $self->identity;
+	if ($id =~ /^\@/)
+	{
+		# the identity is a domain-name only, so it only needs to match
+		# the domain part of the sender address
+		return (lc(substr($addr, -length($id))) eq lc($id));
+
+		# TODO - compare the parent domains?
+	}
+	return lc($addr) eq lc($id);
+}
+
 =head2 method() - get or set the canonicalization (c=) field
 
 Message canonicalization (default is "simple"). This informs the verifier

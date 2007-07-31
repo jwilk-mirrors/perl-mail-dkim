@@ -151,9 +151,7 @@ sub apply
 		next if $signature->result ne "pass";
 
 		my $oa = $dkim->message_originator->address;
-		my $id = $signature->identity;
-
-		if (lc(substr($oa, -length($id))) eq lc($id))
+		if ($signature->identity_matches($oa))
 		{
 			# found a first party signature
 			$first_party = 1;
