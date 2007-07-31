@@ -167,6 +167,10 @@ sub wrap
 			$raw_name =~ s/\s+$//;
 		}
 
+		$wrap->{Break} = undef;
+		$did_first ? $wrap->add(";") : ($did_first = 1);
+		$wrap->add($raw_name . "=");
+
 		if ($tagtype eq "b64")
 		{
 			$raw_value =~ s/\s+//gs;   #removes all whitespace
@@ -185,13 +189,7 @@ sub wrap
 			$raw_value =~ s/^\s|\s$//g; #trims preceding/trailing spaces
 			$wrap->{Break} = qr/\s/;
 		}
-		else
-		{
-			$wrap->{Break} = undef;
-		}
-
-		$did_first ? $wrap->add(";") : ($did_first = 1);
-		$wrap->add($raw_name . "=" . $raw_value);
+		$wrap->add($raw_value);
 	}
 
 	$wrap->finish;

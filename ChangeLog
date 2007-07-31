@@ -1,6 +1,10 @@
 2007-07-31: Jason Long <jlong@messiah.edu>
  * Makefile.PL: OpenSSL 0.23 segfaults on certain signatures, so
    the requirement is now Crypt::OpenSSL::RSA 0.24 or better
+ * lib/Mail/DKIM/KeyValueList.pm: don't split the header in the middle
+   of a tag name
+
+ -- VERSION 0.27 --
 
 2007-07-25: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Signature.pm (identity_matches): new method to help
