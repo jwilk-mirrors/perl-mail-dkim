@@ -1,3 +1,6 @@
+Common:
+ - remove dependency on Digest::SHA1 (use Digest::SHA instead)
+
 DKIM-Signature:
  - allow version tag (DONE)
  - accept q=dns/txt (DONE)
