@@ -186,6 +186,10 @@ sub check_body_hash
 {
 	my $self = shift;
 
+	# The body_hash value is set in finish_message(), if we're operating
+	# from a version of the DKIM spec that uses the bh= tag. Otherwise,
+	# the signature shouldn't have a bh= tag to check.
+
 	if ($self->{body_hash})
 	{
 		my $body_hash = $self->{body_hash};
