@@ -90,7 +90,7 @@ package Mail::DKIM::Verifier;
 use base "Mail::DKIM::Common";
 use Carp;
 use Error ":try";
-our $VERSION = '0.28';
+our $VERSION = '0.29';
 
 sub init
 {
