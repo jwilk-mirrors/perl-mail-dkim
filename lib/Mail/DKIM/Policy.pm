@@ -78,31 +78,10 @@ sub fetch
 	my $class = shift;
 	my %prms = @_;
 
-	my $strn;
-
 	($prms{'Protocol'} eq "dns")
 		or die "invalid protocol '$prms{Protocol}'\n";
 
-	if ($prms{Author} && !$prms{Sender})
-	{
-		$prms{Sender} = $prms{Author};
-	}
-	if ($prms{Sender} && !$prms{Domain})
-	{
-		(undef, $prms{Domain}) = split(/\@/, $prms{Sender}, 2);
-	}
-
-	unless ($prms{Domain})
-	{
-		die "no domain to fetch policy for\n";
-	}
-
-	# IETF seems poised to create policy records this way
-	#my $host = "_policy._domainkey." . $prms{Domain};
-
-	# but Yahoo! policy records are still much more common
-	# see historic RFC4870, section 3.6
-	my $host = "_domainkey." . $prms{Domain};
+	my $host = $class->get_lookup_name(\%prms);
 
 	#
 	# perform DNS query for domain policy...
@@ -116,6 +95,7 @@ sub fetch
 		return $class->default;
 	}
 
+	my $strn;
 	foreach my $ans ($resp->answer) {
 		next unless $ans->type eq "TXT";
 		$strn = join "", $ans->char_str_list;
@@ -131,6 +111,38 @@ sub fetch
 			String => $strn,
 			Domain => $prms{Domain},
 			);
+}
+
+# get_lookup_name() - determine name of record to fetch
+#
+sub get_lookup_name
+{
+	my $self = shift;
+	my ($prms) = @_;
+
+	# in DomainKeys, the record to fetch is determined based on the
+	# Sender header, then the From header
+
+	if ($prms->{Author} && !$prms->{Sender})
+	{
+		$prms->{Sender} = $prms->{Author};
+	}
+	if ($prms->{Sender} && !$prms->{Domain})
+	{
+		(undef, $prms->{Domain}) = split(/\@/, $prms->{Sender}, 2);
+	}
+
+	unless ($prms->{Domain})
+	{
+		die "no domain to fetch policy for\n";
+	}
+
+	# IETF seems poised to create policy records this way
+	#my $host = "_policy._domainkey." . $prms{Domain};
+
+	# but Yahoo! policy records are still much more common
+	# see historic RFC4870, section 3.6
+	return "_domainkey." . $prms->{Domain};
 }
 
 =head2 new() - construct a default policy object

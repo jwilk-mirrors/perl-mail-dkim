@@ -31,55 +31,27 @@ Mail::DKIM::DkimPolicy - implements DKIM Sender Signing Practices records
 
 =cut
 
-sub fetch
+# get_lookup_name() - determine name of record to fetch
+#
+sub get_lookup_name
 {
-	my $class = shift;
-	my %prms = @_;
+	my $self = shift;
+	my ($prms) = @_;
 
-	($prms{'Protocol'} eq "dns")
-		or die "invalid protocol '$prms{Protocol}'\n";
+	# in DKIM, the record to fetch is determined based on the From header
 
-	if ($prms{Author} && !$prms{Domain})
+	if ($prms->{Author} && !$prms->{Domain})
 	{
-		(undef, $prms{Domain}) = split(/\@/, $prms{Author}, 2);
+		(undef, $prms->{Domain}) = split(/\@/, $prms->{Author}, 2);
 	}
 
-	unless ($prms{Domain})
+	unless ($prms->{Domain})
 	{
 		die "no domain to fetch policy for\n";
 	}
 
 	# IETF seems poised to create policy records this way
-	my $host = "_policy._domainkey." . $prms{Domain};
-
-	#
-	# perform DNS query for domain policy...
-	#   if the query takes too long, we should catch it and generate
-	#   an error
-	#
-	my $resp = Mail::DKIM::DNS::query($host, "TXT");
-	unless ($resp)
-	{
-		# no response => NXDOMAIN, use default policy
-		return $class->default;
-	}
-
-	my $strn;
-	foreach my $ans ($resp->answer) {
-		next unless $ans->type eq "TXT";
-		$strn = join "", $ans->char_str_list;
-	}
-
-	unless ($strn)
-	{
-		# empty record found in DNS, use default policy
-		return $class->default;
-	}
-
-	return $class->parse(
-			String => $strn,
-			Domain => $prms{Domain},
-			);
+	return "_policy._domainkey." . $prms->{Domain};
 }
 
 =head2 new() - construct a default policy object

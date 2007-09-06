@@ -1,3 +1,9 @@
+2007-09-06: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Policy.pm (get_lookup_name): new method that determines
+   the name of the record to lookup
+ * lib/Mail/DKIM/DkimPolicy.pm: no longer need to override fetch(), now
+   it just overrides get_lookup_name()
+
  -- VERSION 0.28 --
 
 2007-07-31: Jason Long <jlong@messiah.edu>
