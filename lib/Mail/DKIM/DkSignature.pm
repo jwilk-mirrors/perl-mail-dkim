@@ -275,7 +275,7 @@ sub identity
 
 sub method
 {
-	croak "method not implemented";
+	croak "method not implemented (use canonicalization instead)";
 }	
 
 =head2 protocol() - get or set the query methods (q=) field

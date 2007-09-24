@@ -200,9 +200,9 @@ sub check_signature
 	{
 		# unsupported canonicalization method
 		$self->{signature_reject_reason} = "unsupported canonicalization";
-		if (defined $signature->method)
+		if (defined $signature->canonicalization)
 		{
-			$self->{signature_reject_reason} .= " " . $signature->method;
+			$self->{signature_reject_reason} .= " " . $signature->canonicalization;
 		}
 		return 0;
 	}
