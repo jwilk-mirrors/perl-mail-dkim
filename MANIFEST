@@ -58,6 +58,7 @@ t/corpus/good_dk_yahoo.txt
 t/corpus/good_dk_gmail.txt
 t/corpus/good_dk_1.txt
 t/corpus/good_dk_2.txt
+t/corpus/dk_headers_reordered.txt
 t/corpus/multiple_1.txt
 t/corpus/bad_ietf01_1.txt
 t/corpus/bad_ietf01_2.txt
