@@ -65,11 +65,9 @@ sub finish_header
 		my %heads;
 		foreach my $line (@{$self->{myheaders}})
 		{
-			my $field_name = "";
-			if ($line =~ /^([^\s:]+)\s*:/)
-			{
-				$field_name = lc $1;
-			}
+			next unless $line =~ /^([^\s:]+)\s*:/;
+			my $field_name = lc $1;
+
 			$heads{$field_name} ||= [];
 			push @{$heads{$field_name}}, $line;
 		}
@@ -81,11 +79,15 @@ sub finish_header
 			$heads{lc $field_name} ||= [];
 			$counts{lc $field_name}++;
 		}
+
 		# - finally, working backwards through the h= tag,
 		#   collect the headers we will be signing (last to first).
-		#   Normally one header at a time, but if there are more
-		#   headers when the last of a certain h= tag value comes up,
-		#   put the rest in.
+		#   Normally, one occurrence of a name in the h= tag
+		#   correlates to one occurrence of that header being presented
+		#   to canonicalization, but if (working backwards) we are
+		#   at the first occurrence of that name, and there are
+		#   multiple headers of that name, then put them all in.
+		#
 		while (my $field_name = pop @sig_header_names)
 		{
 			$counts{lc $field_name}--;
