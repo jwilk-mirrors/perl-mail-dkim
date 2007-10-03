@@ -26,8 +26,8 @@ sub load {
 		$self->{'DATA'} = $prms{'Data'};
 	} elsif ($prms{'File'}) {	
 		my @data;
-		open FILE, "<$prms{'File'}" or
-			return;
+		open FILE, "<", $prms{'File'}
+			or die "Error: cannot read $prms{File}: $!\n";
 		while (<FILE>) {
 			chomp;
 			/^---/ and
