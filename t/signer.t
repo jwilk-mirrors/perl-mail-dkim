@@ -62,6 +62,7 @@ $dkim = Mail::DKIM::Signer->new(
 		Method => "relaxed",
 		Domain => "example.org",
 		Selector => "test",
+		Identity => "bob\@example.org",
 		KeyFile => $keyfile);
 ok($dkim, "new() works");
 
@@ -69,13 +70,17 @@ $dkim->PRINT($sample_email);
 $dkim->CLOSE;
 
 ok($dkim->signature, "signature() works");
-print "# signature=" . $signature->as_string . "\n";
+print "# signature=" . $dkim->signature->as_string . "\n";
+
+# check whether the signature includes/excludes certain header fields
 my $sigstr = $dkim->signature->as_string;
 ok($sigstr =~ /subject/i, "subject was signed");
 ok($sigstr =~ /from/i, "from was signed");
 ok($sigstr !~ /received/i, "received was excluded");
 ok($sigstr !~ /comments/i, "comments was excluded");
-ok($sigstr =~ /$EXPECTED_RE/, "got expected signature value");
+
+# check if the identity got included
+ok($sigstr =~ /i=bob\@/, "got expected identity value");
 
 eval {
 $dkim = Mail::DKIM::Signer->new(

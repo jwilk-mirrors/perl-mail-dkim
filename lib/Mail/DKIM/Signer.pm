@@ -216,6 +216,8 @@ sub finish_header
 				Headers => $self->headers,
 				Domain => $self->{"Domain"},
 				Selector => $self->{"Selector"},
+				($self->{"Identity"} ?
+					(Identity => $self->{"Identity"}) : ()),
 			));
 	}
 

@@ -31,6 +31,7 @@ Mail::DKIM::Signature - encapsulates a DKIM signature header
                       [ Signature => $base64, ]
                       [ Method => "relaxed", ]
                       [ Domain => "example.org", ]
+                      [ Identity => 'user@example.org', ]
                       [ Headers => "from:subject:date:message-id", ]
                       [ Query => "dns", ]
                       [ Selector => "alpha", ]
@@ -53,6 +54,7 @@ sub new {
 	#$self->protocol($prms{'Query'} || "dns");
 	$self->protocol($prms{'Query'} || "dns/txt");
 	$self->selector($prms{'Selector'});
+	$self->identity($prms{'Identity'}) if exists $prms{'Identity'};
 
 	return $self;
 }
