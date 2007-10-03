@@ -1,6 +1,7 @@
 2007-10-03: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Canonicalization/DkCommon.pm: attempt at making the
    header handling algorithm easier to understand
+ * t/signer.t: test case for unreadable private key
 
 2007-10-02: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Canonicalization/DkCommon.pm: there are some varying
