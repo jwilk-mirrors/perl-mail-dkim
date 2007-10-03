@@ -4,6 +4,7 @@
    an h= tag and the headers are in a different order... this is an
    attempt at making our verifier more compatible with other
    implementations
+ * dk_headers.txt: some notes on multiple-occuring headers
 
 2007-09-06: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Policy.pm (get_lookup_name): new method that determines
