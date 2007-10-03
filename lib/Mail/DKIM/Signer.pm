@@ -130,9 +130,6 @@ sub init
 
 	if (defined $self->{KeyFile})
 	{
-		croak "not a file: " . $self->{KeyFile}
-			unless (-f $self->{KeyFile});
-
 		$self->{private} = Mail::DKIM::PrivateKey->load(
 				File => $self->{KeyFile});
 	}

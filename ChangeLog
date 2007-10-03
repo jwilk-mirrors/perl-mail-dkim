@@ -3,6 +3,8 @@
    header handling algorithm easier to understand
  * t/signer.t: test case for unreadable private key
  * lib/Mail/DKIM/PrivateKey.pm: die if unable to open private key file
+ * lib/Mail/DKIM/Signer.pm: no more need for a separate existance check
+   on the private key filename
 
 2007-10-02: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Canonicalization/DkCommon.pm: there are some varying
