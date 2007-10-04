@@ -195,7 +195,9 @@ sub domain
 
 sub expiration
 {
-	croak "expiration not implemented";
+	my $self = shift;
+	croak "cannot change expiration on " . ref($self) if @_;
+	return undef;
 }
 
 use MIME::Base64;
