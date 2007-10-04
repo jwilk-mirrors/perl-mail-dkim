@@ -1,7 +1,10 @@
 This file summarizes what's changed between releases of Mail-DKIM.
 See the ChangeLog file for the details.
 
-Version 0.29
+Version 0.29 - not yet released
+
+ * fixed a compatibility issue handling the h= tag on DomainKeys signatures
+ * some minor API improvements, see ChangeLog for details
 
 
 Version 0.28 - released 2007-07-31
