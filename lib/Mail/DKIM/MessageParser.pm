@@ -75,6 +75,7 @@ sub PRINT
 		last;
 	}
 	$self->{buf} = $buf;
+	return 1;
 }
 
 sub CLOSE
@@ -105,6 +106,7 @@ sub CLOSE
 	}
 	$self->{buf} = "";
 	$self->finish_body;
+	return 1;
 }
 
 sub add_header
