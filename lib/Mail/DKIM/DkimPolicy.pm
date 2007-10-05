@@ -18,7 +18,7 @@ use Mail::DKIM::DNS;
 
 =head1 NAME
 
-Mail::DKIM::DkimPolicy - implements DKIM Sender Signing Practices records
+Mail::DKIM::DkimPolicy - represents a DKIM Sender Signing Practices record
 
 =head1 CONSTRUCTORS
 

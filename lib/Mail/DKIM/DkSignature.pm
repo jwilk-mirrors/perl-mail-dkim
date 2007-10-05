@@ -19,7 +19,7 @@ use Carp;
 
 =head1 NAME
 
-Mail::DKIM::DkSignature - a DomainKeys signature header
+Mail::DKIM::DkSignature - represents a DomainKeys-Signature header
 
 =head1 CONSTRUCTORS
 
@@ -324,5 +324,23 @@ sub version
 {
 	croak "version not implemented";
 }
+
+=head1 SEE ALSO
+
+L<Mail::DKIM::Signature> for DKIM-Signature headers
+
+=head1 AUTHOR
+
+Jason Long, E<lt>jlong@messiah.eduE<gt>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2006-2007 by Messiah College
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.6 or,
+at your option, any later version of Perl 5 you may have available.
+
+=cut
 
 1;

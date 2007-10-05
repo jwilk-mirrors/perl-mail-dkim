@@ -74,7 +74,7 @@ domain, and selector to use. Use of the policy object lets you defer
 the determination of algorithm, method, domain and selector until
 the message being signed has been partially read.
 
-See Mail::DKIM::SignerPolicy for more information about policy objects.
+See L<Mail::DKIM::SignerPolicy> for more information about policy objects.
 
 =cut
 
@@ -276,7 +276,7 @@ and generates a signature.
 
 Signer policies can use this method to specify complete parameters for
 the signature to add, including what type of signature. For more information,
-see Mail::DKIM::SignerPolicy.
+see L<Mail::DKIM::SignerPolicy>.
 
 =cut
 
@@ -418,7 +418,7 @@ sub method
 
 Returns the "originator address" found in the message. This is typically
 the (first) name and email address found in the From: header. The returned
-object is of type Mail::Address. To get just the email address part, do:
+object is of type L<Mail::Address>. To get just the email address part, do:
 
   my $email = $dkim->message_originator->address;
 
@@ -535,7 +535,7 @@ specified in the new() constructor.
 
 =head1 SEE ALSO
 
-Mail::DKIM::SignerPolicy
+L<Mail::DKIM::SignerPolicy>
 
 =head1 AUTHOR
 

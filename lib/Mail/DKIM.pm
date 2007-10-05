@@ -19,7 +19,7 @@ Mail::DKIM - Signs/verifies Internet mail with DKIM/DomainKey signatures
   use Mail::DKIM::Verifier;
 
   # create a verifier object
-  my $dkim = Mail::DKIM::Verifier->new_object();
+  my $dkim = Mail::DKIM::Verifier->new();
 
   # read an email from stdin, pass it into the verifier
   while (<STDIN>)
@@ -44,13 +44,13 @@ parts into this module, for use in other programs.
 
 The Mail::DKIM module uses an object-oriented interface. You use one of
 two different classes, depending on whether you are signing or verifying
-a message. To sign, use the Mail::DKIM::Signer class. To verify, use the
-Mail::DKIM::Verifier class. Simple, eh?
+a message. To sign, use the L<Mail::DKIM::Signer> class. To verify, use the
+L<Mail::DKIM::Verifier> class. Simple, eh?
 
 =head1 SEE ALSO
 
-Mail::DKIM::Signer,
-Mail::DKIM::Verifier
+L<Mail::DKIM::Signer>,
+L<Mail::DKIM::Verifier>
 
 http://jason.long.name/dkimproxy/
 
@@ -63,7 +63,7 @@ specification.
 The "sender signing policy" component is still under construction. The
 sender signing policy is supposed to identify the practice of the message
 author, so you could for example reject a message from an author who claims
-they always sign their messages. See Mail::DKIM::Policy.
+they always sign their messages. See L<Mail::DKIM::Policy>.
 
 =head1 AUTHOR
 

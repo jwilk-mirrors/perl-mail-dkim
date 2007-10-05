@@ -626,7 +626,7 @@ The following are possible results from the result_detail() method:
   my $sig = $dkim->signature;
 
 Accesses the signature found and verified in this message. The returned
-object is of type Mail::DKIM::Signature.
+object is of type L<Mail::DKIM::Signature>.
 
 In case of multiple signatures, the signature with the "best" result will
 be returned.

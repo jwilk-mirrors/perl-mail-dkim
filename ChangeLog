@@ -12,6 +12,7 @@
  * lib/Mail/DKIM/Canonicalization/Base.pm, Algorithm/Base.pm:
    add see also, author, copyright sections to POD
  * lib/Mail/DKIM/Algorithm/rsa_sha1.pm, rsa_sha256.pm: remove useless pod
+ * ...and others...: inline documentation (POD) cleanup
 
 2007-10-03: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Canonicalization/DkCommon.pm: attempt at making the

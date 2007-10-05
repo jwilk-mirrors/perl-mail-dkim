@@ -54,7 +54,7 @@ Here is an example of a policy that always returns the same values:
 To use this policy, simply specify the name of the class as the Policy
 parameter...
 
-  my $dkim = Mail::DKIM::Signer->new_object(
+  my $dkim = Mail::DKIM::Signer->new(
                   Policy => "MySignerPolicy",
                   KeyFile => "private.key"
              );

@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2005-2006 Messiah College. All rights reserved.
+# Copyright 2005-2007 Messiah College. All rights reserved.
 # Jason Long <jlong@messiah.edu>
 
 # Copyright (c) 2004 Anthony D. Urso. All rights reserved.
@@ -20,7 +20,7 @@ use Carp;
 
 =head1 NAME
 
-Mail::DKIM::Signature - encapsulates a DKIM signature header
+Mail::DKIM::Signature - represents a DKIM-Signature header
 
 =head1 CONSTRUCTORS
 
@@ -758,6 +758,10 @@ sub version
 
 	return $self->get_tag("v");
 }
+
+=head1 SEE ALSO
+
+L<Mail::DKIM::DkSignature> for DomainKey-Signature headers
 
 =head1 AUTHOR
 
