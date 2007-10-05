@@ -61,25 +61,3 @@ sub verify
 }
 
 1;
-
-__END__
-
-=head1 NAME
-
-Mail::DKIM::Algorithm::rsa_sha1 - implements the rsa-sha1 signing algorithm for DKIM
-
-=head1 CONSTRUCTOR
-
-=head2 new() - create an object for the DKIM signing algorithm "rsa-sha1"
-
-  my $algorithm = new Mail::DKIM::Algorithm::rsa_sha1(
-                      Signature => $dkim_signature
-                  );
-
-=head1 METHODS
-
-See Mail::DKIM::Algorithm::Base for the full list of methods supported
-by this algorithm class.
-
-=cut
-
