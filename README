@@ -39,6 +39,8 @@ Some details of the specification are not completely implemented.
 See the TODO file for a list of things I know about.
 
 Report bugs to Jason Long <jlong@messiah.edu>.
+If `make test' fails, please include the versions of your
+installed Crypt::OpenSSL::RSA module and OpenSSL libraries.
 
 COPYRIGHT AND LICENCE
 
