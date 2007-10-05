@@ -3,6 +3,10 @@
  * lib/Mail/DKIM/DkSignature.pm: make expiration() for DomainKey-Signature
    behave more compatibly with expiration() for DKIM-Signature
  * lib/Mail/DKIM/Verifier.pm: remove dependency on Error module
+ * README: what I'm interested in if make test fails
+ * lib/Mail/DKIM/Signer.pm: fix bug reported by dairiki, who noticed that
+   the Signer class ignored the signature-specified algorithm when
+   building the algorithm object
 
 2007-10-03: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Canonicalization/DkCommon.pm: attempt at making the

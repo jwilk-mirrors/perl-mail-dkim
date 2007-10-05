@@ -287,7 +287,7 @@ sub add_signature
 
 	# create a canonicalization filter and algorithm
 	my $algorithm_class = $signature->get_algorithm_class(
-			$self->{"Algorithm"});
+			$signature->algorithm);
 	my $algorithm = $algorithm_class->new(
 			Signature => $signature,
 			Debug_Canonicalization => $self->{Debug_Canonicalization},
