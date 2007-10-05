@@ -7,6 +7,8 @@
  * lib/Mail/DKIM/Signer.pm: fix bug reported by dairiki, who noticed that
    the Signer class ignored the signature-specified algorithm when
    building the algorithm object
+ * scripts/dkimsign.pl: update POD a bit
+ * scripts/dkimverify.pl: add POD
 
 2007-10-03: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Canonicalization/DkCommon.pm: attempt at making the

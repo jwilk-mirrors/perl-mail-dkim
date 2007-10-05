@@ -1,6 +1,6 @@
 #!/usr/bin/perl -I../lib
 #
-# Copyright (c) 2005-2006 Messiah College. This program is free software.
+# Copyright (c) 2005-2007 Messiah College. This program is free software.
 # You can redistribute it and/or modify it under the terms of the
 # GNU Public License as found at http://www.fsf.org/copyleft/gpl.html.
 #
@@ -134,5 +134,17 @@ to computing the DKIM signature. This is helpful for debugging
 canonicalization methods.
 
 =back
+
+=head1 AUTHOR
+
+Jason Long, E<lt>jlong@messiah.eduE<gt>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2006-2007 by Messiah College
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.6 or,
+at your option, any later version of Perl 5 you may have available.
 
 =cut

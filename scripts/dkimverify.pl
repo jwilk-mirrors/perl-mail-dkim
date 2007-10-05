@@ -67,3 +67,44 @@ else
 {
 	print "sender policy result: not found\n";
 }
+
+__END__
+
+=head1 NAME
+
+dkimverify.pl - verifies DKIM signatures on an email message
+
+=head1 SYNOPSIS
+
+  dkimverify.pl [options] < signed_email.txt
+    options:
+      --debug-canonicalization=FILE
+
+  dkimverify.pl --help
+    to see a full description of the various options
+
+=head1 OPTIONS
+
+=over
+
+=item B<--debug-canonicalization>
+
+Outputs the canonicalized message to the specified file, in addition
+to computing the DKIM signature. This is helpful for debugging
+canonicalization methods.
+
+=back
+
+=head1 AUTHOR
+
+Jason Long, E<lt>jlong@messiah.eduE<gt>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2006-2007 by Messiah College
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.6 or,
+at your option, any later version of Perl 5 you may have available.
+
+=cut
