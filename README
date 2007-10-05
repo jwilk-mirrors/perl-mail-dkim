@@ -23,7 +23,6 @@ This module requires these other modules and libraries:
   Crypt::OpenSSL::RSA
   Digest::SHA
   Digest::SHA1
-  Error
   Mail::Address (part of the MailTools package)
   MIME::Base64
   Net::DNS
