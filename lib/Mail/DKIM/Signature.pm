@@ -308,6 +308,67 @@ sub canonicalization
 	}
 }	
 
+use MIME::Base64;
+
+sub check_canonicalization
+{
+	my $self = shift;
+
+	my ($c1, $c2) = $self->canonicalization;
+
+	my @known = ("nowsp", "simple", "relaxed");
+	return undef unless (grep { $_ eq $c1 } @known);
+	return undef unless (grep { $_ eq $c2 } @known);
+	return 1;
+}
+
+# checks whether the protocol found on this subject is valid for
+# fetching the public key
+# returns a true value if protocol is "dns/txt", false otherwise
+#
+sub check_protocol
+{
+	my $self = shift;
+
+	my ($type, $options) = split(/\//, $self->protocol, 2);
+	return unless ($type eq "dns");
+	return if ($options && $options ne "txt");
+
+	my $v = $self->version;
+	if ($v)
+	{
+		# in v=1 signatures, the /txt option is REQUIRED
+		return unless ($options && $options eq "txt");
+	}
+	return 1;
+}
+
+=head2 data() - get or set the signature data (b=) field
+
+  my $base64 = $signature->data;
+  $signature->data($base64);
+
+The signature data. Whitespace is automatically stripped from the
+returned value. The data is Base64-encoded.
+
+=cut
+
+sub data
+{
+	my $self = shift;
+
+	if (@_)
+	{
+		$self->set_tag("b", shift);
+	}
+
+	my $b = $self->get_tag("b");
+	$b =~ tr/\015\012 \t//d  if defined $b;
+	return $b;
+}	
+
+*signature = \*data;
+
 =head2 domain() - get or set the domain (d=) field
 
   my $d = $signature->domain;          # gets the domain value
@@ -347,41 +408,6 @@ sub expiration
 		$self->set_tag("x", shift);
 	
 	return $self->get_tag("x");
-}
-
-use MIME::Base64;
-
-sub check_canonicalization
-{
-	my $self = shift;
-
-	my ($c1, $c2) = $self->canonicalization;
-
-	my @known = ("nowsp", "simple", "relaxed");
-	return undef unless (grep { $_ eq $c1 } @known);
-	return undef unless (grep { $_ eq $c2 } @known);
-	return 1;
-}
-
-# checks whether the protocol found on this subject is valid for
-# fetching the public key
-# returns a true value if protocol is "dns/txt", false otherwise
-#
-sub check_protocol
-{
-	my $self = shift;
-
-	my ($type, $options) = split(/\//, $self->protocol, 2);
-	return unless ($type eq "dns");
-	return if ($options && $options ne "txt");
-
-	my $v = $self->version;
-	if ($v)
-	{
-		# in v=1 signatures, the /txt option is REQUIRED
-		return unless ($options && $options eq "txt");
-	}
-	return 1;
 }
 
 # allows the type of signature to determine what "algorithm" gets used
@@ -652,32 +678,6 @@ sub selector {
 
 	return $self->get_tag("s");
 }	
-
-=head2 data() - get or set the signature data (b=) field
-
-  my $base64 = $signature->data;
-  $signature->data($base64);
-
-The signature data. Whitespace is automatically stripped from the
-returned value. The data is Base64-encoded.
-
-=cut
-
-sub data
-{
-	my $self = shift;
-
-	if (@_)
-	{
-		$self->set_tag("b", shift);
-	}
-
-	my $b = $self->get_tag("b");
-	$b =~ tr/\015\012 \t//d  if defined $b;
-	return $b;
-}	
-
-*signature = \*data;
 
 =head2 prettify() - alters the signature to look "nicer" as an email header
 
