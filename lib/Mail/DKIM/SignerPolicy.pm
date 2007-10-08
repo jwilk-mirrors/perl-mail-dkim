@@ -21,12 +21,13 @@ Mail::DKIM::SignerPolicy - determines signing parameters for a message
 
 =head1 DESCRIPTION
 
-Objects of type Mail::DKIM::SignerPolicy are used by Mail::DKIM::Signer.
-To take advantage of policy objects, create your own Perl class that
-extends this class. The only method you need to provide is the apply()
-method.
+A "signer policy" is an object, class, or function used by
+L<Mail::DKIM::Signer> to determine what signatures to add to the
+current message. To take advantage of signer policies, create your
+own Perl class that extends the L<Mail::DKIM::SignerPolicy> class.
+The only method you need to implement is the apply() method.
 
-The apply() method takes as a parameter the Mail::DKIM::Signer object.
+The apply() method takes as a parameter the L<Mail::DKIM::Signer> object.
 Using this object, it can determine some properties of the message (e.g.
 what the From: address or Sender: address is). Then it sets various
 signer properties as desired. The apply() method should
@@ -47,6 +48,7 @@ Here is an example of a policy that always returns the same values:
       $signer->method("relaxed");
       $signer->domain("example.org");
       $signer->selector("selector1");
+      $signer->key_file("private.key");
   
       return 1;
   }
@@ -56,7 +58,6 @@ parameter...
 
   my $dkim = Mail::DKIM::Signer->new(
                   Policy => "MySignerPolicy",
-                  KeyFile => "private.key"
              );
 
 =head1 ADVANCED
