@@ -247,8 +247,16 @@ sub finish_body
 		# load the private key file if necessary
 		my $signature = $algorithm->signature;
 		my $key = $signature->{Key}
-			|| Mail::DKIM::PrivateKey->load(
-					File => $signature->{KeyFile});
+			|| $signature->{KeyFile}
+			|| $self->{Key}
+			|| $self->{KeyFile};
+		if (not ref $key)
+		{
+			$key = Mail::DKIM::PrivateKey->load(
+					File => $key);
+		}
+		$key
+			or die "no key available to sign with\n";
 
 		# compute signature value
 		my $signb64 = $algorithm->sign($key);
