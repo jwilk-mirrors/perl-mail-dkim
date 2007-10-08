@@ -49,11 +49,11 @@ $policy = sub {
 		$signer->method("relaxed");
 		$signer->algorithm("rsa-sha256");
 		$signer->selector("beta");
+		$signer->key_file($keyfile);
 		return 1;
 	};
 $dkim = sign_sample_using_args(
-		Policy => $policy,
-		KeyFile => $keyfile);
+		Policy => $policy);
 ok($dkim, "processed message");
 
 $signature = $dkim->signature;
