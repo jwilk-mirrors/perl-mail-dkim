@@ -639,10 +639,9 @@ Best is defined as "pass", followed by "fail", "invalid", and "none".
 #
 #   my @all_signatures = $dkim->signatures;
 #
+# Use $signature->result or $signature->result_detail to access
+# the verification results of each signature.
 # =cut
-#TODO
-# how would the caller get the verification results of each signature?
-# are they stored in the signature object?
 sub signatures
 {
 	my $self = shift;
