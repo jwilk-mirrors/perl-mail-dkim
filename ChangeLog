@@ -1,3 +1,8 @@
+2007-10-08: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Signer.pm: use "Key" property instead of "private" to
+   store the private key; new methods key() and key_file(); allow each
+   signature to have its own private key
+
 2007-10-04: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/MessageParser.pm: return nonzero for PRINT and CLOSE
  * lib/Mail/DKIM/DkSignature.pm: make expiration() for DomainKey-Signature

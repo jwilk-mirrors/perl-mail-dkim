@@ -65,14 +65,14 @@ Mail::DKIM::Signer - generates a DKIM signature for a message
   # create a signer using a custom policy
   my $dkim = Mail::DKIM::Signer->new(
                   Policy => $policyfn,
-                  KeyFile => "private.key",
              );
 
-You must always specify the name of a private key file. In addition,
-you must specify a policy object, or specify the algorithm, method,
-domain, and selector to use. Use of the policy object lets you defer
-the determination of algorithm, method, domain and selector until
-the message being signed has been partially read.
+The "default policy" is to create a DKIM signature using the specified
+parameters, but only if the message's sender matches the domain.
+If you want different behavior, you can provide a "signer policy"
+instead. A signer policy is a subroutine or class that determines
+signature parameters after the message's headers have been parsed.
+See the section "SIGNER POLICIES" below for more information.
 
 See L<Mail::DKIM::SignerPolicy> for more information about policy objects.
 
@@ -107,14 +107,14 @@ our $VERSION = '0.29';
 # $dkim->{Selector}
 #   identifies name of the selector identifying the key
 #
+# $dkim->{Key}
+#   the loaded private key
+#
 # private:
 #
 # $dkim->{algorithms} = []
 #   an array of algorithm objects... an algorithm object is created for
 #   each signature being added to the message
-#
-# $dkim->{private}
-#   the loaded private key
 #
 # $dkim->{result}
 #   result of the signing policy: "signed" or "skipped"
@@ -130,11 +130,9 @@ sub init
 
 	if (defined $self->{KeyFile})
 	{
-		$self->{private} = Mail::DKIM::PrivateKey->load(
+		$self->{Key} ||= Mail::DKIM::PrivateKey->load(
 				File => $self->{KeyFile});
 	}
-	croak "No private key specified"
-		unless ($self->{private});
 	
 	unless ($self->{"Algorithm"})
 	{
@@ -208,6 +206,10 @@ sub finish_header
 		{
 			die "invalid selector property";
 		}
+		unless ($self->{"Key"})
+		{
+			die "missing private key";
+		}
 
 		$self->add_signature(
 			new Mail::DKIM::Signature(
@@ -216,6 +218,7 @@ sub finish_header
 				Headers => $self->headers,
 				Domain => $self->{"Domain"},
 				Selector => $self->{"Selector"},
+				Key => $self->{"Key"},
 				($self->{"Identity"} ?
 					(Identity => $self->{"Identity"}) : ()),
 			));
@@ -241,14 +244,20 @@ sub finish_body
 		# finished canonicalizing
 		$algorithm->finish_body;
 
+		# load the private key file if necessary
+		my $signature = $algorithm->signature;
+		my $key = $signature->{Key}
+			|| Mail::DKIM::PrivateKey->load(
+					File => $signature->{KeyFile});
+
 		# compute signature value
-		my $signb64 = $algorithm->sign($self->{private});
-		$algorithm->signature->data($signb64);
+		my $signb64 = $algorithm->sign($key);
+		$signature->data($signb64);
 
 		# insert linebreaks in signature data, if desired
-		$algorithm->signature->prettify_safe();
+		$signature->prettify_safe();
 
-		$self->{signature} = $algorithm->signature;
+		$self->{signature} = $signature;
 		$self->{result} = "signed";
 	}
 }
@@ -392,6 +401,44 @@ sub want_header
 
 	#TODO- provide a way for user to specify which headers to sign
 	return scalar grep { lc($_) eq lc($header_name) } @DEFAULT_HEADERS;
+}
+
+=head2 key() - get or set the private key object
+
+  my $key = $dkim->key;
+
+  $dkim->key(Mail::DKIM::PrivateKey->load(File => "private.key"));
+
+=cut
+
+sub key
+{
+	my $self = shift;
+	if (@_)
+	{
+		$self->{Key} = shift;
+		$self->{KeyFile} = undef;
+	}
+	return $self->{Key};
+}
+
+=head2 key_file() - get or set the filename containing the private key
+
+  my $filename = $dkim->key_file;
+
+  $dkim->key_file("private.key");
+
+=cut
+
+sub key_file
+{
+	my $self = shift;
+	if (@_)
+	{
+		$self->{Key} = undef;
+		$self->{KeyFile} = shift;
+	}
+	return $self->{KeyFile};
 }
 
 =head2 method() - get or set the selected canonicalization method
