@@ -206,10 +206,6 @@ sub finish_header
 		{
 			die "invalid selector property";
 		}
-		unless ($self->{"Key"})
-		{
-			die "missing private key";
-		}
 
 		$self->add_signature(
 			new Mail::DKIM::Signature(
@@ -219,6 +215,7 @@ sub finish_header
 				Domain => $self->{"Domain"},
 				Selector => $self->{"Selector"},
 				Key => $self->{"Key"},
+				KeyFile => $self->{"KeyFile"},
 				($self->{"Identity"} ?
 					(Identity => $self->{"Identity"}) : ()),
 			));
