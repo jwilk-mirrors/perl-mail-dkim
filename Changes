@@ -5,6 +5,7 @@ Version 0.29 - not yet released
 
  * fixed a compatibility issue handling the h= tag on DomainKeys signatures
  * some minor API improvements, see ChangeLog for details
+ * key file can now be specified in policy
 
 
 Version 0.28 - released 2007-07-31
