@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 47;
+use Test::More tests => 48;
 
 use Mail::DKIM::Verifier;
 

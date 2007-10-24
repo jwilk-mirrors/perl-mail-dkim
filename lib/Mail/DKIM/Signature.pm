@@ -312,6 +312,9 @@ sub canonicalization
 
 use MIME::Base64;
 
+# checks whether this signature specifies a legal canonicalization method
+# returns true if the canonicalization is acceptable, false otherwise
+#
 sub check_canonicalization
 {
 	my $self = shift;
@@ -324,7 +327,20 @@ sub check_canonicalization
 	return 1;
 }
 
-# checks whether the protocol found on this subject is valid for
+# checks whether the expiration time on this signature is acceptable
+# returns a true value if acceptable, false otherwise
+#
+sub check_expiration
+{
+	my $self = shift;
+	my $x = $self->expiration;
+	return 1 if not defined $x;
+
+	$self->{_verify_time} ||= time();
+	return ($self->{_verify_time} <= $x);
+}
+
+# checks whether the protocol found on this signature is valid for
 # fetching the public key
 # returns a true value if protocol is "dns/txt", false otherwise
 #

@@ -215,6 +215,13 @@ sub check_signature
 		return 0;
 	}
 
+	unless ($signature->check_expiration)
+	{
+		# signature has expired
+		$self->{signature_reject_reason} = "signature is expired";
+		return 0;
+	}
+
 	unless ($signature->domain ne '')
 	{
 		# no domain specified

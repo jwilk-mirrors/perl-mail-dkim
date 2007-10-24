@@ -3,6 +3,9 @@
  * lib/Mail/DKIM/Signature.pm: recognize Expiration as a parameter
  * scripts/dkimsign.pl: make it possible to create a signature with an
    x= tag
+ * t/verifier.t: test ignore_7.txt message, should "ignore"
+ * lib/Mail/DKIM/Verifier.pm: check signature expiration when verifying
+ * lib/Mail/DKIM/Signature.pm (check_expiration): new method
 
 2007-10-08: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Signer.pm: use "Key" property instead of "private" to
