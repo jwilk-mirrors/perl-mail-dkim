@@ -35,6 +35,7 @@ Mail::DKIM::Signature - represents a DKIM-Signature header
                       [ Headers => "from:subject:date:message-id", ]
                       [ Query => "dns", ]
                       [ Selector => "alpha", ]
+                      [ Expiration => time() + 86400, ]
                   );
 
 =cut
