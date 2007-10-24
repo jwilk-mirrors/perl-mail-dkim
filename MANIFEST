@@ -61,6 +61,7 @@ t/corpus/good_dk_2.txt
 t/corpus/dk_headers_1.txt
 t/corpus/dk_headers_2.txt
 t/corpus/multiple_1.txt
+t/corpus/multiple_2.txt
 t/corpus/bad_ietf01_1.txt
 t/corpus/bad_ietf01_2.txt
 t/corpus/bad_ietf01_3.txt

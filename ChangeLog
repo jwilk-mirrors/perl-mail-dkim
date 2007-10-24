@@ -8,6 +8,10 @@
    (check_version): version check is now a separate method, rather than
    being part of parse()
  * lib/Mail/DKIM/DkSignature.pm (check_version): always true
+ * t/corpus/multiple_2.txt: a message testing multiple signatures with
+   different results
+ * t/verifier.t: verify that each signature's results are available and
+   correct
 
 2007-10-24: Jason Long <jlong@messiah.edu>
  * t/corpus/ignore_7.txt: a message with an expired signature

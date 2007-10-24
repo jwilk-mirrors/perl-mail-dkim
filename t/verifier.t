@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 48;
+use Test::More tests => 52;
 
 use Mail::DKIM::Verifier;
 
@@ -45,6 +45,11 @@ test_email("good_ietf00_5.txt", "pass");
 test_email("good_ietf01_1.txt", "pass");
 test_email("good_ietf01_2.txt", "pass");
 test_email("multiple_1.txt", "pass");
+test_email("multiple_2.txt", "pass");
+my @sigs = $dkim->signatures;
+ok($sigs[0]->result eq "invalid", "first signature is 'invalid'");
+ok($sigs[1]->result eq "pass", "second signature is 'pass'");
+ok($sigs[2]->result eq "fail", "third signature is 'fail'");
 
 test_email("bad_ietf01_1.txt", "fail");
 ok($dkim->result_detail =~ /body/, "determined body had been altered");
