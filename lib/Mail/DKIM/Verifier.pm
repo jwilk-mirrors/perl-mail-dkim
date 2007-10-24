@@ -100,7 +100,7 @@ sub init
 
 # @{$dkim->{signatures}}
 #   array of L<Mail::DKIM::Signature> objects, representing all
-#   syntactically valid signatures found in the header,
+#   parseable signatures found in the header,
 #   ordered from the top of the header to the bottom.
 #
 # $dkim->{signature_reject_reason}
@@ -153,6 +153,11 @@ sub add_signature
 	};
 	if ($@)
 	{
+		# the only reason an error should be thrown is if the
+		# signature really is unparse-able
+
+		# otherwise, invalid signatures are caught in finish_header()
+
 		chomp (my $E = $@);
 		$self->{signature_reject_reason} = $E;
 	}
@@ -172,6 +177,11 @@ sub add_signature_dk
 	};
 	if ($@)
 	{
+		# the only reason an error should be thrown is if the
+		# signature really is unparse-able
+
+		# otherwise, invalid signatures are caught in finish_header()
+
 		chomp (my $E = $@);
 		$self->{signature_reject_reason} = $E;
 	}
@@ -182,6 +192,20 @@ sub check_signature
 	my $self = shift;
 	croak "wrong number of arguments" unless (@_ == 1);
 	my ($signature) = @_;
+
+	unless ($signature->check_version)
+	{
+		# unsupported version
+		if (defined $signature->version)
+		{
+			$self->{signature_reject_reason} = "unsupported version (v="
+				. $signature->version . ")";
+		}
+		else
+		{
+			$self->{signature_reject_reason} = "missing v tag";
+		}
+	}
 
 	unless ($signature->algorithm
 		&& $signature->get_algorithm_class($signature->algorithm))
@@ -316,7 +340,12 @@ sub finish_header
 	my @valid = ();
 	foreach my $signature (@{$self->{signatures}})
 	{
-		next unless ($self->check_signature($signature));
+		unless ($self->check_signature($signature))
+		{
+			$signature->result("invalid",
+				$self->{signature_reject_reason});
+			next;
+		}
 
 		# get public key
 		my $pkey;
@@ -329,16 +358,14 @@ sub finish_header
 			my $E = $@;
 			chomp $E;
 			$self->{signature_reject_reason} = $E;
+			$signature->result("invalid", $E);
+			next;
 		}
 
-		if ($pkey)
+		unless ($self->check_public_key($signature, $pkey))
 		{
-			$self->check_public_key($signature, $pkey)
-				or next;
-		}
-		else
-		{
-			# public key not available
+			$signature->result("invalid",
+				$self->{signature_reject_reason});
 			next;
 		}
 
@@ -654,7 +681,7 @@ sub signatures
 	my $self = shift;
 	croak "unexpected argument" if @_;
 
-	return map { $_->signature } @{$self->{algorithms}};
+	return @{$self->{signatures}};
 }
 
 =head1 AUTHOR

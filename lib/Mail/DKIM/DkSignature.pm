@@ -226,6 +226,12 @@ sub check_protocol
 	return ($protocol eq "dns");
 }
 
+sub check_version
+{
+	#DomainKeys doesn't have a v= tag
+	return 1;
+}
+
 sub get_algorithm_class
 {
 	my $self = shift;

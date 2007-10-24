@@ -26,7 +26,7 @@ Mail::DKIM::Signature - represents a DKIM-Signature header
 
 =head2 new() - create a new signature from parameters
 
-  my $signature = new Mail::DKIM::Signature(
+  my $signature = Mail::DKIM::Signature->new(
                       [ Algorithm => "rsa-sha1", ]
                       [ Signature => $base64, ]
                       [ Method => "relaxed", ]
@@ -40,11 +40,12 @@ Mail::DKIM::Signature - represents a DKIM-Signature header
 
 =cut
 
-sub new {
-	my $type = shift;
+sub new
+{
+	my $class = shift;
 	my %prms = @_;
 	my $self = {};
-	bless $self, $type;
+	bless $self, $class;
 
 	$self->version("1");
 	$self->algorithm($prms{'Algorithm'} || "rsa-sha1");
@@ -52,7 +53,6 @@ sub new {
 	$self->canonicalization($prms{'Method'} || "simple");
 	$self->domain($prms{'Domain'});
 	$self->headerlist($prms{'Headers'});
-	#$self->protocol($prms{'Query'} || "dns");
 	$self->protocol($prms{'Query'} || "dns/txt");
 	$self->selector($prms{'Selector'});
 	$self->identity($prms{'Identity'}) if exists $prms{'Identity'};
@@ -63,7 +63,7 @@ sub new {
 
 =head2 parse() - create a new signature from a DKIM-Signature header
 
-  my $sig = parse Mail::DKIM::Signature(
+  my $sig = Mail::DKIM::Signature->parse(
                   "DKIM-Signature: a=rsa-sha1; b=yluiJ7+0=; c=relaxed"
             );
 
@@ -98,16 +98,6 @@ sub parse
 
 	my $self = $class->SUPER::parse($string);
 	$self->{prefix} = $prefix;
-
-	# check version
-	if (my $version = $self->version)
-	{
-		my @ALLOWED_VERSIONS = ("0.5", "1");
-		unless (grep {$_ eq $version} @ALLOWED_VERSIONS)
-		{
-			die "unsupported v=$version tag\n";
-		}
-	}
 
 	return $self;
 }
@@ -358,6 +348,25 @@ sub check_protocol
 		# in v=1 signatures, the /txt option is REQUIRED
 		return unless ($options && $options eq "txt");
 	}
+	return 1;
+}
+
+# checks whether the version tag has an acceptable value
+# returns true if so, otherwise false
+#
+sub check_version
+{
+	my $self = shift;
+
+	# check version
+	if (my $version = $self->version)
+	{
+		my @ALLOWED_VERSIONS = ("0.5", "1");
+		return (grep {$_ eq $version} @ALLOWED_VERSIONS);
+	}
+
+	# we still consider a missing v= tag acceptable,
+	# for backwards-compatibility
 	return 1;
 }
 

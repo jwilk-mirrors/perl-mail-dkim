@@ -1,4 +1,15 @@
 2007-10-24: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Verifier.pm (check_signature): do signature version check
+   here
+   (finish_header): report invalid signature details to the signature
+   object
+   (signatures): return all parsed signatures, not just "valid" signatures
+ * lib/Mail/DKIM/Signature.pm: some misc. cleanup
+   (check_version): version check is now a separate method, rather than
+   being part of parse()
+ * lib/Mail/DKIM/DkSignature.pm (check_version): always true
+
+2007-10-24: Jason Long <jlong@messiah.edu>
  * t/corpus/ignore_7.txt: a message with an expired signature
  * lib/Mail/DKIM/Signature.pm: recognize Expiration as a parameter
  * scripts/dkimsign.pl: make it possible to create a signature with an
