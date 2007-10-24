@@ -1,4 +1,10 @@
 2007-10-24: Jason Long <jlong@messiah.edu>
+ * t/corpus/badkey_8.txt, ignore_5.txt, ignore_6.txt: fix signature so
+   it would verify if not for the flaw in the public key
+ * scripts/dkimsign.pl: allow key protocol to be specified on command
+   line
+
+2007-10-24: Jason Long <jlong@messiah.edu>
  * t/corpus/badkey_*.txt: changed subjects to indicate which test it is
  * t/corpus/badkey_7.txt, badkey_8.txt, goodkey_1.txt, goodkey_2.txt,
    goodkey_3.txt: additional tests of public key features
