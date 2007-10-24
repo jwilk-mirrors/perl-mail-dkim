@@ -1,4 +1,4 @@
-DKIM-Signature: v=0.5; a=rsa-sha1; c=simple; d=messiah.edu; h=received:received:from:to:subject:date:message-id; q=dns/txt; s=testbad8; bh=rYdLRBGGXK4PCDh+3AbwGuV2OEU=; b=fTmnR2WeabrW0qAlIDm25QOI8pEVfKayiu56bNQeIg7Qbcg7SEeq9Y71MU5WK11DWUwg2+nruwq+y22VQq/Wtw+014kTkfT073wMlTBjeZqNl63T+whlwgUAIjgR6XuR+BP6bc1/nRBbVB7Wjfctj5yNUgGCZqxVEh07wBtgFg0=
+DKIM-Signature: v=1; a=rsa-sha1; c=simple; d=messiah.edu; h=from:to:subject:date:message-id; q=dns/txt; s=testbad8; i=jlong@messiah.edu; bh=N9OQp3Fydw5h5SJ1UDyZrgBPEDU=; b=A+2Cc4OXC/PhT/5zcWDPKh6JSidy2TC+7Ejg4vgXpIvsFU6nXFPxpT2jEpXuBvwcpXI7tAcFOFwwIwOwxIywuA==
 Received: from x.y.test
    by example.net
    via TCP

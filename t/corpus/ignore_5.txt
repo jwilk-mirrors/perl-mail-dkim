@@ -1,4 +1,4 @@
-DKIM-Signature: v=0.5; a=rsa-sha1; c=simple; d=messiah.edu; h=received:received:from:to:subject:date:message-id; q=http; s=selector1; bh=rYdLRBGGXK4PCDh+3AbwGuV2OEU=; b=NjJBlNqLnQcz8zwF899l4JHO0blD3rRSlR3mPiOLa137fG5RSKOHeYle0U5sBcRNwIUQub+kpXhi9snZqf0zbRfO+TBaZ8dfdVRzX0d4n0PoQCX453fAAnmZcsgD3jevR+R0J/oa1Ao1A0Oj5X7mwut35QcwjIi42bDIjsFP9xk=
+DKIM-Signature: v=1; a=rsa-sha1; c=simple; d=messiah.edu; h=from:to:subject:date:message-id; q=http; s=test1; bh=gG+cRFxnpu7ApVgxzeYxYHywjBA=; b=SqBRGTdPJyZZUbgRrzZlOxXeHvFXmUvPTLyR7FqkFfezM7SH1YMoFqmL1a5Yteej8CzNBJifhmJ9a3SoyuLn8w==
 Received: from x.y.test
    by example.net
    via TCP
@@ -8,7 +8,7 @@ Received: from x.y.test
 Received: from machine.example by x.y.test; 21 Nov 1997 10:01:22 -0600
 From: Jason Long <jlong@messiah.edu>
 To: Nobody <nobody@messiah.edu>
-Subject: dkim test
+Subject: dkim test (ignore_5)
 Date: Wed, 7 Dec 2005 09:11:00 -0500
 Message-ID: <20051207091100@test.messiah.edu>
 
