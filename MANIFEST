@@ -72,6 +72,11 @@ t/corpus/badkey_3.txt
 t/corpus/badkey_4.txt
 t/corpus/badkey_5.txt
 t/corpus/badkey_6.txt
+t/corpus/badkey_7.txt
+t/corpus/badkey_8.txt
+t/corpus/goodkey_1.txt
+t/corpus/goodkey_2.txt
+t/corpus/goodkey_3.txt
 t/corpus/mine_ietf01_1.txt
 t/corpus/mine_ietf01_2.txt
 t/corpus/mine_ietf01_3.txt

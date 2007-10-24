@@ -156,6 +156,49 @@ sub check
 	return 1;
 }
 
+# returns true if the actual identity of the signature is allowed
+# by this public key; false otherwise
+#
+sub check_granularity
+{
+	my $self = shift;
+	my ($identity) = @_;
+
+	# check granularity
+	my $g = $self->granularity;
+	return 1 if ($g eq "*");  #shortcut for most common case
+
+	# do case-insensitive matching
+	$identity = lc $identity;
+	$g = lc $g;
+
+	my ($local_part, undef) = split /\@/, $identity, 2;
+
+	my ($begins, $ends) = split /\*/, $g, 2;
+	if (defined $ends)
+	{
+		# the g= tag contains an asterisk
+
+		# the local part must be at least as long as the pattern
+		return if (length($local_part) < length($begins) + length($ends));
+
+		# the local part must begin with $begins
+		return unless (substr($local_part, 0, length($begins)) eq $begins);
+
+		# the local part must end with $ends
+		return unless (substr($local_part, -length($ends)) eq $ends);
+	}
+	else
+	{
+		return unless ($local_part eq $begins);
+	}
+
+	return 1;
+}
+
+# returns true if the actual hash algorithm used is listed by this
+# public key; dies otherwise
+#
 sub check_hash_algorithm
 {
 	my $self = shift;
@@ -226,14 +269,39 @@ sub verify {
 	return $rtrn;
 }
 
+=head2 granularity() - get or set the granularity (g=) field
+
+  my $g = $public_key->granularity;
+
+  $public_key->granularity("*");
+
+Granularity of the key. The value must match the Local-part of the
+effective "i=" tag of the DKIM-Signature header field.
+The granularity is a literal value, or a pattern with a single '*'
+wildcard character that matches zero or more characters.
+
+If no granularity is defined, then the default value, '*', will
+be returned.
+
+=cut
+
 sub granularity
 {
 	my $self = shift;
 
+	# set new granularity if provided
 	(@_) and 
 		$self->set_tag("g", shift);
 
-	return $self->get_tag("g");
+	my $g = $self->get_tag("g");
+	if (defined $g)
+	{
+		return $g;
+	}
+	else
+	{
+		return '*';
+	}
 }
 
 sub notes

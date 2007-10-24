@@ -294,7 +294,12 @@ sub check_public_key
 		$result = $public_key->check_hash_algorithm(
 				$signature->hash_algorithm);
 
-		# TODO - check public key's granularity
+		# check public key's granularity
+		unless ($public_key->check_granularity($signature->identity))
+		{
+			$result &&= 0;
+			die "public key: granularity mismatch\n";
+		}
 	};
 	if ($@)
 	{

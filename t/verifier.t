@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 52;
+use Test::More tests => 57;
 
 use Mail::DKIM::Verifier;
 
@@ -93,6 +93,13 @@ test_email("ignore_6.txt", "invalid"); # unsupported q= tag (q=dns/special)
 test_email("ignore_7.txt", "invalid"); # expired signature
 
 #
+# test variants on the public key
+#
+test_email("goodkey_1.txt", "pass"); # public key with s=email
+test_email("goodkey_2.txt", "pass"); # public key with extra tags, h=, s=, etc.
+test_email("goodkey_3.txt", "pass"); # public key with g=jl*g
+
+#
 # test problems with the public key
 #
 test_email("badkey_1.txt", "invalid"); # public key NXDOMAIN
@@ -101,6 +108,8 @@ test_email("badkey_3.txt", "invalid"); # public key unsupported v= tag
 test_email("badkey_4.txt", "invalid"); # public key syntax error
 test_email("badkey_5.txt", "invalid"); # public key unsupported k= tag
 test_email("badkey_6.txt", "invalid"); # public key unsupported s= tag
+test_email("badkey_7.txt", "invalid"); # public key unsupported h= tag
+test_email("badkey_8.txt", "invalid"); # public key unmatched g= tag
 
 
 sub read_file
