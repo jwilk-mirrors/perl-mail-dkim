@@ -55,6 +55,7 @@ sub new {
 	$self->protocol($prms{'Query'} || "dns/txt");
 	$self->selector($prms{'Selector'});
 	$self->identity($prms{'Identity'}) if exists $prms{'Identity'};
+	$self->expiration($prms{'Expiration'}) if defined $prms{'Expiration'};
 
 	return $self;
 }

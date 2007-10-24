@@ -17,6 +17,7 @@ my $type = "dkim";
 my $selector = "selector1";
 my $algorithm = "rsa-sha1";
 my $method = "simple";
+my $expiration;
 my $debug_canonicalization;
 my $binary;
 my $help;
@@ -25,6 +26,7 @@ GetOptions(
 		"algorithm=s" => \$algorithm,
 		"method=s" => \$method,
 		"selector=s" => \$selector,
+		"expiration=i" => \$expiration,
 		"debug-canonicalization=s" => \$debug_canonicalization,
 		"binary" => \$binary,
 		"help|?" => \$help,
@@ -89,6 +91,7 @@ sub signer_policy
 			Headers => $dkim->headers,
 			Domain => $dkim->domain,
 			Selector => $dkim->selector,
+			defined($expiration) ? (Expiration => time() + $expiration) : (),
 		);
 	$dkim->add_signature($sig);
 	return;
@@ -107,6 +110,7 @@ dkimsign.pl - computes a DKIM signature for an email message
       --type=TYPE
       --method=METHOD
       --selector=SELECTOR
+      --expiration=INTEGER
       --debug-canonicalization=FILE
 
   dkimsign.pl --help
@@ -115,6 +119,11 @@ dkimsign.pl - computes a DKIM signature for an email message
 =head1 OPTIONS
 
 =over
+
+=item B<--expiration>
+
+Optional. Specify the desired signature expiration, as a delta
+from the signature timestamp.
 
 =item B<--type>
 

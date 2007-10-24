@@ -85,6 +85,7 @@ test_email("ignore_3.txt", "invalid"); # unsupported a= tag (a=dsa-sha1)
 test_email("ignore_4.txt", "invalid"); # unsupported c= tag (c=future)
 test_email("ignore_5.txt", "invalid"); # unsupported q= tag (q=http)
 test_email("ignore_6.txt", "invalid"); # unsupported q= tag (q=dns/special)
+test_email("ignore_7.txt", "invalid"); # expired signature
 
 #
 # test problems with the public key

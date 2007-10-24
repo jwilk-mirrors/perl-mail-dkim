@@ -1,3 +1,9 @@
+2007-10-24: Jason Long <jlong@messiah.edu>
+ * t/corpus/ignore_7.txt: a message with an expired signature
+ * lib/Mail/DKIM/Signature.pm: recognize Expiration as a parameter
+ * scripts/dkimsign.pl: make it possible to create a signature with an
+   x= tag
+
 2007-10-08: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Signer.pm: use "Key" property instead of "private" to
    store the private key; new methods key() and key_file(); allow each

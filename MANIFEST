@@ -82,6 +82,7 @@ t/corpus/ignore_3.txt
 t/corpus/ignore_4.txt
 t/corpus/ignore_5.txt
 t/corpus/ignore_6.txt
+t/corpus/ignore_7.txt
 t/corpus/no_body_1.txt
 t/corpus/no_body_2.txt
 t/corpus/no_body_3.txt
