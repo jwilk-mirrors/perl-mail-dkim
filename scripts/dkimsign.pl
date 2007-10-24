@@ -18,6 +18,7 @@ my $selector = "selector1";
 my $algorithm = "rsa-sha1";
 my $method = "simple";
 my $expiration;
+my $identity;
 my $debug_canonicalization;
 my $binary;
 my $help;
@@ -27,6 +28,7 @@ GetOptions(
 		"method=s" => \$method,
 		"selector=s" => \$selector,
 		"expiration=i" => \$expiration,
+		"identity=s" => \$identity,
 		"debug-canonicalization=s" => \$debug_canonicalization,
 		"binary" => \$binary,
 		"help|?" => \$help,
@@ -92,6 +94,7 @@ sub signer_policy
 			Domain => $dkim->domain,
 			Selector => $dkim->selector,
 			defined($expiration) ? (Expiration => time() + $expiration) : (),
+			defined($identity) ? (Identity => $identity) : (),
 		);
 	$dkim->add_signature($sig);
 	return;
