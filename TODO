@@ -14,7 +14,7 @@ DKIM Public Key Records:
 Verifier:
  - verify multiple signatures (ietf05 6.1) (DONE)
  - check that From header is signed (ietf05 6.1.1)
- - check public key "granularity"
+ - check public key "granularity" (DONE)
  - handle no response from first DNS server listed in resolv.conf
    (currently it goes to the second server after 5 seconds,
    but it does this for EVERY signature, so this will badly affect
@@ -41,7 +41,8 @@ Signer:
  - allow adding chained signatures in one pass
    (e.g. allow adding a DomainKeys signature, and a DKIM signature,
    with the new DKIM signature signing the new DomainKeys signature) (REJECTED)
- - allow creation of i=, l=, t=, x=, and z= tags
+ - allow creation of i= and x= tags (DONE)
+ - allow creation of l=, t=, and z= tags
  - do header-wrapping to signature before signing (DONE)
  - allow signer policy to change which private key is used
 
