@@ -92,7 +92,7 @@ sub check
 	{
 		unless ($v eq "DKIM1")
 		{
-			die "unrecognized public key version\n";
+			die "public key: unsupported version\n";
 		}
 	}
 

@@ -651,12 +651,14 @@ The following are possible results from the result_detail() method:
   invalid (missing s tag)
   invalid (unsupported v=0.1 tag)
   invalid (no public key available)
-  invalid (public key: does not support email)
-  invalid (public key: does not support hash algorithm 'sha1')
+  invalid (public key: unsupported version)
   invalid (public key: unsupported key type)
   invalid (public key: missing p= tag)
-  invalid (public key: revoked)
   invalid (public key: invalid data)
+  invalid (public key: does not support email)
+  invalid (public key: does not support hash algorithm 'sha1')
+  invalid (public key: revoked)
+  invalid (public key: granularity mismatch)
   invalid (public key: OpenSSL error: ...)
   none
 
