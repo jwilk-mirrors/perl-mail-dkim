@@ -74,6 +74,7 @@ t/corpus/badkey_5.txt
 t/corpus/badkey_6.txt
 t/corpus/badkey_7.txt
 t/corpus/badkey_8.txt
+t/corpus/badkey_9.txt
 t/corpus/goodkey_1.txt
 t/corpus/goodkey_2.txt
 t/corpus/goodkey_3.txt
