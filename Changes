@@ -3,9 +3,16 @@ See the ChangeLog file for the details.
 
 Version 0.29 - not yet released
 
- * fixed a compatibility issue handling the h= tag on DomainKeys signatures
- * some minor API improvements, see ChangeLog for details
- * key file can now be specified in policy
+ * verifiers can now access all parsed signatures and their results,
+   not just signatures that were fully tested
+ * signer policies can now specify what private key file to use
+ * some other minor API improvements, see ChangeLog for details
+ * bugfixes:
+   * for DomainKeys signatures, fixed a compatibility issue handling
+     the h= tag
+   * for DKIM, signature expirations had been ignored
+   * for DKIM, signature identities did not have to match the domain
+   * for DKIM, public key granularity field had been ignored
 
 
 Version 0.28 - released 2007-07-31
