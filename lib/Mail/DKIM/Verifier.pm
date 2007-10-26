@@ -205,6 +205,7 @@ sub check_signature
 		{
 			$self->{signature_reject_reason} = "missing v tag";
 		}
+		return 0;
 	}
 
 	unless ($signature->algorithm
@@ -262,6 +263,12 @@ sub check_signature
 		return 0;
 	}
 
+	unless (check_signature_identity($signature))
+	{
+		$self->{signature_reject_reason} = "bad identity";
+		return 0;
+	}
+
 	# check domain against message From: and Sender: headers
 #	my $responsible_address = $self->message_originator;
 #	if (!$responsible_address)
@@ -272,7 +279,7 @@ sub check_signature
 #
 #	my $senderdomain = $responsible_address->host;
 #	my $sigdomain = $signature->domain;
-#	if (!$self->match_subdomain($senderdomain, $sigdomain))
+#	if (!match_subdomain($senderdomain, $sigdomain))
 #	{
 #		$self->{signature_reject_reason} = "unmatched domain";
 #		return 0;
@@ -310,9 +317,24 @@ sub check_public_key
 	return $result;
 }
 
+# returns true if the i= tag is an address with a domain matching or
+# a subdomain of the d= tag
+#
+sub check_signature_identity
+{
+	my ($signature) = @_;
+
+	my $d = $signature->domain;
+	my $i = $signature->identity;
+	if ($i =~ /\@(.*)$/)
+	{
+		return match_subdomain($1, $d);
+	}
+	return 0;
+}
+
 sub match_subdomain
 {
-	my $self = shift;
 	croak "wrong number of arguments" unless (@_ == 2);
 	my ($subdomain, $superdomain) = @_;
 
