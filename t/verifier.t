@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 57;
+use Test::More tests => 58;
 
 use Mail::DKIM::Verifier;
 
@@ -91,6 +91,7 @@ test_email("ignore_4.txt", "invalid"); # unsupported c= tag (c=future)
 test_email("ignore_5.txt", "invalid"); # unsupported q= tag (q=http)
 test_email("ignore_6.txt", "invalid"); # unsupported q= tag (q=dns/special)
 test_email("ignore_7.txt", "invalid"); # expired signature
+test_email("ignore_8.txt", "invalid"); # bad i= value
 
 #
 # test variants on the public key

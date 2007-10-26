@@ -1,5 +1,6 @@
 2007-10-26: Jason Long <jlong@messiah.edu>
  * t/corpus/badkey_9.txt: to test empty g= in selector
+ * t/corpus/ignore_8.txt: to test bad i= value in signature
 
 2007-10-24: Jason Long <jlong@messiah.edu>
  * t/corpus/badkey_8.txt, ignore_5.txt, ignore_6.txt: fix signature so
