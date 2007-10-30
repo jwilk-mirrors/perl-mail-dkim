@@ -297,16 +297,16 @@ sub check_public_key
 	my $result = 0;
 	eval
 	{
+		$@ = undef;
+
 		# check public key's allowed hash algorithms
 		$result = $public_key->check_hash_algorithm(
 				$signature->hash_algorithm);
 
 		# check public key's granularity
-		unless ($public_key->check_granularity($signature->identity))
-		{
-			$result &&= 0;
-			die "public key: granularity mismatch\n";
-		}
+		$result &&= $public_key->check_granularity(
+				$signature->identity);
+		die $@ if $@;
 	};
 	if ($@)
 	{
@@ -679,8 +679,10 @@ The following are possible results from the result_detail() method:
   invalid (public key: invalid data)
   invalid (public key: does not support email)
   invalid (public key: does not support hash algorithm 'sha1')
+  invalid (public key: does not support signing subdomains)
   invalid (public key: revoked)
   invalid (public key: granularity mismatch)
+  invalid (public key: granularity is empty)
   invalid (public key: OpenSSL error: ...)
   none
 

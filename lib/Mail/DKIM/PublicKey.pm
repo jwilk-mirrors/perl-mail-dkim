@@ -156,8 +156,16 @@ sub check
 	return 1;
 }
 
-# returns true if the actual identity of the signature is allowed
-# by this public key; false otherwise
+# check_granularity() - check whether this key matches signature identity
+# 
+# a public key record can restrict what identities it may sign with,
+#   g=, granularity, restricts the local part of the identity
+#   t=s, restricts whether subdomains can be used
+#
+# This method returns true if the given identity is allowed by this
+# public key; it returns false otherwise.
+# If false is returned, you can check C<$@> for an explanation of
+# why.
 #
 sub check_granularity
 {
@@ -166,13 +174,12 @@ sub check_granularity
 
 	# check granularity
 	my $g = $self->granularity;
-	return 1 if ($g eq "*");  #shortcut for most common case
 
 	# do case-insensitive matching
 	$identity = lc $identity;
 	$g = lc $g;
 
-	my ($local_part, undef) = split /\@/, $identity, 2;
+	my ($local_part, $domain_part) = split /\@/, $identity, 2;
 
 	my ($begins, $ends) = split /\*/, $g, 2;
 	if (defined $ends)
@@ -180,17 +187,40 @@ sub check_granularity
 		# the g= tag contains an asterisk
 
 		# the local part must be at least as long as the pattern
-		return if (length($local_part) < length($begins) + length($ends));
-
+		if (length($local_part) < length($begins) + length($ends)
+			or
 		# the local part must begin with $begins
-		return unless (substr($local_part, 0, length($begins)) eq $begins);
-
+			substr($local_part, 0, length($begins)) ne $begins
+			or
 		# the local part must end with $ends
-		return unless (substr($local_part, -length($ends)) eq $ends);
+			substr($local_part, -length($ends)) ne $ends)
+		{
+			$@ = "public key: granularity mismatch\n";
+			return;
+		}
 	}
 	else
 	{
-		return unless ($local_part eq $begins);
+		if ($g eq "")
+		{
+			$@ = "public key: granularity is empty\n";
+			return;
+		}
+		unless ($local_part eq $begins)
+		{
+			$@ = "public key: granularity mismatch\n";
+			return;
+		}
+	}
+
+	# check subdomains
+	if ($self->subdomain_flag)
+	{
+		unless ($domain_part eq lc($self->{'Domain'}))
+		{
+			$@ = "public key: does not support signing subdomains\n";
+			return;
+		}
 	}
 
 	return 1;
@@ -337,6 +367,17 @@ sub flags
 	return $self->get_tag("t");
 }
 
+# subdomain_flag() - checks whether "s" is specified in flags
+#
+# returns true if "s" is found, false otherwise
+#
+sub subdomain_flag
+{
+	my $self = shift;
+	my @flags = split /:/, $self->flags;
+	return grep { $_ eq "s" } @flags;
+}
+
 sub revoked
 {
 	my $self = shift;
@@ -367,6 +408,10 @@ sub verify_sha1_digest
 	return $self->verify_digest("SHA-1", $digest, $signature);
 }
 
+# verify_digest() - returns true if the digest verifies, false otherwise
+#
+# if false, $@ is set to a description of the problem
+#
 sub verify_digest
 {
 	my $self = shift;
