@@ -4,6 +4,7 @@
    putting in the signature
  * lib/Mail/DKIM/MessageParser.pm: make "not implemented" messages
    more helpful
+ * t/corpus/badkey_10.txt: to test key with t=s
 
 2007-10-26: Jason Long <jlong@messiah.edu>
  * t/corpus/badkey_9.txt: to test empty g= in selector
