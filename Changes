@@ -6,7 +6,7 @@ Version 0.29 - not yet released
  * verifiers can now access all parsed signatures and their results,
    not just signatures that were fully tested
  * signer policies can now specify what private key file to use
- * some other minor API improvements, see ChangeLog for details
+ * some other minor API improvements
  * bugfixes:
    * for DomainKeys signatures, fixed a compatibility issue handling
      the h= tag
