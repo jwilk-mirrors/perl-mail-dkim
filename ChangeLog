@@ -10,6 +10,7 @@
  * lib/Mail/DKIM/PublicKey.pm (check_granularity): check for empty g= value;
    check for subdomain usage;
    (subdomain_flag): helper method to look for "s" in flags
+   (flags): return default value if no t= tag
 
 2007-10-26: Jason Long <jlong@messiah.edu>
  * t/corpus/badkey_9.txt: to test empty g= in selector

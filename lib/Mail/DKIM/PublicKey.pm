@@ -364,7 +364,7 @@ sub flags
 	(@_) and 
 		$self->set_tag("t", shift);
 
-	return $self->get_tag("t");
+	return $self->get_tag("t") || "";
 }
 
 # subdomain_flag() - checks whether "s" is specified in flags
