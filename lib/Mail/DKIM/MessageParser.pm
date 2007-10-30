@@ -111,17 +111,17 @@ sub CLOSE
 
 sub add_header
 {
-	die "not implemented";
+	die "add_header not implemented";
 }
 
 sub finish_header
 {
-	die "not implemented";
+	die "finish_header not implemented";
 }
 
 sub add_body
 {
-	die "not implemented";
+	die "add_body not implemented";
 }
 
 sub finish_body
