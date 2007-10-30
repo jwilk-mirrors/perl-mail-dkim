@@ -20,6 +20,7 @@ my $method = "simple";
 my $expiration;
 my $identity;
 my $key_protocol;
+my @extra_tag;
 my $debug_canonicalization;
 my $binary;
 my $help;
@@ -32,6 +33,7 @@ GetOptions(
 		"identity=s" => \$identity,
 		"key-protocol=s" => \$key_protocol,
 		"debug-canonicalization=s" => \$debug_canonicalization,
+		"extra-tag=s" => \@extra_tag,
 		"binary" => \$binary,
 		"help|?" => \$help,
 		)
@@ -99,6 +101,11 @@ sub signer_policy
 			defined($identity) ? (Identity => $identity) : (),
 		);
 	$sig->protocol($key_protocol) if defined $key_protocol;
+	foreach my $extra (@extra_tag)
+	{
+		my ($n, $v) = split /=/, $extra, 2;
+		$sig->set_tag($n, $v);
+	}
 	$dkim->add_signature($sig);
 	return;
 }
