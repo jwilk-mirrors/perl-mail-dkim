@@ -84,7 +84,7 @@ sub canonicalize_body
 	$line .= "\015\012";
 
 	#
-	# step 3: ignore empty lines at the end of the message bode
+	# step 3: ignore empty lines at the end of the message body
 	# (i.e. do not emit empty lines until a following nonempty line
 	# is found)
 	#
