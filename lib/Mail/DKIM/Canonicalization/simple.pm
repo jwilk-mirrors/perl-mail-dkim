@@ -18,7 +18,7 @@ sub init
 	my $self = shift;
 	$self->SUPER::init;
 
-	$self->{canonicalize_body_buf} = "";
+	$self->{canonicalize_body_empty_lines} = 0;
 }
 
 sub canonicalize_header
@@ -39,7 +39,7 @@ sub canonicalize_header
 sub canonicalize_body
 {
 	my $self = shift;
-	my ($line) = @_;
+	# my ($line) = @_;  # optimized away for speed
 
 	#
 	# draft-allman-dkim-base-01.txt, section 3.4.3:
@@ -51,19 +51,18 @@ sub canonicalize_body
 	# (i.e. do not emit empty lines until a following nonempty line
 	# is found)
 	#
-	if ($line eq "\015\012")
+	if ($_[0] eq "\015\012")
 	{
-		$self->{canonicalize_body_buf} .= $line;
-		$line = "";
+		$self->{canonicalize_body_empty_lines}++;
+		return "";
 	}
 	else
 	{
-		$line = $self->{canonicalize_body_buf} . $line;
-		$self->{canonicalize_body_buf} = "";
+		my $n = $self->{canonicalize_body_empty_lines};
+		$self->{canonicalize_body_empty_lines} = 0;
 		$self->{canonicalize_body_started} = 1;
+		return $n <= 0 ? $_[0] : ("\015\012" x $n) . $_[0];
 	}
-
-	return $line;
 }
 
 sub finish_body

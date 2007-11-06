@@ -1,3 +1,9 @@
+2007-11-06: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Canonicalization/simple.pm,
+   lib/Mail/DKIM/Canonicalization/Base.pm,
+   lib/Mail/DKIM/MessageParser.pm: speedup optimizations contributed
+   by Mark Martinec.
+
 2007-10-30: Jason Long <jlong@messiah.edu>
  * t/corpus/good_rfc4871_3.txt: to test extra tags in signature
  * scripts/dkimsign.pl: allow user to specify arbitrary extra tags for
