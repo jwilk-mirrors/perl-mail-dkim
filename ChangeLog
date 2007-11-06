@@ -3,6 +3,9 @@
    lib/Mail/DKIM/Canonicalization/Base.pm,
    lib/Mail/DKIM/MessageParser.pm: speedup optimizations contributed
    by Mark Martinec.
+ * lib/Mail/DKIM/Canonicalization/dk_simple,pm
+   lib/Mail/DKIM/Canonicalization/relaxed.pm: more speed up optimizations
+   by Mark Martinec.
 
 2007-10-30: Jason Long <jlong@messiah.edu>
  * t/corpus/good_rfc4871_3.txt: to test extra tags in signature

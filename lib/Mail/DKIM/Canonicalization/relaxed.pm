@@ -18,7 +18,7 @@ sub init
 	my $self = shift;
 	$self->SUPER::init;
 
-	$self->{canonicalize_body_buf} = "";
+	$self->{canonicalize_body_empty_lines} = 0;
 }
 
 sub canonicalize_header
@@ -90,13 +90,14 @@ sub canonicalize_body
 	#
 	if ($line eq "\015\012")
 	{
-		$self->{canonicalize_body_buf} .= $line;
+		$self->{canonicalize_body_empty_lines}++;
 		$line = "";
 	}
 	else
 	{
-		$line = $self->{canonicalize_body_buf} . $line;
-		$self->{canonicalize_body_buf} = "";
+		my $n = $self->{canonicalize_body_empty_lines};
+		$line = ("\015\012" x $n) . $line  if $n > 0;
+		$self->{canonicalize_body_empty_lines} = 0;
 	}
 
 	return $line;
