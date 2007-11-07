@@ -89,6 +89,15 @@ sub verify
 
 sub finish_message
 {
+	my $self = shift;
+
+	# DomainKeys doesn't include the signature in the digest,
+	# but we still want it to look "pretty" :).
+
+	if ($self->{mode} eq "sign")
+	{
+		$self->{Signature}->prettify;
+	}
 }
 
 1;

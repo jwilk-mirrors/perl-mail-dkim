@@ -1,5 +1,7 @@
 2007-11-07: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Algorithm/Base.pm: cleanup (delete commented-out code)
+ * lib/Mail/DKIM/Algorithm/dk_rsa_sha1.pm (finish_message): fix bug
+   where DomainKeys signatures were not "pretty"
 
 2007-11-07: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Signature.pm: allow Timestamp to be specified to new()
