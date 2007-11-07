@@ -2,6 +2,7 @@
  * lib/Mail/DKIM/Signature.pm: allow Timestamp to be specified to new()
  * lib/Mail/DKIM/Signer.pm: allow Timestamp to be specified to new(),
    requested by Mark Martinec
+ * t/signer.t: test timestamp creation
 
 2007-11-06: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Canonicalization/simple.pm,

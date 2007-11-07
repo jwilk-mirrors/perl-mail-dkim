@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::Simple tests => 14;
+use Test::Simple tests => 15;
 
 use Mail::DKIM::Signer;
 
@@ -63,6 +63,7 @@ $dkim = Mail::DKIM::Signer->new(
 		Domain => "example.org",
 		Selector => "test",
 		Identity => "bob\@example.org",
+		Timestamp => time(),
 		KeyFile => $keyfile);
 ok($dkim, "new() works");
 
@@ -81,6 +82,8 @@ ok($sigstr !~ /comments/i, "comments was excluded");
 
 # check if the identity got included
 ok($sigstr =~ /i=bob\@/, "got expected identity value");
+# check if timestamp got included
+ok($sigstr =~ /t=\d+/, "found timestamp value");
 
 eval {
 $dkim = Mail::DKIM::Signer->new(
