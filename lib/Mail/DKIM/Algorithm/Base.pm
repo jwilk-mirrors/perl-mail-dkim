@@ -210,7 +210,10 @@ sub check_body_hash
 sub finish_message
 {
 	my $self = shift;
-#	$self->{canon}->finish_message;
+
+	# DKIM requires the signature itself to be committed into the digest.
+	# But first, we need to set the bh= tag on the signature, then
+	# "prettify" it.
 
 	if ($self->{draft_version} eq "01")
 	{
@@ -220,11 +223,6 @@ sub finish_message
 			$self->{Signature}->body_hash(
 					encode_base64($self->{body_hash}, ""));
 		}
-	#	else
-	#	{
-	#		print STDERR "verify: body hash is "
-	#			. encode_base64($self->{body_hash}, "") . "\n";
-	#	}
 	}
 
 	if ($self->{mode} eq "sign")
@@ -241,7 +239,6 @@ sub finish_message
 	}
 
 	$self->{canon}->output($canonicalized);
-	#$self->{header_digest}->add($canonicalized);
 }
 
 =head2 sign() - generates a signature using a private key

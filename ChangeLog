@@ -1,4 +1,7 @@
 2007-11-07: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Algorithm/Base.pm: cleanup (delete commented-out code)
+
+2007-11-07: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Signature.pm: allow Timestamp to be specified to new()
  * lib/Mail/DKIM/Signer.pm: allow Timestamp to be specified to new(),
    requested by Mark Martinec
