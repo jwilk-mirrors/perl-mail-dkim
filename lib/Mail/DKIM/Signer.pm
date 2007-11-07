@@ -69,10 +69,14 @@ Mail::DKIM::Signer - generates a DKIM signature for a message
 
 The "default policy" is to create a DKIM signature using the specified
 parameters, but only if the message's sender matches the domain.
+The following parameters can be passed to this new() method to
+influence the resulting signature:
+Algorithm, Method, Domain, Selector, KeyFile, Identity, Timestamp.
+
 If you want different behavior, you can provide a "signer policy"
 instead. A signer policy is a subroutine or class that determines
 signature parameters after the message's headers have been parsed.
-See the section "SIGNER POLICIES" below for more information.
+See the section L</"SIGNER POLICIES"> below for more information.
 
 See L<Mail::DKIM::SignerPolicy> for more information about policy objects.
 
@@ -208,7 +212,7 @@ sub finish_header
 		}
 
 		$self->add_signature(
-			new Mail::DKIM::Signature(
+			Mail::DKIM::Signature->new(
 				Algorithm => $self->{"Algorithm"},
 				Method => $self->{"Method"},
 				Headers => $self->headers,
@@ -218,6 +222,8 @@ sub finish_header
 				KeyFile => $self->{"KeyFile"},
 				($self->{"Identity"} ?
 					(Identity => $self->{"Identity"}) : ()),
+				($self->{"Timestamp"} ?
+					(Timestamp => $self->{"Timestamp"}) : ()),
 			));
 	}
 
