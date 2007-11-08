@@ -716,6 +716,8 @@ This method may alter the signature in a way that breaks signatures, so
 it should be done ONLY when the signature is being generated, BEFORE being
 fed to the canonicalization algorithm.
 
+See also prettify_safe(), which will not break signatures.
+
 =cut
 
 sub prettify

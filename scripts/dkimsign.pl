@@ -10,6 +10,7 @@ use strict;
 use warnings;
 
 use Mail::DKIM::Signer;
+use Mail::DKIM::TextWrap;
 use Getopt::Long;
 use Pod::Usage;
 
@@ -89,8 +90,9 @@ sub signer_policy
 
 	$dkim->domain($dkim->message_sender->host);
 
-	my $class = $type eq "domainkeys" ? "Mail::DKIM::DkSignature"
-		: "Mail::DKIM::Signature";
+	my $class = $type eq "domainkeys" ? "Mail::DKIM::DkSignature" :
+			$type eq "dkim" ? "Mail::DKIM::Signature" :
+				die "unknown signature type '$type'\n";
 	my $sig = $class->new(
 			Algorithm => $dkim->algorithm,
 			Method => $dkim->method,
