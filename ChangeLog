@@ -1,4 +1,7 @@
 2007-11-08: Jason Long <jlong@messiah.edu>
+ * Makefile.PL, others: version bump to 0.30
+
+2007-11-08: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Signature.pm: minor doc edit
  * scripts/dkimsign.pl: generate "pretty" signatures;
    die on unrecognized signature type
