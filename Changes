@@ -1,7 +1,13 @@
 This file summarizes what's changed between releases of Mail-DKIM.
 See the ChangeLog file for the details.
 
-Version 0.30
+Version 0.30 - in testing
+
+ * includes speed-up optimizations by Mark Martinec
+ * API improvements:
+   * Timestamp can be specified when creating a Signer/Signature
+ * bugfix:
+   * DomainKey-Signature headers were not "prettified"
 
 
 Version 0.29 - released 2007-11-08
