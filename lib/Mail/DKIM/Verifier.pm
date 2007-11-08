@@ -699,14 +699,14 @@ Best is defined as "pass", followed by "fail", "invalid", and "none".
 
 =cut
 
-#EXPERIMENTAL
-# =head2 signatures() - access all of this message's signatures
-#
-#   my @all_signatures = $dkim->signatures;
-#
-# Use $signature->result or $signature->result_detail to access
-# the verification results of each signature.
-# =cut
+=head2 signatures() - access all of this message's signatures
+
+  my @all_signatures = $dkim->signatures;
+
+Use $signature->result or $signature->result_detail to access
+the verification results of each signature.
+=cut
+
 sub signatures
 {
 	my $self = shift;

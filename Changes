@@ -1,7 +1,7 @@
 This file summarizes what's changed between releases of Mail-DKIM.
 See the ChangeLog file for the details.
 
-Version 0.29 - not yet released
+Version 0.29 - released 2007-11-08
 
  * verifiers can now access all parsed signatures and their results,
    not just signatures that were fully tested
