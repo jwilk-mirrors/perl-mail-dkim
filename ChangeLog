@@ -1,4 +1,16 @@
 2007-11-08: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Canonicalization/relaxed.pm,
+   lib/Mail/DKIM/Canonicalization/nowsp.pm,
+   lib/Mail/DKIM/Canonicalization/DkCommon.pm,
+   lib/Mail/DKIM/Canonicalization/dk_simple.pm,
+   lib/Mail/DKIM/Canonicalization/simple.pm,
+   lib/Mail/DKIM/Canonicalization/dk_nofws.pm,
+   lib/Mail/DKIM/Canonicalization/DkimCommon.pm,
+   lib/Mail/DKIM/MessageParser.pm:
+   more speed-up optimizations by Mark Martinec, now multiple lines
+   at once can be fed into the canonicalization bits
+
+2007-11-08: Jason Long <jlong@messiah.edu>
  * Makefile.PL, others: version bump to 0.30
 
 2007-11-08: Jason Long <jlong@messiah.edu>

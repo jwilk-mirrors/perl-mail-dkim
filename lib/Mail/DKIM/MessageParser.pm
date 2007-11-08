@@ -71,8 +71,8 @@ sub PRINT
 	}
 
 	if (!$self->{in_header}) {
-		my $j;
-		while ( ($j=index($buf,"\015\012")) >= 0 )
+		my $j = rindex($buf,"\015\012");
+		if ($j >= 0)
 		{
 			$self->add_body(substr($buf, 0, $j+2));
 			substr($buf, 0, $j+2) = '';

@@ -66,41 +66,49 @@ sub canonicalize_header
 sub canonicalize_body
 {
 	my $self = shift;
-	my ($line) = @_;
+	my ($multiline) = @_;
 
-	$line =~ s/\015\012\z//s;
+	$multiline =~ s/\015\012\z//s;
 
 	#
 	# step 1: ignore all white space at the end of lines
 	#
-	$line =~ s/[ \t]+$//;
+	$multiline =~ s/[ \t]+(?=\015\012|\z)//g;
 
 	#
 	# step 2: reduce all sequences of WSP within a line to a single
 	# SP character
 	#
-	$line =~ s/[ \t]+/ /g;
+	$multiline =~ s/[ \t]+/ /g;
 
-	$line .= "\015\012";
+	$multiline .= "\015\012";
 
 	#
 	# step 3: ignore empty lines at the end of the message body
 	# (i.e. do not emit empty lines until a following nonempty line
 	# is found)
 	#
-	if ($line eq "\015\012")
-	{
-		$self->{canonicalize_body_empty_lines}++;
-		$line = "";
-	}
-	else
-	{
-		my $n = $self->{canonicalize_body_empty_lines};
-		$line = ("\015\012" x $n) . $line  if $n > 0;
-		$self->{canonicalize_body_empty_lines} = 0;
+
+	my $empty_lines = $self->{canonicalize_body_empty_lines};
+
+	if ( $multiline =~ s/^((?:\015\012)+)// )
+	{	# count & strip leading empty lines
+		$empty_lines += length($1)/2;
 	}
 
-	return $line;
+	if ($empty_lines > 0 && length($multiline) > 0)
+	{	# re-insert leading white if any nonempty lines exist
+		$multiline = ("\015\012" x $empty_lines) . $multiline;
+		$empty_lines = 0;
+	}
+ 
+	if ($multiline =~ s/((?:\015\012){2,})\z/\015\012/)
+	{	# count & strip trailing empty lines
+		$empty_lines += length($1)/2 - 1;
+	}
+
+	$self->{canonicalize_body_empty_lines} = $empty_lines;
+	return $multiline;
 }
 
 1;

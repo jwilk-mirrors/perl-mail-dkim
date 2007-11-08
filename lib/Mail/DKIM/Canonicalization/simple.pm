@@ -39,7 +39,7 @@ sub canonicalize_header
 sub canonicalize_body
 {
 	my $self = shift;
-	# my ($line) = @_;  # optimized away for speed
+	my ($multiline) = @_;
 
 	#
 	# draft-allman-dkim-base-01.txt, section 3.4.3:
@@ -51,18 +51,30 @@ sub canonicalize_body
 	# (i.e. do not emit empty lines until a following nonempty line
 	# is found)
 	#
-	if ($_[0] eq "\015\012")
-	{
-		$self->{canonicalize_body_empty_lines}++;
-		return "";
+	my $empty_lines = $self->{canonicalize_body_empty_lines};
+
+	if ( $multiline =~ s/^((?:\015\012)+)// )
+	{	# count & strip leading empty lines
+		$empty_lines += length($1)/2;
 	}
-	else
+
+	if (length($multiline) > 0)
 	{
-		my $n = $self->{canonicalize_body_empty_lines};
-		$self->{canonicalize_body_empty_lines} = 0;
 		$self->{canonicalize_body_started} = 1;
-		return $n <= 0 ? $_[0] : ("\015\012" x $n) . $_[0];
+		if ($empty_lines > 0)
+		{	# re-insert leading white if any nonempty lines exist
+			$multiline = ("\015\012" x $empty_lines) . $multiline;
+			$empty_lines = 0;
+		}
 	}
+
+	if ($multiline =~ s/((?:\015\012){2,})\z/\015\012/)
+	{	# count & strip trailing empty lines
+		$empty_lines += length($1)/2 - 1;
+	}
+
+	$self->{canonicalize_body_empty_lines} = $empty_lines;
+	return $multiline;
 }
 
 sub finish_body

@@ -122,9 +122,9 @@ sub finish_header
 sub add_body
 {
 	my $self = shift;
-	my ($line) = @_;
+	my ($multiline) = @_;
 
-	$self->output($self->canonicalize_body($line));
+	$self->output($self->canonicalize_body($multiline));
 }
 
 sub finish_body
