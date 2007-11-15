@@ -1,8 +1,8 @@
 DKIM-Signature: v=1; a=rsa-sha1; c=simple; d=messiah.edu; h=from:to:
 	subject:date:message-id; q=dns/txt; s=test3; i=
-	=6Along@messiah.edu; bh=a1tsxn+Nkk390KsMynntsb/bycM=; b=YE8IkD52
-	CXau4jx/hcyrI4Su8RDtGCr8Sv6esZvji//ZbPXJGMi7FUNH0Z/moQ/ZbsGAwSql
-	D6flvr5COUn7/Q==
+	=6Along@messiah.edu; bh=a1tsxn+Nkk390KsMynntsb/bycM=; b=fYt1qVZc
+	kYrGQupWYUxDX1byTfuQt8sAPPMVUPsN/Ha552XI1x+2ufltDLTmnFyRjc3xlgqV
+	kMGzoeDCD4Z/jw==
 Received: from x.y.test
    by example.net
    via TCP
@@ -12,7 +12,7 @@ Received: from x.y.test
 Received: from machine.example by x.y.test; 21 Nov 1997 10:01:22 -0600
 From: Jason Long <jlong@messiah.edu>
 To: Nobody <nobody@messiah.edu>
-Subject: dkim test (h= requires sha1, not sha256, so it should fail)
+Subject: dkim test (i= with quoted printable, and g= check)
 Date: Wed, 7 Dec 2005 09:11:00 -0500
 Message-ID: <20051207091100@test.messiah.edu>
 
