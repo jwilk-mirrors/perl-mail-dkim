@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 62;
+use Test::More tests => 65;
 
 use Mail::DKIM::Verifier;
 
@@ -74,6 +74,9 @@ test_email("good_dk_gmail.txt", "pass");
 test_email("good_dk_yahoo.txt", "pass");
 test_email("good_dk_1.txt", "pass");
 test_email("good_dk_2.txt", "pass");
+test_email("good_dk_3.txt", "pass"); # key with g= tag (ident in From header)
+test_email("good_dk_4.txt", "pass"); # key with g= tag (ident in Sender head)
+test_email("good_dk_5.txt", "pass"); # key with empty g=
 test_email("dk_headers_1.txt", "pass");
 test_email("dk_headers_2.txt", "pass");
 

@@ -2,6 +2,8 @@
  * t/corpus/goodkey_4.txt: tests signature with i=a@b, public key implied g=
  * lib/Mail/DKIM/PublicKey.pm (check_granularity): fixed broken
    ends-with check, reported by Mark Martinec
+ * t/corpus/good_dk_3.txt, good_dk_4.txt, good_dk_5.txt:
+   these files test DomainKeys signatures with g= values in the public keys
 
 2007-11-08: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Canonicalization/relaxed.pm,
