@@ -101,7 +101,7 @@ Mail::DKIM::Canonicalization::Base - base class for canonicalization methods
 
   # add body
   $method->add_body("This is the body.\015\012");
-  $method->add_body("Another line of the body.\015\012");
+  $method->add_body("Another two lines\015\012of the body.\015\012");
   $method->finish_body;
 
   # this adds the signature to the end
@@ -153,9 +153,10 @@ can be accessed using the result() method.
 =head2 add_body() - feeds part of the body into the canonicalization
 
   $method->add_body("This is the body.\015\012");
-  $method->add_body("Another line of the body.\015\012");
+  $method->add_body("Another two lines\015\012of the body.\015\012");
 
-The body should be fed one "line" at a time.
+The body should be fed one or more "lines" at a time.
+I.e. do not feed part of a line.
 
 =head2 result()
 

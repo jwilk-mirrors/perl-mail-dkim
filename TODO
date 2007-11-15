@@ -62,6 +62,7 @@ Testing (some of this may already be implemented):
    - unspecified canonicalization
    - test presence of version tag in signature
  - IMPORTANT- allow `make test' to work when DNS is not available
+ - test absense of h= tag in DKIM signature
 
 Possible issues in base-10 draft:
  - 6.1.2 - check g= tag of public key against i= tag of signature

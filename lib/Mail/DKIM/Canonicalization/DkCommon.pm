@@ -24,6 +24,11 @@ sub add_header
 	{
 		# DomainKeys never includes headers that precede the
 		# DomainKey-Signature header
+
+		# FIXME- this seems to make it impossible to have multiple
+		# DomainKey signatures in an email (wouldn't the second header
+		# cause the first header's to be broken?)
+
 		$self->{myheaders} = [];
 	}
 	else
