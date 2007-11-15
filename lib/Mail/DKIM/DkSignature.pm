@@ -278,9 +278,7 @@ sub identity
 {
 	my $self = shift;
 	croak "cannot change identity on " . ref($self) if @_;
-	return defined($self->{dk_identity})
-		? $self->{dk_identity}
-		: ("@" . $self->domain);
+	return $self->{dk_identity};
 }
 
 # init_identity() - initialize the DomainKeys concept of identity
