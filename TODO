@@ -65,6 +65,7 @@ Testing (some of this may already be implemented):
  - test various components of verifying, so better diagnostics can be
    made when the verify.t script reports a bunch of unexplained failures
  - test absense of h= tag in DKIM signature
+ - test use of non-ASCII characters in header names and h= tag
 
 Possible issues in base-10 draft:
  - 6.1.2 - check g= tag of public key against i= tag of signature (DONE)
@@ -77,3 +78,17 @@ Possible issues in base-10 draft:
  - 3.3.1 - what's an RSA exponent?
  - 6.1.1 - configurable list of unacceptable signing domains,
        e.g. "com" and "co.uk"
+
+Possible issues in RFC 4871:
+ - 3.6.1 - g= should be case-sensitive (see 3.2 "tag values must be
+   processed as case sensitive unless...", and 3.6.1, "g=", which does
+   NOT mention case-sensitivity)
+ - 3.5 - i= tag, should allow quoted-printable encoding
+ - 3.5 - i= tag, internationalized domains?
+ - 3.5 - l= tag, what happens if the number is REALLY big,
+   or doesn't contain a number?
+ - 3.5 - q= tag, should skip signature if subtype is not "txt"
+   (I think I do this, but do other verifiers?)
+    - rationale- if a dns/foo type comes out, then it will be WRONG
+      to lookup the txt record
+
