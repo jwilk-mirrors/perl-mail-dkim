@@ -198,8 +198,8 @@ sub check_signature
 		# unsupported version
 		if (defined $signature->version)
 		{
-			$self->{signature_reject_reason} = "unsupported version (v="
-				. $signature->version . ")";
+			$self->{signature_reject_reason} = "unsupported version "
+				. $signature->version;
 		}
 		else
 		{
@@ -682,7 +682,7 @@ The following are possible results from the result_detail() method:
   invalid (missing q tag)
   invalid (missing d tag)
   invalid (missing s tag)
-  invalid (unsupported v=0.1 tag)
+  invalid (unsupported version 0.1)
   invalid (no public key available)
   invalid (public key: unsupported version)
   invalid (public key: unsupported key type)
