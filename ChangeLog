@@ -6,6 +6,7 @@
    these files test DomainKeys signatures with g= values in the public keys
  * t/corpus/bad_dk_1.txt: this one should fail, since the signature
    domain does not match the From/Sender header
+ * scripts/dkimsign.pl: added option to override signature's d= tag
 
 2007-11-08: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Canonicalization/relaxed.pm,
