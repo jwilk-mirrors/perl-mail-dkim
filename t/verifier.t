@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 61;
+use Test::More tests => 62;
 
 use Mail::DKIM::Verifier;
 
@@ -100,6 +100,7 @@ test_email("ignore_8.txt", "invalid"); # bad i= value
 test_email("goodkey_1.txt", "pass"); # public key with s=email
 test_email("goodkey_2.txt", "pass"); # public key with extra tags, h=, s=, etc.
 test_email("goodkey_3.txt", "pass"); # public key with g=jl*g
+test_email("goodkey_4.txt", "pass"); # public key with implied g
 
 #
 # test problems with the public key
