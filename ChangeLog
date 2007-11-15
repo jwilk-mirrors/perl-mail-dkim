@@ -1,5 +1,7 @@
 2007-11-14: Jason Long <jlong@messiah.edu>
  * t/corpus/goodkey_4.txt: tests signature with i=a@b, public key implied g=
+ * lib/Mail/DKIM/PublicKey.pm (check_granularity): fixed broken
+   ends-with check, reported by Mark Martinec
 
 2007-11-08: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Canonicalization/relaxed.pm,

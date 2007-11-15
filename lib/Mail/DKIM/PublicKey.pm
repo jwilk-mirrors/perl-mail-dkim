@@ -193,7 +193,7 @@ sub check_granularity
 			substr($local_part, 0, length($begins)) ne $begins
 			or
 		# the local part must end with $ends
-			substr($local_part, -length($ends)) ne $ends)
+			(length($ends) && substr($local_part, -length($ends)) ne $ends))
 		{
 			$@ = "public key: granularity mismatch\n";
 			return;
@@ -203,6 +203,8 @@ sub check_granularity
 	{
 		if ($g eq "")
 		{
+			#FIXME- maybe DomainKeys signatures should allow an empty g=
+
 			$@ = "public key: granularity is empty\n";
 			return;
 		}
