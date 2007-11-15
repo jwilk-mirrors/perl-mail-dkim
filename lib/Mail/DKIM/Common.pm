@@ -135,7 +135,7 @@ sub message_originator
 		my @list = Mail::Address->parse($self->{headers_by_name}->{from});
 		return $list[0];
 	}
-	return undef;
+	return Mail::Address->new;
 }
 
 sub message_sender
@@ -153,7 +153,7 @@ sub message_sender
 		my @list = Mail::Address->parse($self->{headers_by_name}->{from});
 		return $list[0];
 	}
-	return undef;
+	return Mail::Address->new;
 }
 
 sub result

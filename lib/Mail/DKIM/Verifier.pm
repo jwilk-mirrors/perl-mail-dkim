@@ -571,10 +571,8 @@ sub fetch_sender_policy
 	use Mail::DKIM::Policy;
 
 	# determine addresses found in the "From" and "Sender" headers
-	my $author = $self->message_originator;
-	$author &&= $author->address;
-	my $sender = $self->message_sender;
-	$sender &&= $sender->address;
+	my $author = $self->message_originator->address;
+	my $sender = $self->message_sender->address;
 
 	# fetch the policy
 	return Mail::DKIM::Policy->fetch(
@@ -596,21 +594,29 @@ terminators (same as the SMTP protocol).
 
   my $address = $dkim->message_originator;
 
-Returns the "originator address" found in the message. This is typically
-the (first) name and email address found in the From: header. The returned
-object is of type Mail::Address. To get just the email address part, do:
+Returns the "originator address" found in the message, as a
+L<Mail::Address> object.
+This is typically the (first) name and email address found in the
+From: header. If there is no From: header,
+then an empty L<Mail::Address> object is returned.
+
+To get just the email address part, do:
 
   my $email = $dkim->message_originator->address;
+
+See also L</"message_sender()">.
 
 =head2 message_sender() - access the "From" or "Sender" header
 
   my $address = $dkim->message_sender;
 
-Returns the "sender" found in the message. This is typically the (first)
-name and email address found in the Sender: header. If there is no Sender:
-header, it is the first name and email address in the From: header.
-The returned object is of type Mail::Address, so to get just the email
-address part, do:
+Returns the "sender" found in the message, as a L<Mail::Address> object.
+This is typically the (first) name and email address found in the
+Sender: header. If there is no Sender: header, it is the first name and
+email address in the From: header. If neither header is present,
+then an empty L<Mail::Address> object is returned.
+
+To get just the email address part, do:
 
   my $email = $dkim->message_sender->address;
 

@@ -1,4 +1,12 @@
 2007-11-14: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Verifier.pm, Signer.pm: update documentation for
+   message_sender() and message_originator() methods, which are now
+   guaranteed to return an object
+ * lib/Mail/DKIM/Common.pm (message_sender, message_originator):
+   always return a Mail::Address object, even if the relevant headers
+   were not found
+
+2007-11-14: Jason Long <jlong@messiah.edu>
  * t/corpus/goodkey_4.txt: tests signature with i=a@b, public key implied g=
  * lib/Mail/DKIM/PublicKey.pm (check_granularity): fixed broken
    ends-with check, reported by Mark Martinec
