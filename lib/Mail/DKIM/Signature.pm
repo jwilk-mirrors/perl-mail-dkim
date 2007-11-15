@@ -406,6 +406,10 @@ sub data
 The domain of the signing entity, as specified in the signature.
 This is the domain that will be queried for the public key.
 
+If using an "internationalized domain name", the domain name must be
+converted to ASCII (following section 4.1 of RFC 3490) before passing
+it to this method.
+
 =cut
 
 sub domain
@@ -569,6 +573,10 @@ Ideally, the identity should match the identity listed in the From:
 header, or the Sender: header, but this is not required to have a
 valid signature. Whether the identity used is "authorized" to sign
 for the given message is not determined here.
+
+If using an "internationalized domain name", the domain name must be
+converted to ASCII (following section 4.1 of RFC 3490) before passing
+it to this method.
 
 =cut
 
