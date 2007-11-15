@@ -5,6 +5,9 @@
  * lib/Mail/DKIM/Common.pm (message_sender, message_originator):
    always return a Mail::Address object, even if the relevant headers
    were not found
+ * t/corpus/dk_headers_2.txt renamed to bad_dk_2.txt: it turns out this
+   message should've been failing all along, since the Sender header
+   doesn't match the domain of the signature
 
 2007-11-14: Jason Long <jlong@messiah.edu>
  * t/corpus/goodkey_4.txt: tests signature with i=a@b, public key implied g=
