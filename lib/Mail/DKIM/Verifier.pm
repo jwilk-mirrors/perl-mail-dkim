@@ -299,6 +299,10 @@ sub check_public_key
 	{
 		$@ = undef;
 
+		# HACK- I'm indecisive here about whether I want the
+		# check_foo functions to return false or to "die"
+		# on failure
+
 		# check public key's allowed hash algorithms
 		$result = $public_key->check_hash_algorithm(
 				$signature->hash_algorithm);
@@ -306,6 +310,7 @@ sub check_public_key
 		# check public key's granularity
 		$result &&= $public_key->check_granularity(
 				$signature->identity);
+
 		die $@ if $@;
 	};
 	if ($@)
