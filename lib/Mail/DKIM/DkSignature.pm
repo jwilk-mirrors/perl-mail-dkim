@@ -278,7 +278,24 @@ sub identity
 {
 	my $self = shift;
 	croak "cannot change identity on " . ref($self) if @_;
-	return "@" . $self->domain;
+	return defined($self->{dk_identity})
+		? $self->{dk_identity}
+		: ("@" . $self->domain);
+}
+
+# init_identity() - initialize the DomainKeys concept of identity
+#
+# The signing identity of a DomainKeys signature is the sender
+# of the message itself, i.e. the address in the Sender/From header.
+# The sender may not be known when the signature object is
+# constructed (since the signature usually precedes the From/Sender
+# header), so use this method when you have the From/Sender value.
+# See also finish_header() in Mail::DKIM::Verifier.
+#
+sub init_identity
+{
+	my $self = shift;
+	$self->{dk_identity} = shift;
 }
 
 sub method

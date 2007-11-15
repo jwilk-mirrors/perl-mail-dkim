@@ -307,9 +307,13 @@ sub check_public_key
 		$result = $public_key->check_hash_algorithm(
 				$signature->hash_algorithm);
 
+		# HACK- DomainKeys signatures are allowed to have an empty g=
+		# tag in the public key
+		my $empty_g_means_wildcard = $signature->isa("Mail::DKIM::DkSignature");
+
 		# check public key's granularity
 		$result &&= $public_key->check_granularity(
-				$signature->identity);
+				$signature->identity, $empty_g_means_wildcard);
 
 		die $@ if $@;
 	};
@@ -372,6 +376,13 @@ sub finish_header
 	my @valid = ();
 	foreach my $signature (@{$self->{signatures}})
 	{
+		# DomainKeys signatures take the "identity" of the
+		# message "sender"
+		if ($signature->can("init_identity"))
+		{
+			$signature->init_identity($self->message_sender->address);
+		}
+
 		unless ($self->check_signature($signature))
 		{
 			$signature->result("invalid",

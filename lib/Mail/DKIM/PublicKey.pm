@@ -170,10 +170,18 @@ sub check
 sub check_granularity
 {
 	my $self = shift;
-	my ($identity) = @_;
+	my ($identity, $empty_g_means_wildcard) = @_;
 
 	# check granularity
 	my $g = $self->granularity;
+
+	# yuck- what is this $empty_g_means_wildcard parameter?
+	# well, it turns out that with DomainKeys signatures,
+	# an empty g= is the same as g=*
+	if ($g eq "" && $empty_g_means_wildcard)
+	{
+		$g = "*";
+	}
 
 	# do case-insensitive matching
 	$identity = lc $identity;
@@ -203,8 +211,6 @@ sub check_granularity
 	{
 		if ($g eq "")
 		{
-			#FIXME- maybe DomainKeys signatures should allow an empty g=
-
 			$@ = "public key: granularity is empty\n";
 			return;
 		}

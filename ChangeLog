@@ -1,4 +1,12 @@
 2007-11-14: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Verifier.pm: for DomainKeys signatures, use the message
+   sender as the identity
+ * lib/Mail/DKIM/DkSignature.pm: allow verifier to supply the signing
+   identity
+ * lib/Mail/DKIM/Verifier.pm, PublicKey.pm: hack for allowing
+   DomainKeys signatures to use public keys with empty g= tags
+
+2007-11-14: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Verifier.pm, Signer.pm: update documentation for
    message_sender() and message_originator() methods, which are now
    guaranteed to return an object
