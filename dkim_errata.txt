@@ -1,0 +1,23 @@
+Following are some notes about gray areas in the RFC 4871 DKIM
+specification.
+
+
+Section 3.4.4 "relaxed" Body Canonicalization
+
+  Empty bodies. Unlike the "simple" body canonicalization, which
+  explicitly says to add a CRLF, the "relaxed" body canonicalization
+  does not say this. The consensus at DKIM-Interop was NOT to add
+  a CRLF for "relaxed" body canonicalization when the body is empty.
+
+
+Section 3.6.1 "granularity of the key"
+
+  Does "an empty g= value never matches any addresses" mean that any
+  signature, no matter the i= value, using this key cannot be
+  matched? The consensus at DKIM-Interop was that YES, that's what
+  it means.
+
+  It should be noted that this is an incompatible change from
+  RFC4870-DomainKeys, where an empty g= tag in the public key is
+  equivalent to g=*, which would match anything.
+
