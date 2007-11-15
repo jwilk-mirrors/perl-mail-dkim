@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 65;
+use Test::More tests => 66;
 
 use Mail::DKIM::Verifier;
 
@@ -79,6 +79,7 @@ test_email("good_dk_4.txt", "pass"); # key with g= tag (ident in Sender head)
 test_email("good_dk_5.txt", "pass"); # key with empty g=
 test_email("dk_headers_1.txt", "pass");
 test_email("dk_headers_2.txt", "pass");
+test_email("bad_dk_1.txt", "fail"); # sig. domain != sender domain
 
 # test empty/missing body - simple canonicalization
 test_email("no_body_1.txt", "pass");

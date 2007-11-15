@@ -4,6 +4,8 @@
    ends-with check, reported by Mark Martinec
  * t/corpus/good_dk_3.txt, good_dk_4.txt, good_dk_5.txt:
    these files test DomainKeys signatures with g= values in the public keys
+ * t/corpus/bad_dk_1.txt: this one should fail, since the signature
+   domain does not match the From/Sender header
 
 2007-11-08: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Canonicalization/relaxed.pm,
