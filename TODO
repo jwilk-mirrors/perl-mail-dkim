@@ -55,22 +55,25 @@ Testing (some of this may already be implemented):
  - test signature options:
    - unspecified query type
    - query type of "dns/"
-   - bad query type
-   - bad algorithm
+   - bad query type (DONE)
+   - bad algorithm (DONE)
    - unspecified algorithm
    - bad canonicalization
    - unspecified canonicalization
    - test presence of version tag in signature
  - IMPORTANT- allow `make test' to work when DNS is not available
+ - test various components of verifying, so better diagnostics can be
+   made when the verify.t script reports a bunch of unexplained failures
  - test absense of h= tag in DKIM signature
 
 Possible issues in base-10 draft:
- - 6.1.2 - check g= tag of public key against i= tag of signature
- - 6.1.2 - check h= tag of public key against a= tag of signature
+ - 6.1.2 - check g= tag of public key against i= tag of signature (DONE)
+ - 6.1.2 - check h= tag of public key against a= tag of signature (DONE)
  - 3.5 - t= tag, create it when signing messages, check it when verifying
- - 3.5 - x= tag, create it when signing messages, check it when verifying
+ - 3.5 - x= tag, create it when signing messages
+               - check it when verifying (DONE)
  - 5.4 - allow better control of which headers to sign
- - 5.5 - recommended headers to sign and NOT to sign
+ - 5.5 - recommended headers to sign and NOT to sign (DONE)
  - 3.3.1 - what's an RSA exponent?
  - 6.1.1 - configurable list of unacceptable signing domains,
        e.g. "com" and "co.uk"
