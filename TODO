@@ -83,6 +83,7 @@ Possible issues in RFC 4871:
  - 3.6.1 - g= should be case-sensitive (see 3.2 "tag values must be
    processed as case sensitive unless...", and 3.6.1, "g=", which does
    NOT mention case-sensitivity)
+ - 3.6.1 - g= tag using irregular characters
  - 3.5 - i= tag, should allow quoted-printable encoding
  - 3.5 - i= tag, internationalized domains?
  - 3.5 - l= tag, what happens if the number is REALLY big,
@@ -91,4 +92,3 @@ Possible issues in RFC 4871:
    (I think I do this, but do other verifiers?)
     - rationale- if a dns/foo type comes out, then it will be WRONG
       to lookup the txt record
-
