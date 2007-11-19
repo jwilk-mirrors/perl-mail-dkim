@@ -92,3 +92,5 @@ Possible issues in RFC 4871:
    (I think I do this, but do other verifiers?)
     - rationale- if a dns/foo type comes out, then it will be WRONG
       to lookup the txt record
+ - 3.2 - "if a tag name does occur more than once, the entire tag-list
+         is invalid"
