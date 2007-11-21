@@ -1,3 +1,7 @@
+2007-11-21: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Signer.pm: provide documentation for Key parameter
+ * lib/Mail/DKIM/PrivateKey.pm: created documentation for this package
+
 2007-11-14: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Verifier.pm: for DomainKeys signatures, use the message
    sender as the identity

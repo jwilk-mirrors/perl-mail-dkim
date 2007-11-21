@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2005 Messiah College. All rights reserved.
+# Copyright 2005-2007 Messiah College. All rights reserved.
 # Jason Long <jlong@messiah.edu>
 #
 # Copyright (c) 2004 Anthony D. Urso. All rights reserved.
@@ -10,9 +10,43 @@
 use strict;
 use warnings;
 
+=head1 NAME
+
+Mail::DKIM::PrivateKey - a private key loaded in memory for DKIM signing
+
+=head1 SYNOPSIS
+
+ my $key1 = Mail::DKIM::PrivateKey->load(
+               File => "/path/to/private.key");
+
+ my $key2 = Mail::DKIM::PrivateKey->load(
+               Data => $base64);
+
+ # use the loaded key in a DKIM signing object
+ my $dkim = Mail::DKIM::Signer->new(
+               Key => $key2,
+             );
+
+=cut
+
 package Mail::DKIM::PrivateKey;
 use base "Mail::DKIM::Key";
 *calculate_EM = \&Mail::DKIM::Key::calculate_EM;
+
+=head1 CONSTRUCTOR
+
+=head2 load() - loads a private key into memory
+
+ my $key1 = Mail::DKIM::PrivateKey->load(
+               File => "/path/to/private.key");
+
+Loads the Base64-encoded key from the specified file.
+
+  my $key2 = Mail::DKIM::PrivateKey->load(Data => $base64);
+
+Loads the Base64-encoded key from a string already in memory.
+
+=cut
 
 sub load {
 	my $type = shift;

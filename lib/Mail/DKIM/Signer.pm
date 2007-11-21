@@ -80,6 +80,18 @@ See the section L</"SIGNER POLICIES"> below for more information.
 
 See L<Mail::DKIM::SignerPolicy> for more information about policy objects.
 
+In addition to the parameters demonstrated above, the following
+are recognized:
+
+=over
+
+=item Key
+
+rather than using C<KeyFile>, use C<Key> to use an already-loaded
+L<Mail::DKIM::PrivateKey> object.
+
+=back
+
 =cut
 
 package Mail::DKIM::Signer;
@@ -420,6 +432,9 @@ sub want_header
 
   $dkim->key(Mail::DKIM::PrivateKey->load(File => "private.key"));
 
+If you use this method to specify a private key,
+do not use L</"key_file()">.
+
 =cut
 
 sub key
@@ -438,6 +453,9 @@ sub key
   my $filename = $dkim->key_file;
 
   $dkim->key_file("private.key");
+
+If you use this method to specify a private key file,
+do not use L</"key()">.
 
 =cut
 
