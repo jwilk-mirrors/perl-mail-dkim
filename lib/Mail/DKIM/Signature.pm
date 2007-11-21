@@ -59,6 +59,7 @@ sub new
 	$self->identity($prms{'Identity'}) if exists $prms{'Identity'};
 	$self->timestamp($prms{'Timestamp'}) if defined $prms{'Timestamp'};
 	$self->expiration($prms{'Expiration'}) if defined $prms{'Expiration'};
+	$self->key($prms{'Key'}) if defined $prms{'Key'};
 
 	return $self;
 }
@@ -614,6 +615,25 @@ sub identity_matches
 		# TODO - compare the parent domains?
 	}
 	return lc($addr) eq lc($id);
+}
+
+=head2 key() - get or set the key object
+
+  my $key = $signature->key;
+
+  $signature->key(Mail::DKIM::PrivateKey->load(File => "private.key"));
+
+=cut
+
+sub key
+{
+	my $self = shift;
+	if (@_)
+	{
+		$self->{Key} = shift;
+		$self->{KeyFile} = undef;
+	}
+	return $self->{Key};
 }
 
 =head2 method() - get or set the canonicalization (c=) field
