@@ -79,7 +79,7 @@ test_email("good_dk_4.txt", "pass"); # key with g= tag (ident in Sender head)
 test_email("good_dk_5.txt", "pass"); # key with empty g=
 test_email("dk_headers_1.txt", "pass");
 test_email("dk_headers_2.txt", "pass");
-test_email("bad_dk_1.txt", "fail"); # sig. domain != sender domain
+test_email("bad_dk_1.txt", "invalid"); # sig. domain != From header (no Sender)
 
 # test empty/missing body - simple canonicalization
 test_email("no_body_1.txt", "pass");
