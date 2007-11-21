@@ -63,10 +63,10 @@ t/corpus/good_dk_4.txt
 t/corpus/good_dk_5.txt
 t/corpus/good_rfc4871_3.txt
 t/corpus/dk_headers_1.txt
+t/corpus/dk_headers_2.txt
 t/corpus/multiple_1.txt
 t/corpus/multiple_2.txt
 t/corpus/bad_dk_1.txt
-t/corpus/bad_dk_2.txt
 t/corpus/bad_ietf01_1.txt
 t/corpus/bad_ietf01_2.txt
 t/corpus/bad_ietf01_3.txt

@@ -1,4 +1,9 @@
 2007-11-21: Jason Long <jlong@messiah.edu>
+ * t/corpus/bad_dk_2.txt renamed to dk_headers_2.txt: revert this
+   rename from earlier... the message should "pass" after
+   all (the Sender header was not part of the signature)
+
+2007-11-21: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Signer.pm: provide documentation for Key parameter
  * lib/Mail/DKIM/PrivateKey.pm: created documentation for this package
  * lib/Mail/DKIM/Signature.pm: implement Key parameter for constructor,
