@@ -131,12 +131,40 @@ sub handle_header
 
 	if (lc($field_name) eq "dkim-signature")
 	{
-		$self->add_signature($line);
+		eval
+		{
+			my $signature = Mail::DKIM::Signature->parse($line);
+			$self->add_signature($signature);
+		};
+		if ($@)
+		{
+			# the only reason an error should be thrown is if the
+			# signature really is unparse-able
+
+			# otherwise, invalid signatures are caught in finish_header()
+
+			chomp (my $E = $@);
+			$self->{signature_reject_reason} = $E;
+		}
 	}
 
 	if (lc($field_name) eq "domainkey-signature")
 	{
-		$self->add_signature_dk($line);
+		eval
+		{
+			my $signature = Mail::DKIM::DkSignature->parse($line);
+			$self->add_signature($signature);
+		};
+		if ($@)
+		{
+			# the only reason an error should be thrown is if the
+			# signature really is unparse-able
+
+			# otherwise, invalid signatures are caught in finish_header()
+
+			chomp (my $E = $@);
+			$self->{signature_reject_reason} = $E;
+		}
 	}
 }
 
@@ -144,47 +172,9 @@ sub add_signature
 {
 	my $self = shift;
 	croak "wrong number of arguments" unless (@_ == 1);
-	my ($contents) = @_;
+	my ($signature) = @_;
 
-	eval
-	{
-		my $signature = Mail::DKIM::Signature->parse($contents);
-		push @{$self->{signatures}}, $signature;
-	};
-	if ($@)
-	{
-		# the only reason an error should be thrown is if the
-		# signature really is unparse-able
-
-		# otherwise, invalid signatures are caught in finish_header()
-
-		chomp (my $E = $@);
-		$self->{signature_reject_reason} = $E;
-	}
-}
-
-# parses a DomainKeys-type signature
-sub add_signature_dk
-{
-	my $self = shift;
-	croak "wrong number of arguments" unless (@_ == 1);
-	my ($contents) = @_;
-
-	eval
-	{
-		my $signature = Mail::DKIM::DkSignature->parse($contents);
-		push @{$self->{signatures}}, $signature;
-	};
-	if ($@)
-	{
-		# the only reason an error should be thrown is if the
-		# signature really is unparse-able
-
-		# otherwise, invalid signatures are caught in finish_header()
-
-		chomp (my $E = $@);
-		$self->{signature_reject_reason} = $E;
-	}
+	push @{$self->{signatures}}, $signature;
 }
 
 sub check_signature

@@ -1,3 +1,7 @@
+2007-12-07: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Verifier.pm (add_signature): changed to take a
+   signature object, instead of an unparsed header line
+
 2007-11-21: Jason Long <jlong@messiah.edu>
  * t/corpus/bad_dk_2.txt renamed to dk_headers_2.txt: revert this
    rename from earlier... the message should "pass" after
