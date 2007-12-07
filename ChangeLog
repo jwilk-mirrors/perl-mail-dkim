@@ -1,4 +1,13 @@
 2007-12-07: Jason Long <jlong@messiah.edu>
+ * t/verifier.t: three new DK tests
+ * t/corpus/good_dk_6.txt: tests DK signature without h= tag
+ * t/corpus/bad_dk_2.txt: tests DK signature w/o h= tag, Sender has
+   been added
+ * t/corpus/dk_multiple_1.txt: tests two DK signatures (with different
+   domains) in a single message... both should pass
+ * Makefile.PL: version bump
+
+2007-12-07: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Verifier.pm, lib/Mail/DKIM/Algorithm/dk_rsa_sha1.pm,
    lib/Mail/DKIM/Canonicalization/DkCommon.pm:
    domainkeys: determine identity from algorithm object.  Currently the

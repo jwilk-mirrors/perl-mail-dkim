@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 67;
+use Test::More tests => 73;
 
 use Mail::DKIM::Verifier;
 
@@ -77,9 +77,16 @@ test_email("good_dk_2.txt", "pass");
 test_email("good_dk_3.txt", "pass"); # key with g= tag (ident in From header)
 test_email("good_dk_4.txt", "pass"); # key with g= tag (ident in Sender head)
 test_email("good_dk_5.txt", "pass"); # key with empty g=
+test_email("good_dk_6.txt", "pass"); # no h= tag
 test_email("dk_headers_1.txt", "pass");
 test_email("dk_headers_2.txt", "pass");
 test_email("bad_dk_1.txt", "invalid"); # sig. domain != From header (no Sender)
+test_email("bad_dk_2.txt", "invalid"); # added Sender header, no h= tag
+test_email("dk_multiple_1.txt", "pass");
+my @dksigs = $dkim->signatures;
+ok(@dksigs == 2, "found two signatures");
+ok($dksigs[0]->result eq "pass", "first signature is 'pass'");
+ok($dksigs[1]->result eq "pass", "second signature is 'pass'");
 
 # test empty/missing body - simple canonicalization
 test_email("no_body_1.txt", "pass");
