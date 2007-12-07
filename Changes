@@ -3,6 +3,14 @@ See the ChangeLog file for the details.
 
 Version 0.30 - in testing
 
+ since 0.29_3
+ * DomainKeys, identity matching: a DomainKey-Signature's domain
+   should match the From/Sender address, as long as the From/Sender
+   was included in the signature
+ * API improvements:
+   * Key parameter for Signature constructor, Signer constructor
+
+ since 0.29
  * includes speed-up optimizations by Mark Martinec
  * several more test cases
  * API improvements:
