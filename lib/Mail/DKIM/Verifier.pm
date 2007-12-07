@@ -191,12 +191,6 @@ sub add_signature
 				Debug_Canonicalization => $self->{Debug_Canonicalization},
 			);
 
-	# output header as received so far into canonicalization
-	foreach my $line (@{$self->{headers}})
-	{
-		$algorithm->add_header($line);
-	}
-
 	# save the algorithm
 	$self->{algorithms} ||= [];
 	push @{$self->{algorithms}}, $algorithm;
@@ -362,19 +356,17 @@ sub finish_header
 		return;
 	}
 
+	foreach my $algorithm (@{$self->{algorithms}})
+	{
+		$algorithm->finish_header;
+	}
+
 	# For each parsed signature, check it for validity. If none are valid,
 	# our result is "invalid" and our result detail will be the reason
 	# why the last signature was invalid.
 
 	foreach my $signature (@{$self->{signatures}})
 	{
-		# DomainKeys signatures take the "identity" of the
-		# message "sender"
-		if ($signature->can("init_identity"))
-		{
-			$signature->init_identity($self->message_sender->address);
-		}
-
 		unless (check_signature_identity($signature))
 		{
 			$self->{signature_reject_reason} = "bad identity";
@@ -420,11 +412,6 @@ sub finish_header
 		$self->{result} = $self->{signatures}->[0]->result;
 		$self->{details} = $self->{signatures}->[0]->{verify_details};
 		return;
-	}
-
-	foreach my $algorithm (@{$self->{algorithms}})
-	{
-		$algorithm->finish_header;
 	}
 }
 

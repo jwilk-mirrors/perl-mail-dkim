@@ -1,4 +1,15 @@
 2007-12-07: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Verifier.pm, lib/Mail/DKIM/Algorithm/dk_rsa_sha1.pm,
+   lib/Mail/DKIM/Canonicalization/DkCommon.pm:
+   domainkeys: determine identity from algorithm object.  Currently the
+   DomainKeys identity is determined by the Verifier.  It is
+   theoretically possible for two different DomainKeys signatures on
+   the same message to have different identities.  (This happens when
+   one DomainKey signature includes a Sender header, and the other one
+   does not.) This patch moves the determination of identity to the
+   algorithm object.
+
+2007-12-07: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Verifier.pm, lib/Mail/DKIM/Common.pm: initialize
    signatures early.  This patch makes Mail::DKIM::Verifier initialize
    and check the signature object as soon as it is parsed, and

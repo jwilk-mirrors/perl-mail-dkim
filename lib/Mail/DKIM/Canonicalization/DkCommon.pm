@@ -118,6 +118,12 @@ sub finish_header
 	# iterate through each header, in the order determined above
 	foreach my $line (@sig_headers)
 	{
+		if ($line =~ /^(from|sender)\s*:(.*)$/i)
+		{
+			my $field = $1;
+			my $content = $2;
+			$self->{interesting_header}->{lc $field} = $content;
+		}
 		$self->output($line);
 	}
 

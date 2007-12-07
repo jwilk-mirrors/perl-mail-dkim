@@ -20,6 +20,27 @@ use Carp;
 use MIME::Base64;
 use Digest::SHA1;
 
+sub finish_header
+{
+	my $self = shift;
+	$self->SUPER::finish_header(@_);
+
+	if ((my $s = $self->signature)
+		&& $self->{canon}->{interesting_header})
+	{
+		my $sender = $self->{canon}->{interesting_header}->{sender};
+		$sender = defined($sender) && (Mail::Address->parse($sender))[0];
+		my $author = $self->{canon}->{interesting_header}->{from};
+		$author = defined($author) && (Mail::Address->parse($author))[0];
+
+		$s->init_identity(
+			$sender ? $sender->address :
+			$author ? $author->address :
+			undef);
+	}
+	return;
+}
+
 sub get_canonicalization_class
 {
 	my $self = shift;
