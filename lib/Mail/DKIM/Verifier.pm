@@ -183,28 +183,6 @@ sub add_signature
 		return;
 	}
 
-	# get public key
-	my $pkey;
-	eval
-	{
-		$pkey = $signature->get_public_key;
-	};
-	if ($@)
-	{
-		my $E = $@;
-		chomp $E;
-		$self->{signature_reject_reason} = $E;
-		$signature->result("invalid", $E);
-		return;
-	}
-
-	unless ($self->check_public_key($signature, $pkey))
-	{
-		$signature->result("invalid",
-			$self->{signature_reject_reason});
-		return;
-	}
-
 	# create a canonicalization filter and algorithm
 	my $algorithm_class = $signature->get_algorithm_class(
 				$signature->algorithm);
@@ -299,28 +277,6 @@ sub check_signature
 		$self->{signature_reject_reason} = "missing s tag";
 		return 0;
 	}
-
-	unless (check_signature_identity($signature))
-	{
-		$self->{signature_reject_reason} = "bad identity";
-		return 0;
-	}
-
-	# check domain against message From: and Sender: headers
-#	my $responsible_address = $self->message_originator;
-#	if (!$responsible_address)
-#	{
-#		# oops, no From: or Sender: header
-#		die "No From: or Sender: header";
-#	}
-#
-#	my $senderdomain = $responsible_address->host;
-#	my $sigdomain = $signature->domain;
-#	if (!match_subdomain($senderdomain, $sigdomain))
-#	{
-#		$self->{signature_reject_reason} = "unmatched domain";
-#		return 0;
-#	}
 
 	return 1;
 }
@@ -418,7 +374,45 @@ sub finish_header
 		{
 			$signature->init_identity($self->message_sender->address);
 		}
+
+		unless (check_signature_identity($signature))
+		{
+			$self->{signature_reject_reason} = "bad identity";
+			$signature->result("invalid",
+				$self->{signature_reject_reason});
+			next;
+		}
+
+		# get public key
+		my $pkey;
+		eval
+		{
+			$pkey = $signature->get_public_key;
+		};
+		if ($@)
+		{
+			my $E = $@;
+			chomp $E;
+			$self->{signature_reject_reason} = $E;
+			$signature->result("invalid",
+				$self->{signature_reject_reason});
+			next;
+		}
+
+		unless ($self->check_public_key($signature, $pkey))
+		{
+			$signature->result("invalid",
+				$self->{signature_reject_reason});
+			next;
+		}
 	}
+
+	# stop processing signatures that are already known to be invalid
+	@{$self->{algorithms}} = grep
+		{
+			my $sig = $_->signature;
+			!($sig->result && $sig->result eq "invalid");
+		} @{$self->{algorithms}};
 
 	if (@{$self->{algorithms}} == 0
 		&& @{$self->{signatures}} > 0)

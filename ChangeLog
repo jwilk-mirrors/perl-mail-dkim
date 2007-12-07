@@ -4,6 +4,9 @@
    and check the signature object as soon as it is parsed, and
    subsequent headers are fed into the algorithm as they are read,
    instead of waiting for the end of header.
+ * lib/Mail/DKIM/Verifier.pm: fix DK identity.  The previous patch broke
+   identity-checking for DomainKeys signatures.  This patch moves some
+   things around so that identity checking still works.
 
 2007-12-07: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Verifier.pm (add_signature): changed to take a
