@@ -28,6 +28,11 @@ sub add_header
 	my $self = shift;
 	my ($line) = @_;
 
+	foreach my $algorithm (@{$self->{algorithms}})
+	{
+		$algorithm->add_header($line);
+	}
+
 	if ($line =~ /^([^:]+)\s*:(.*)/s)
 	{
 		my $field_name = lc $1;

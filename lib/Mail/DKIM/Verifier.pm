@@ -175,6 +175,53 @@ sub add_signature
 	my ($signature) = @_;
 
 	push @{$self->{signatures}}, $signature;
+
+	unless ($self->check_signature($signature))
+	{
+		$signature->result("invalid",
+			$self->{signature_reject_reason});
+		return;
+	}
+
+	# get public key
+	my $pkey;
+	eval
+	{
+		$pkey = $signature->get_public_key;
+	};
+	if ($@)
+	{
+		my $E = $@;
+		chomp $E;
+		$self->{signature_reject_reason} = $E;
+		$signature->result("invalid", $E);
+		return;
+	}
+
+	unless ($self->check_public_key($signature, $pkey))
+	{
+		$signature->result("invalid",
+			$self->{signature_reject_reason});
+		return;
+	}
+
+	# create a canonicalization filter and algorithm
+	my $algorithm_class = $signature->get_algorithm_class(
+				$signature->algorithm);
+	my $algorithm = $algorithm_class->new(
+				Signature => $signature,
+				Debug_Canonicalization => $self->{Debug_Canonicalization},
+			);
+
+	# output header as received so far into canonicalization
+	foreach my $line (@{$self->{headers}})
+	{
+		$algorithm->add_header($line);
+	}
+
+	# save the algorithm
+	$self->{algorithms} ||= [];
+	push @{$self->{algorithms}}, $algorithm;
 }
 
 sub check_signature
@@ -325,7 +372,7 @@ sub check_signature_identity
 
 	my $d = $signature->domain;
 	my $i = $signature->identity;
-	if ($i =~ /\@(.*)$/)
+	if (defined($i) && $i =~ /\@(.*)$/)
 	{
 		return match_subdomain($1, $d);
 	}
@@ -363,7 +410,6 @@ sub finish_header
 	# our result is "invalid" and our result detail will be the reason
 	# why the last signature was invalid.
 
-	my @valid = ();
 	foreach my $signature (@{$self->{signatures}})
 	{
 		# DomainKeys signatures take the "identity" of the
@@ -372,71 +418,19 @@ sub finish_header
 		{
 			$signature->init_identity($self->message_sender->address);
 		}
-
-		unless ($self->check_signature($signature))
-		{
-			$signature->result("invalid",
-				$self->{signature_reject_reason});
-			next;
-		}
-
-		# get public key
-		my $pkey;
-		eval
-		{
-			$pkey = $signature->get_public_key;
-		};
-		if ($@)
-		{
-			my $E = $@;
-			chomp $E;
-			$self->{signature_reject_reason} = $E;
-			$signature->result("invalid", $E);
-			next;
-		}
-
-		unless ($self->check_public_key($signature, $pkey))
-		{
-			$signature->result("invalid",
-				$self->{signature_reject_reason});
-			next;
-		}
-
-		# this signature is ok
-		push @valid, $signature;
 	}
 
-	unless (@valid)
+	if (@{$self->{algorithms}} == 0
+		&& @{$self->{signatures}} > 0)
 	{
-		# no valid signatures found
-		$self->{result} = "invalid";
-		$self->{details} = $self->{signature_reject_reason};
+		$self->{result} = $self->{signatures}->[0]->result;
+		$self->{details} = $self->{signatures}->[0]->{verify_details};
 		return;
 	}
 
-	# now, for each valid signature, create an "algorithm" object which
-	# will process the message
-
-	$self->{algorithms} = [];
-	foreach my $signature (@valid)
+	foreach my $algorithm (@{$self->{algorithms}})
 	{
-		# create a canonicalization filter and algorithm
-		my $algorithm_class = $signature->get_algorithm_class(
-					$signature->algorithm);
-		my $algorithm = $algorithm_class->new(
-					Signature => $signature,
-					Debug_Canonicalization => $self->{Debug_Canonicalization},
-				);
-
-		# output header as received so far into canonicalization
-		foreach my $line (@{$self->{headers}})
-		{
-			$algorithm->add_header($line);
-		}
 		$algorithm->finish_header;
-
-		# save the algorithm
-		push @{$self->{algorithms}}, $algorithm;
 	}
 }
 

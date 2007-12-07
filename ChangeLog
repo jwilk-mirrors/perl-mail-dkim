@@ -1,4 +1,11 @@
 2007-12-07: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Verifier.pm, lib/Mail/DKIM/Common.pm: initialize
+   signatures early.  This patch makes Mail::DKIM::Verifier initialize
+   and check the signature object as soon as it is parsed, and
+   subsequent headers are fed into the algorithm as they are read,
+   instead of waiting for the end of header.
+
+2007-12-07: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Verifier.pm (add_signature): changed to take a
    signature object, instead of an unparsed header line
 
