@@ -5,6 +5,7 @@
    differ only in case
  * t/corpus/good_rfc4871_4.txt: tests DKIM signature with i= and d=
    contain domain names differing in case
+ * t/corpus/badkey_12.txt: tests public key where i=JLong, g=jl*ng
 
 2007-12-07: Jason Long <jlong@messiah.edu>
  * t/verifier.t: three new DK tests
