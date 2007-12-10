@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 73;
+use Test::More tests => 74;
 
 use Mail::DKIM::Verifier;
 
@@ -78,6 +78,7 @@ test_email("good_dk_3.txt", "pass"); # key with g= tag (ident in From header)
 test_email("good_dk_4.txt", "pass"); # key with g= tag (ident in Sender head)
 test_email("good_dk_5.txt", "pass"); # key with empty g=
 test_email("good_dk_6.txt", "pass"); # no h= tag
+test_email("good_dk_7.txt", "pass"); # case-differing domain names
 test_email("dk_headers_1.txt", "pass");
 test_email("dk_headers_2.txt", "pass");
 test_email("bad_dk_1.txt", "invalid"); # sig. domain != From header (no Sender)

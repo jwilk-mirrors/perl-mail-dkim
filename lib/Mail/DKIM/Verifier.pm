@@ -335,7 +335,7 @@ sub match_subdomain
 	my ($subdomain, $superdomain) = @_;
 
 	my $tmp = substr(".$subdomain", -1 - length($superdomain));
-	return (".$superdomain" eq $tmp);
+	return (lc ".$superdomain" eq lc $tmp);
 }
 
 #

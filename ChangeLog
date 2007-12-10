@@ -1,3 +1,9 @@
+2007-12-10: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Verifier.pm (is_subdomain): do case-insensitive
+   comparison
+ * t/corpus/good_dk_7.txt: tests DK signature with domain names that
+   differ only in case
+
 2007-12-07: Jason Long <jlong@messiah.edu>
  * t/verifier.t: three new DK tests
  * t/corpus/good_dk_6.txt: tests DK signature without h= tag
