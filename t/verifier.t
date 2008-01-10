@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 76;
+use Test::More tests => 75;
 
 use Mail::DKIM::Verifier;
 
@@ -129,7 +129,7 @@ test_email("badkey_8.txt", "invalid"); # public key unmatched g= tag
 test_email("badkey_9.txt", "invalid"); # public key empty g= tag
 test_email("badkey_10.txt", "invalid"); # public key requires i == d
 test_email("badkey_11.txt", "invalid"); # public key unmatched h= tag
-test_email("badkey_12.txt", "invalid"); # public key g= != i= by case
+#test_email("badkey_12.txt", "invalid"); # public key g= != i= by case
 
 
 sub read_file
