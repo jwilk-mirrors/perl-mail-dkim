@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 76;
+use Test::More tests => 77;
 
 use Mail::DKIM::Verifier;
 
@@ -122,6 +122,7 @@ test_email("badkey_1.txt", "invalid"); # public key NXDOMAIN
 test_email("badkey_2.txt", "invalid"); # public key REVOKED
 test_email("badkey_3.txt", "invalid"); # public key unsupported v= tag
 test_email("badkey_4.txt", "invalid"); # public key syntax error
+ok($dkim->result_detail =~ /public key/, "detail mentions public key");
 test_email("badkey_5.txt", "invalid"); # public key unsupported k= tag
 test_email("badkey_6.txt", "invalid"); # public key unsupported s= tag
 test_email("badkey_7.txt", "invalid"); # public key unsupported h= tag

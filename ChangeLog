@@ -1,5 +1,15 @@
 2008-01-10: Jason Long <jlong@messiah.edu>
  * Makefile.PL: bump version
+ * lib/Mail/DKIM/Signature.pm: make sure all public key problems are
+   prefixed with "public key:" (most were already, see below for actual
+   changes)
+ * lib/Mail/DKIM/PublicKey.pm: since Signature.pm is providing the "public
+   key:" prefix, it can be omitted in PublicKey.pm error messages
+ * lib/Mail/DKIM/Verifier: the following result_detail messages have changed:
+     "no public key available" => "public key: not available"
+     "key value list syntax error" => "syntax error"
+                                   or "public key: syntax error"
+ * t/verifier.t: test that "public key" is mentioned
 
  -- VERSION 0.30 --
 

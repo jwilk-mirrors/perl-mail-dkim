@@ -47,7 +47,7 @@ sub parse
 		my ($tagname, $value) = split(/\s*=\s*/, $raw_tag, 2);
 		unless (defined $value)
 		{
-			die "key value list syntax error\n";
+			die "syntax error\n";
 		}
 
 		$tag->{name} = $tagname;
