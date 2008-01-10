@@ -1,3 +1,5 @@
+ -- VERSION 0.30 --
+
 2007-12-10: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Verifier.pm (is_subdomain): do case-insensitive
    comparison

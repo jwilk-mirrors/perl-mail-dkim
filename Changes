@@ -1,20 +1,14 @@
 This file summarizes what's changed between releases of Mail-DKIM.
 See the ChangeLog file for the details.
 
-Version 0.30 - in testing
+Version 0.30 - released 2008-01-10
 
- since 0.29_3
- * DomainKeys, identity matching: a DomainKey-Signature's domain
-   should match the From/Sender address, as long as the From/Sender
-   was included in the signature
- * API improvements:
-   * Key parameter for Signature constructor, Signer constructor
-
- since 0.29
  * includes speed-up optimizations by Mark Martinec
+ * DomainKeys, implement proper identity matching...
+   a DomainKey-Signature's domain should match the From/Sender address
  * several more test cases
  * API improvements:
-   * Timestamp can be specified when creating a Signer/Signature
+   * accept additional arguments when creating Signer/Signature
  * bugfixes:
    * DomainKey-Signature headers were not "prettified"
    * granularity ending with '*' was not checked correctly
