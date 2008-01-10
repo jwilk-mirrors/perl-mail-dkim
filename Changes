@@ -1,6 +1,12 @@
 This file summarizes what's changed between releases of Mail-DKIM.
 See the ChangeLog file for the details.
 
+Version 0.31 - not yet released
+
+ since 0.30:
+
+
+
 Version 0.30 - released 2008-01-10
 
  * includes speed-up optimizations by Mark Martinec

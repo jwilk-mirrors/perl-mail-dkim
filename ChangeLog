@@ -1,3 +1,6 @@
+2008-01-10: Jason Long <jlong@messiah.edu>
+ * Makefile.PL: bump version
+
  -- VERSION 0.30 --
 
 2007-12-10: Jason Long <jlong@messiah.edu>

@@ -15,7 +15,7 @@ use Mail::DKIM::Signature;
 package Mail::DKIM::Common;
 use base "Mail::DKIM::MessageParser";
 use Carp;
-our $VERSION = '0.30';
+our $VERSION = '0.31';
 
 sub new
 {

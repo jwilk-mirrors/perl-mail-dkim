@@ -1,4 +1,4 @@
-Mail-DKIM version 0.30
+Mail-DKIM version 0.31
 ======================
 
 This module implements the various components of the DKIM and DomainKeys
@@ -47,7 +47,7 @@ installed Crypt::OpenSSL::RSA module and OpenSSL libraries.
 
 COPYRIGHT AND LICENCE
 
-Copyright (C) 2006-2007 by Messiah College
+Copyright (C) 2006-2008 by Messiah College
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.6 or,
