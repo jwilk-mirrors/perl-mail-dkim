@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 77;
+use Test::More tests => 78;
 
 use Mail::DKIM::Verifier;
 
@@ -46,6 +46,7 @@ test_email("good_ietf01_1.txt", "pass");
 test_email("good_ietf01_2.txt", "pass");
 test_email("good_rfc4871_3.txt", "pass");  # tests extra tags in signature
 test_email("good_rfc4871_4.txt", "pass");  # case-differing domain name
+test_email("good_1878523.txt", "pass");    # test issue #1878523
 test_email("multiple_1.txt", "pass");
 test_email("multiple_2.txt", "pass");
 my @sigs = $dkim->signatures;
