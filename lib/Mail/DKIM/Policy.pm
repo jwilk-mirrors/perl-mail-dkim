@@ -129,7 +129,8 @@ sub get_lookup_name
 	}
 	if ($prms->{Sender} && !$prms->{Domain})
 	{
-		(undef, $prms->{Domain}) = split(/\@/, $prms->{Sender}, 2);
+		# pick domain from email address
+		$prms->{Domain} = ($prms->{Sender} =~ /\@([^@]*)$/ and $1);
 	}
 
 	unless ($prms->{Domain})

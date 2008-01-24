@@ -333,7 +333,7 @@ sub check_signature_identity
 
 	my $d = $signature->domain;
 	my $i = $signature->identity;
-	if (defined($i) && $i =~ /\@(.*)$/)
+	if (defined($i) && $i =~ /\@([^@]*)$/)
 	{
 		return match_subdomain($1, $d);
 	}

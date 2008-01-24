@@ -42,7 +42,7 @@ sub get_lookup_name
 
 	if ($prms->{Author} && !$prms->{Domain})
 	{
-		(undef, $prms->{Domain}) = split(/\@/, $prms->{Author}, 2);
+		$prms->{Domain} = ($prms->{Author} =~ /\@([^@]*)$/ and $1);
 	}
 
 	unless ($prms->{Domain})

@@ -187,7 +187,19 @@ sub check_granularity
 	$identity = lc $identity;
 	$g = lc $g;
 
-	my ($local_part, $domain_part) = split /\@/, $identity, 2;
+	# split i= value into a "local part" and a "domain part"
+	my ($local_part, $domain_part);
+	if ($identity =~ /^(.*)\@([^@]*)$/)
+	{
+		$local_part = $1;
+		$domain_part = $2;
+	}
+	else
+	{
+		$local_part = "";
+		$domain_part = $identity;
+	}
+
 
 	my ($begins, $ends) = split /\*/, $g, 2;
 	if (defined $ends)
