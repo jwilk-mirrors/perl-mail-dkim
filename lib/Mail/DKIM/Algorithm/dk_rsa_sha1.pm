@@ -121,4 +121,9 @@ sub finish_message
 	}
 }
 
+sub wants_pre_signature_headers
+{
+	return 0;
+}
+
 1;

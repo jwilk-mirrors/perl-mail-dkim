@@ -60,4 +60,9 @@ sub verify
 	return $self->check_body_hash;
 }
 
+sub wants_pre_signature_headers
+{
+	return 1;
+}
+
 1;

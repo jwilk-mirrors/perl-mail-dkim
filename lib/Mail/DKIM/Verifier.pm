@@ -191,6 +191,17 @@ sub add_signature
 				Debug_Canonicalization => $self->{Debug_Canonicalization},
 			);
 
+	# push through the headers parsed prior to the signature header
+	if ($algorithm->wants_pre_signature_headers)
+	{
+		# Note: this will include the signature header that led to this
+		# "algorithm"...
+		foreach my $head (@{$self->{headers}})
+		{
+			$algorithm->add_header($head);
+		}
+	}
+
 	# save the algorithm
 	$self->{algorithms} ||= [];
 	push @{$self->{algorithms}}, $algorithm;
