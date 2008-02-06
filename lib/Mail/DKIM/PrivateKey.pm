@@ -31,6 +31,7 @@ Mail::DKIM::PrivateKey - a private key loaded in memory for DKIM signing
 
 package Mail::DKIM::PrivateKey;
 use base "Mail::DKIM::Key";
+use Carp;
 *calculate_EM = \&Mail::DKIM::Key::calculate_EM;
 
 =head1 CONSTRUCTOR
@@ -71,7 +72,7 @@ sub load
 		}
 		$self->{'DATA'} = join '', @data;
 	} else {
-		return;
+		croak "missing required argument";
 	}
 
 	return $self;
