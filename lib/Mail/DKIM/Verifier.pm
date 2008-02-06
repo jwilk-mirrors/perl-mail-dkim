@@ -519,11 +519,11 @@ The result of the apply() method is one of: "accept", "reject", "neutral".
 sub fetch_author_policy
 {
 	my $self = shift;
+	my ($author) = @_;
 	use Mail::DKIM::DkimPolicy;
 
 	# determine address found in the "From"
-	my $author = $self->message_originator;
-	$author &&= $author->address;
+	$author ||= $self->message_originator->address;
 
 	# fetch the policy
 	return Mail::DKIM::DkimPolicy->fetch(
