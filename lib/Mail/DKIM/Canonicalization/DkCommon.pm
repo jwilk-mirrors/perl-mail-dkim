@@ -13,6 +13,14 @@ package Mail::DKIM::Canonicalization::DkCommon;
 use base "Mail::DKIM::Canonicalization::Base";
 use Carp;
 
+sub init
+{
+	my $self = shift;
+	$self->SUPER::init;
+
+	$self->{myheaders} = [];
+}
+
 sub add_header
 {
 	my $self = shift;

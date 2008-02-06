@@ -77,6 +77,7 @@ t/corpus/bad_ietf01_1.txt
 t/corpus/bad_ietf01_2.txt
 t/corpus/bad_ietf01_3.txt
 t/corpus/bad_1.txt
+t/corpus/bad_1878954.txt
 t/corpus/badkey_1.txt
 t/corpus/badkey_2.txt
 t/corpus/badkey_3.txt

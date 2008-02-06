@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 78;
+use Test::More tests => 79;
 
 use Mail::DKIM::Verifier;
 
@@ -70,6 +70,7 @@ SKIP:
 		qr/OpenSSL/i,
 		"determined OpenSSL error");
 }
+test_email("bad_1878954.txt", "fail");  # shouldn't die
 
 # test older DomainKeys messages, from Gmail and Yahoo!
 test_email("good_dk_gmail.txt", "pass");
