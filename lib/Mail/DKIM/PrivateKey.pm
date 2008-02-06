@@ -48,11 +48,12 @@ Loads the Base64-encoded key from a string already in memory.
 
 =cut
 
-sub load {
-	my $type = shift;
+sub load
+{
+	my $class = shift;
 	my %prms = @_;
-	my $self = {};
 
+	my $self = bless {}, $class;
 
 	$self->{'TYPE'} = ($prms{'Type'} or "rsa");
 
@@ -73,7 +74,7 @@ sub load {
 		return;
 	}
 
-	bless $self, $type;
+	return $self;
 }
 
 sub convert {
