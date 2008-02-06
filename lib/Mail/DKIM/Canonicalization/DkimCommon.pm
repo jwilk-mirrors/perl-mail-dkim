@@ -28,6 +28,7 @@ sub init
 		or croak "no signature specified";
 }
 
+# similar to code in DkCommon.pm
 sub add_header
 {
 	my $self = shift;

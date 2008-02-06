@@ -21,6 +21,7 @@ sub init
 	$self->{myheaders} = [];
 }
 
+# similar to code in DkimCommon.pm
 sub add_header
 {
 	my $self = shift;
@@ -28,21 +29,9 @@ sub add_header
 
 	#croak "header parse error \"$line\"" unless ($line =~ /:/);
 
-	if ($line =~ /^domainkey-signature:/i)
-	{
-		# DomainKeys never includes headers that precede the
-		# DomainKey-Signature header
-
-		# FIXME- this seems to make it impossible to have multiple
-		# DomainKey signatures in an email (wouldn't the second header
-		# cause the first header's to be broken?)
-
-		$self->{myheaders} = [];
-	}
-	else
-	{
-		push @{$self->{myheaders}}, $self->canonicalize_header($line);
-	}
+	$line =~ s/\015\012\z//s;
+	push @{$self->{myheaders}},
+		$self->canonicalize_header($line . "\015\012");
 }
 
 sub finish_header
