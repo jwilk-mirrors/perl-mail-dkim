@@ -1,3 +1,20 @@
+2008-02-06: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Canonicalization/DkCommon.pm, DkimCommon.pm:
+   bugfix for issue #1878954 (undef value used as an ARRAY ref)
+ * lib/Mail/DKIM/Canonicalization/DkCommon.pm: some cleanup,
+   possible bugfix for verifying message with two+ DomainKey signatures
+ * lib/Mail/DKIM/Verifier.pm: allow caller of fetch_author_policy() to
+   specify domain (#1879197)
+ * lib/Mail/DKIM/PrivateKey.pm: cleanup- indentation style;
+   throw error on load() if missing argument
+
+2008-01-24: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/DkimPolicy.pm, Policy.pm, PublicKey.pm, Verifier.pm:
+   fix parsing regexes used to split email address into localpart and
+   domain (issue #1878994)
+
+ -- VERSION 0.30.1 --
+
 2008-01-24: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Algorithm/*: implement wants_pre_signature_headers()
    for each algorithm
