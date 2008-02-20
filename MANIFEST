@@ -44,6 +44,7 @@ t/signature.t
 t/simple_canonicalization.t
 t/signer.t
 t/signer_policy.t
+t/textwrap.t
 t/verifier.t
 t/test.key
 t/test5.txt
