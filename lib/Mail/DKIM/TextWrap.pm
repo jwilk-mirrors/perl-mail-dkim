@@ -23,12 +23,6 @@ sub new
 	return bless $self, $class;
 }
 
-sub finish
-{
-	my $self = shift;
-	$self->output($self->{soft_space});
-}
-
 sub _calculate_new_column
 {
 	my ($cur, $text) = @_;
@@ -107,6 +101,13 @@ sub add
 	}
 }
 
+sub finish
+{
+	my $self = shift;
+	$self->output($self->{soft_space});
+	$self->reset;
+}
+
 sub output
 {
 	my $self = shift;
@@ -121,6 +122,13 @@ sub output
 	{
 		$$out .= $to_print;
 	}
+}
+
+sub reset
+{
+	my $self = shift;
+	$self->{cur} = 0;
+	$self->{soft_space} = "";
 }
 
 1;
