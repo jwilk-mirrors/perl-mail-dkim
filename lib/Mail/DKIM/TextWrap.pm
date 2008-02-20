@@ -6,6 +6,113 @@ use warnings;
 package Mail::DKIM::TextWrap;
 use Carp;
 
+=head1 NAME
+
+Mail::DKIM::TextWrap - text wrapping module written for use with DKIM
+
+=head1 SYNOPSIS
+
+  my $output = "";
+  my $tw = Mail::DKIM::TextWrap->new(
+                  Margin => 10,
+                  Output => \$output,
+              );
+  $tw->add("Mary had a little lamb, whose fleece was white as snow.\n");
+  $tw->finish;
+
+  print $output;
+
+=head1 DESCRIPTION
+
+This is a general-purpose text-wrapping module that I wrote because
+I had some specific needs with Mail::DKIM that none of the
+contemporary text-wrapping modules offered.
+
+Specifically, it offers the ability to change wrapping options
+in the middle of a paragraph. For instance, with a DKIM signature:
+
+  DKIM-Signature: a=rsa; c=simple; h=first:second:third:fourth;
+          b=Xr2mo2wmb1LZBwmEJElIPezal7wQQkRQ8WZtxpofkNmXTjXf8y2f0
+
+the line-breaks can be inserted next to any of the colons of the h= tag,
+or any character of the b= tag. The way I implemented this was to
+serialize the signature one element at a time, changing the
+text-wrapping options at the start and end of each tag.
+
+=head1 TEXT WRAPPING OPTIONS
+
+Text wrapping options can be specified when calling new(), or
+by simply changing the property as needed. For example, to change
+the number of characters allowed per line:
+
+  $tw->{Margin} = 20;
+
+=over
+
+=item Break
+
+a regular expression matching characters where a line break
+can be inserted. Line breaks are inserted AFTER a matching substring.
+The default is C</\s/>.
+
+=item BreakBefore
+
+a regular expression matching characters where a line break
+can be inserted. Line breaks are inserted BEFORE a matching substring.
+Usually, you want to use Break, rather than BreakBefore.
+The default is C<undef>.
+
+=item Margin
+
+specifies how many characters to allow per line.
+The default is 72.
+
+=item Separator
+
+the text to insert when a linebreak is needed.
+The default is "\n". If you want to set a following-line indent
+(e.g. all lines but the first begin with four spaces),
+use something like "\n    ".
+
+=item Swallow
+
+a regular expression matching characters that can be omitted
+when a line break occurs. For example, if you insert a line break
+between two words, then you are replacing a "space" with the line
+break, so you are omitting the space. On the other hand, if you
+insert a line break between two parts of a hyphenated word, then
+you are breaking at the hyphen, but you still want to display the
+hyphen.
+The default is C</\s/>.
+
+=back
+
+=head1 CONSTRUCTOR
+
+=head2 new() - create a new text-wrapping object
+
+  my $tw = Mail::DKIM::TextWrap->new(
+                      Output => \$output,
+                      %wrapping_options,
+                  );
+
+The text-wrapping object encapsulates the current options and the
+current state of the text stream. In addition to specifying text
+wrapping options as described in the section above, the following
+options are recognized:
+
+=over
+
+=item Output
+
+a scalar reference, or a glob reference, to specify where the
+"wrapped" text gets output to. If not specified, the default of
+STDOUT is used.
+
+=back
+
+=cut
+
 sub new
 {
 	my $class = shift;
@@ -24,6 +131,20 @@ sub new
 	return bless $self, $class;
 }
 
+# Internal properties:
+#
+# cur - the last known column position
+#
+# soft_space - contains added text that will not be printed if a linebreak
+#              occurs
+#
+
+# Internal methods:
+#
+# _calculate_new_column() - determine where cur would be after adding some text
+#
+# my $new_cur = _calculate_new_column($cur, "some additional\ntext");
+#
 sub _calculate_new_column
 {
 	my ($cur, $text) = @_;
@@ -45,6 +166,29 @@ sub _calculate_new_column
 	$cur += length($text);
 	return $cur;
 }
+
+=head1 METHODS
+
+=head2 add() - process some text that can be wrapped
+
+  $tw->add("Mary had a little lamb.\n");
+
+You can add() all the text at once, or add() the text in parts by calling
+add() multiple times. If you are doing the latter, be aware that the
+text can be "wrapped" between add() calls, even if it does not match
+the "Break" pattern.
+
+For example, given a margin of 12, this will not wrap
+
+  $tw->add("Abcdefghijklmnopqrstuvwxyz");
+
+but this will
+
+  $tw->add("Abcdefgh");
+  $tw->add("ijklmnop");
+  $tw->add("qrstuvwxyz");
+
+=cut
 
 sub add
 {
@@ -83,11 +227,6 @@ sub add
 			$next_soft_space = "";
 		}
 
-# cur - the last known column position
-#
-# soft_space - contains added text that will not be printed if a linebreak
-#              occurs
-#
 		my $to_print = $self->{soft_space} . $word;
 		my $new_pos = _calculate_new_column($self->{cur}, $to_print);
 
@@ -113,6 +252,15 @@ sub add
 		$text = $remaining;
 	}
 }
+
+=head2 finish() - call when no more text is to be added
+
+  $tw->finish;
+
+Call this when finished adding text, so that any remaining text
+in TextWrap's buffers will be output.
+
+=cut
 
 sub finish
 {

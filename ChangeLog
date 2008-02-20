@@ -1,3 +1,10 @@
+2008-02-20: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/TextWrap.pm: implement BreakBefore option;
+   provided a bunch of documentation for this module
+ * lib/Mail/DKIM/KeyValueList.pm: colon-separated lists are now "wrapped"
+   with colons appearing at the beginning of the next line instead of
+   at the end of the current line (hoping this will fix #1868648)
+
 2008-02-06: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Signature.pm: conserve space by omitting "c=simple"
    and "q=dns/txt" (#1878518)
