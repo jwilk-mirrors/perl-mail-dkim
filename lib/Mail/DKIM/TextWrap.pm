@@ -13,6 +13,7 @@ sub new
 	my $self = {
 		Margin => 72,
 		Break => qr/\s/,
+		BreakBefore => undef,
 		Swallow => qr/\s/,
 		Separator => "\n",
 		cur => 0,
@@ -48,12 +49,19 @@ sub _calculate_new_column
 sub add
 {
 	my ($self, $text) = @_;
-	my $break = $self->{Break};
+	my $break_after = $self->{Break};
+	my $break_before = $self->{BreakBefore};
 	my $swallow = $self->{Swallow};
 	while (length $text)
 	{
 		my ($word, $remaining);
-		if (defined($break) and $text =~ /^(.*?)($break)(.*)$/s)
+		if (defined($break_before) and $text =~ /^(.+?)($break_before)(.*)$/s)
+		{
+			# note- $1 should have at least one character
+			$word = $1;
+			$remaining = $2 . $3;
+		}
+		elsif (defined($break_after) and $text =~ /^(.*?)($break_after)(.*)$/s)
 		{
 			$word = $1 . $2;
 			$remaining = $3;
@@ -75,6 +83,11 @@ sub add
 			$next_soft_space = "";
 		}
 
+# cur - the last known column position
+#
+# soft_space - contains added text that will not be printed if a linebreak
+#              occurs
+#
 		my $to_print = $self->{soft_space} . $word;
 		my $new_pos = _calculate_new_column($self->{cur}, $to_print);
 
@@ -83,7 +96,7 @@ sub add
 			# what would happen if we put the separator in?
 			my $w_sep = _calculate_new_column($self->{cur},
 					$self->{Separator});
-			if (defined($break) && $w_sep < $self->{cur})
+			if ($w_sep < $self->{cur})
 			{
 				# inserting the separator gives us more room,
 				# so do it

@@ -168,6 +168,7 @@ sub wrap
 		}
 
 		$wrap->{Break} = undef;
+		$wrap->{BreakBefore} = undef;
 		$did_first ? $wrap->add(";") : ($did_first = 1);
 		$wrap->add($raw_name . "=");
 
@@ -182,6 +183,7 @@ sub wrap
 			$raw_value =~ s/^\s|\s$//g; #trims preceding/trailing spaces
 			$raw_value =~ s/\s*:\s*/:/g;
 			$wrap->{Break} = qr/[\s:]/;
+			$wrap->{BreakBefore} = qr/[:]/;
 		}
 		elsif ($tagtype eq "")
 		{

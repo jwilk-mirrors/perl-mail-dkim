@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::Simple tests => 11;
+use Test::Simple tests => 14;
 
 use Mail::DKIM::TextWrap;
 
@@ -67,6 +67,19 @@ check_output("colon-separated list with spaces");
 ok($lines[0] =~ /^\s/, "first line begins with space");
 ok($lines[$#lines] =~ /\s$/, "last line ends with space");
 ok(grep(!/(^\s|\s$)/, @lines[1 .. ($#lines - 1)]), "middle lines neither begin nor end with space");
+
+$tw = Mail::DKIM::TextWrap->new(
+		Margin => 10,
+		Output => \$output,
+		Break => qr/[\s:]/,
+		BreakBefore => qr/[:]/,
+		);
+$tw->add("apple:orange:banana:apricot:lime:kiwi\n");
+$tw->finish;
+check_output("colon-separated list, split before colons");
+ok($lines[0] eq "apple", "first line looks ok");
+ok($lines[1] eq ":orange", "second line looks ok");
+ok($lines[$#lines] =~ /:kiwi$/, "last line looks ok");
 
 sub check_output
 {
