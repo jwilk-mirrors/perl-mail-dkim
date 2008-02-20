@@ -5,11 +5,14 @@ Version 0.31 - not yet released
 
  since 0.30.1:
   * some error detail messages were changed (see ChangeLog, 2008-01-10 entry)
-  * by default, DKIM signatures no longer have a c= or q= tag
-    (they are optional tags)
-  * various bugfixes
+  * by default, and when possible, DKIM signatures now omit c= and q= tags
+    (they are optional tags) (issue #1878518)
+  * bugfixes:
+    * "undef value" error when DKIM signature appears at end of header
+      (issue #1878954)
+    * use proper regexp for splitting email address (issue #1878994)
   * API improvements:
-    * can specify a domain for fetch_author_policy()
+    * can specify a domain for fetch_author_policy() (issue #1879197)
 
 
 Version 0.30.1 - released 2008-01-24
