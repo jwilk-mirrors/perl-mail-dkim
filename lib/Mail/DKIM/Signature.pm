@@ -51,10 +51,10 @@ sub new
 	$self->version("1");
 	$self->algorithm($prms{'Algorithm'} || "rsa-sha1");
 	$self->signature($prms{'Signature'});
-	$self->canonicalization($prms{'Method'} || "simple");
+	$self->canonicalization($prms{'Method'}) if exists $prms{'Method'};
 	$self->domain($prms{'Domain'});
 	$self->headerlist($prms{'Headers'});
-	$self->protocol($prms{'Query'} || "dns/txt");
+	$self->protocol($prms{'Query'}) if exists $prms{'Query'};
 	$self->selector($prms{'Selector'});
 	$self->identity($prms{'Identity'}) if exists $prms{'Identity'};
 	$self->timestamp($prms{'Timestamp'}) if defined $prms{'Timestamp'};
@@ -652,7 +652,7 @@ sub method
 		$self->set_tag("c", shift);
 	}
 
-	return lc $self->get_tag("c");
+	return (lc $self->get_tag("c")) || "simple";
 }	
 
 =head2 protocol() - get or set the query methods (q=) field

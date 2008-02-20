@@ -6,7 +6,7 @@ use Test::Simple tests => 15;
 
 use Mail::DKIM::Signer;
 
-my $EXPECTED_RE = qr/njTGkk8JIhv23OEV4VSokdvN5q/;
+my $EXPECTED_RE = qr/CIDMVc94VWhLZ4Ktq2Q05011qBXSO/;
 
 my $tdir = -f "t/test.key" ? "t" : ".";
 my $keyfile = "$tdir/test.key";

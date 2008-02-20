@@ -1,4 +1,8 @@
 2008-02-06: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Signature.pm: conserve space by omitting "c=simple"
+   and "q=dns/txt" (#1878518)
+
+2008-02-06: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Canonicalization/DkCommon.pm, DkimCommon.pm:
    bugfix for issue #1878954 (undef value used as an ARRAY ref)
  * lib/Mail/DKIM/Canonicalization/DkCommon.pm: some cleanup,
