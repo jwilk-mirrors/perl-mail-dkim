@@ -465,14 +465,22 @@ sub get_algorithm_class
 Public key to fetch is determined by the protocol, selector, and domain
 fields.
 
+This method caches the result of the fetch, so subsequent calls will not
+require additional DNS queries.
+
+This method will C<die> if an error occurs.
+
 =cut
 
 sub get_public_key
 {
 	my $self = shift;
 
-	unless ($self->{public})
+	unless (exists $self->{public})
 	{
+		# this ensures we only try fetching once, even if an error occurs
+		$self->{public} = undef;
+
 		my $pubk = Mail::DKIM::PublicKey->fetch(
 			Protocol => $self->protocol,
 			Selector => $self->selector,
