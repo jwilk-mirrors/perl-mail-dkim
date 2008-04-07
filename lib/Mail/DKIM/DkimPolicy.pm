@@ -120,7 +120,8 @@ sub apply
 
 	foreach my $signature ($dkim->signatures)
 	{
-		next if $signature->result ne "pass";
+		# only valid/verified signatures are considered
+		next unless ($signature->result && $signature->result eq "pass");
 
 		my $oa = $dkim->message_originator->address;
 		if ($signature->identity_matches($oa))
