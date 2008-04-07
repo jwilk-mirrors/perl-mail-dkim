@@ -28,7 +28,7 @@ Mail::DKIM::Signer - generates a DKIM signature for a message
                   Method => "relaxed",
                   Domain => "example.org",
                   Selector => "selector1",
-                  KeyFile => "private.key");
+                  KeyFile => "private.key",
              );
 
   # read an email from a file handle
