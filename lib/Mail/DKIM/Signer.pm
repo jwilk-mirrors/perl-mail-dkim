@@ -597,7 +597,8 @@ created. E.g.,
 Or the policy object can actually create the signature, using the
 add_signature method within the policy object.
 If you add a signature, you do not need to return a nonzero value.
-This mechanism can be utilized to create multiple signatures.
+This mechanism can be utilized to create multiple signatures,
+or to create the older DomainKey-style signatures.
 
   my $policyfn = sub {
       my $dkim = shift;
@@ -605,6 +606,14 @@ This mechanism can be utilized to create multiple signatures.
               new Mail::DKIM::Signature(
                       Algorithm => "rsa-sha1",
                       Method => "relaxed",
+                      Headers => $dkim->headers,
+                      Domain => "example.org",
+                      Selector => "mx1",
+              ));
+      $dkim->add_signature(
+              new Mail::DKIM::DkSignature(
+                      Algorithm => "rsa-sha1",
+                      Method => "nofws",
                       Headers => $dkim->headers,
                       Domain => "example.org",
                       Selector => "mx1",
