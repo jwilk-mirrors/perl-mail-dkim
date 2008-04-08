@@ -1,6 +1,16 @@
+2008-04-07: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/DkimPolicy.pm: fix "use of uninitialized value in string"
+   errors
+ * lib/Mail/DKIM/Signature.pm: provide public API to public-key object of
+   signatures, e.g. so its flags can be accessed (issue #1879215);
+   also, if an error occurs fetching the public-key record, the failure
+   is cached so it won't get tried again
+ * lib/Mail/DKIM/Signer.pm: document how to create a DomainKey-Signature
+
 2008-02-20: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/TextWrap.pm: implement BreakBefore option;
    provided a bunch of documentation for this module
+ * t/textwrap.t: tests new functionality of TextWrap
  * lib/Mail/DKIM/KeyValueList.pm: colon-separated lists are now "wrapped"
    with colons appearing at the beginning of the next line instead of
    at the end of the current line (hoping this will fix #1868648)
