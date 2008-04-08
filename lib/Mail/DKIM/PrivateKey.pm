@@ -47,6 +47,12 @@ Loads the Base64-encoded key from the specified file.
 
 Loads the Base64-encoded key from a string already in memory.
 
+  my $key3 = Mail::DKIM::PrivateKey->load(Cork => $openssl_object);
+
+Creates a Mail::DKIM::PrivateKey wrapper object for the given
+OpenSSL key object. The key object should be of type
+L<Crypt::OpenSSL::RSA>.
+
 =cut
 
 sub load
@@ -71,12 +77,24 @@ sub load
 			push @data, $_;
 		}
 		$self->{'DATA'} = join '', @data;
+	} elsif ($prms{'Cork'}) {
+		$self->{'CORK'} = $prms{'Cork'};
 	} else {
 		croak "missing required argument";
 	}
 
 	return $self;
 }
+
+=head1 METHODS
+
+=head2 cork() - access the underlying OpenSSL key object
+
+  $openssl_object = $key->cork;
+
+The returned object is of type L<Crypt::OpenSSL::RSA>.
+
+=cut
 
 sub convert {
 	use Crypt::OpenSSL::RSA;
@@ -148,5 +166,19 @@ sub sign_digest
 	my $EM = calculate_EM($digest_algorithm, $digest, $k);
 	return $rsa_priv->decrypt($EM);
 }
+
+=head1 AUTHOR
+
+Jason Long, E<lt>jlong@messiah.eduE<gt>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2006-2008 by Messiah College
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.6 or,
+at your option, any later version of Perl 5 you may have available.
+
+=cut
 
 1;

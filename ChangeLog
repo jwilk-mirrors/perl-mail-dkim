@@ -1,3 +1,6 @@
+2008-04-08: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/PrivateKey.pm: allow Cork argument to new() (#1879209)
+
 2008-04-07: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/DkimPolicy.pm: fix "use of uninitialized value in string"
    errors
