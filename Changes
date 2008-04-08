@@ -1,27 +1,23 @@
 This file summarizes what's changed between releases of Mail-DKIM.
 See the ChangeLog file for the details.
 
-Version 0.31 - not yet released
+Version 0.31 - released 2008-04-14
 
- since 0.30_8:
-  * DKIM and DomainKey signatures are now wrapped so that line breaks
-    occur before colon (':') separators instead of after; this avoids
-	confusing some broken MUAs (issue #1868648)
-  * API improvements:
-    * can access a signature's public-key object (issue #1879215)
-    * can specify an OpenSSL-private-key object for PrivateKey->new()
-      (issue #1879209)
-
- since 0.30.1:
   * some error detail messages were changed (see ChangeLog, 2008-01-10 entry)
   * by default, and when possible, DKIM signatures now omit c= and q= tags
     (they are optional tags) (issue #1878518)
+  * DKIM and DomainKey signatures are now wrapped so that line breaks
+    occur before colon (':') separators instead of after; this avoids
+	confusing some broken MUAs (issue #1868648)
   * bugfixes:
     * "undef value" error when DKIM signature appears at end of header
       (issue #1878954)
     * use proper regexp for splitting email address (issue #1878994)
   * API improvements:
     * can specify a domain for fetch_author_policy() (issue #1879197)
+    * can access a signature's public-key object (issue #1879215)
+    * can specify an OpenSSL-private-key object for PrivateKey->new()
+      (issue #1879209)
 
 
 Version 0.30.1 - released 2008-01-24
