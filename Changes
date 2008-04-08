@@ -3,6 +3,15 @@ See the ChangeLog file for the details.
 
 Version 0.31 - not yet released
 
+ since 0.30_8:
+  * DKIM and DomainKey signatures are now wrapped so that line breaks
+    occur before colon (':') separators instead of after; this avoids
+	confusing some broken MUAs (issue #1868648)
+  * API improvements:
+    * can access a signature's public-key object (issue #1879215)
+    * can specify an OpenSSL-private-key object for PrivateKey->new()
+      (issue #1879209)
+
  since 0.30.1:
   * some error detail messages were changed (see ChangeLog, 2008-01-10 entry)
   * by default, and when possible, DKIM signatures now omit c= and q= tags

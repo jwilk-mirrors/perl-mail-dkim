@@ -4,7 +4,7 @@ use ExtUtils::MakeMaker;
 # the contents of the Makefile that is written.
 WriteMakefile(
 	NAME           => 'Mail::DKIM',
-	VERSION        => "0.30_8",
+	VERSION        => "0.30_9",
 	PREREQ_PM      => {
 			Crypt::OpenSSL::RSA => 0.24,
 			Digest::SHA1 => 0,
