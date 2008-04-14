@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 79;
+use Test::More tests => 80;
 
 use Mail::DKIM::Verifier;
 
@@ -137,6 +137,7 @@ TODO:
 	local $TODO = "not fixed yet";
 	test_email("badkey_12.txt", "invalid"); # public key g= != i= by case
 };
+test_email("badkey_13.txt", "invalid"); # public key g= matches From but not i=
 
 
 sub read_file
