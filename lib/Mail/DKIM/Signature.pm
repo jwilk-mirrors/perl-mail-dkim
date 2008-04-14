@@ -502,6 +502,19 @@ sub get_public_key
 	return $self->{public};
 }
 
+=head2 get_tag() - access the raw value of a tag in this signature
+
+  my $raw_identity = $signature->get_tag("i");
+
+Use this method to access a tag not already supported by Mail::DKIM,
+or if you want to bypass decoding of the value by Mail::DKIM.
+
+For example, the raw i= (identity) tag is encoded in quoted-printable
+form. If you use the identity() method, Mail::DKIM will decode from
+quoted-printable before returning the value. But if you use
+get_tag("i"), you can access the encoded quoted-printable form of
+the value.
+
 =head2 hash_algorithm() - access the hash algorithm specified in this signature
 
   my $hash = $signature->hash_algorithm;

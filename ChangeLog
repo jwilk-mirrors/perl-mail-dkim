@@ -1,4 +1,7 @@
 2008-04-14: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Signature.pm: documentation for get_tag()
+
+2008-04-14: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/PublicKey.pm (check_granularity): do case-sensitive
    comparison (issue #1938112)
 
