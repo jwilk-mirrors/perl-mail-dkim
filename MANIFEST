@@ -96,6 +96,9 @@ t/corpus/goodkey_1.txt
 t/corpus/goodkey_2.txt
 t/corpus/goodkey_3.txt
 t/corpus/goodkey_4.txt
+t/corpus/good_qp_1.txt
+t/corpus/good_qp_2.txt
+t/corpus/good_qp_3.txt
 t/corpus/mine_ietf01_1.txt
 t/corpus/mine_ietf01_2.txt
 t/corpus/mine_ietf01_3.txt
