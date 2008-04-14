@@ -1,4 +1,8 @@
 2008-04-14: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/PublicKey.pm (check_granularity): do case-sensitive
+   comparison (issue #1938112)
+
+2008-04-14: Jason Long <jlong@messiah.edu>
  * t/corpus/badkey_12.txt: fix g= case-sensitivity test so it won't give
    false positives on dkim-milter
  * t/corpus/badkey_13.txt: test that the verifier checks granularity

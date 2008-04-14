@@ -183,10 +183,6 @@ sub check_granularity
 		$g = "*";
 	}
 
-	# do case-insensitive matching
-	$identity = lc $identity;
-	$g = lc $g;
-
 	# split i= value into a "local part" and a "domain part"
 	my ($local_part, $domain_part);
 	if ($identity =~ /^(.*)\@([^@]*)$/)
