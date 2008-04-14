@@ -89,7 +89,7 @@ is written to the referenced string or file handle.
 package Mail::DKIM::Verifier;
 use base "Mail::DKIM::Common";
 use Carp;
-our $VERSION = 0.31;
+our $VERSION = 0.32;
 
 sub init
 {

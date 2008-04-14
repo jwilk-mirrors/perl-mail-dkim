@@ -1,6 +1,8 @@
 This file summarizes what's changed between releases of Mail-DKIM.
 See the ChangeLog file for the details.
 
+Version 0.32
+
 Version 0.31 - released 2008-04-14
 
   * some error detail messages were changed (see ChangeLog, 2008-01-10 entry)
