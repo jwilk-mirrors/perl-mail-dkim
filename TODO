@@ -1,5 +1,4 @@
 Common:
- - remove dependency on Digest::SHA1 (use Digest::SHA instead)
  - don't "die" on PRINT or CLOSE, find better ways to report the error
 
 DKIM-Signature:

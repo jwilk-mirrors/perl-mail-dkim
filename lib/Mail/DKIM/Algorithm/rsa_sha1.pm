@@ -16,17 +16,17 @@ package Mail::DKIM::Algorithm::rsa_sha1;
 use base "Mail::DKIM::Algorithm::Base";
 use Carp;
 use MIME::Base64;
-use Digest::SHA1;
+use Digest::SHA;
 
 sub init_digests
 {
 	my $self = shift;
 
 	# initialize a SHA-1 Digest
-	$self->{header_digest} = new Digest::SHA1;
+	$self->{header_digest} = Digest::SHA->new(1);
 	if ($self->{draft_version} eq "01")
 	{
-		$self->{body_digest} = new Digest::SHA1;
+		$self->{body_digest} = Digest::SHA->new(1);
 	}
 	else
 	{

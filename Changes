@@ -3,6 +3,11 @@ See the ChangeLog file for the details.
 
 Version 0.32
 
+ since 0.31:
+  * removed requirement for Digest::SHA1 (issue #1832549).
+    We now use the more capable Digest::SHA module for SHA-1 and SHA-256.
+
+
 Version 0.31 - released 2008-04-14
 
   * some error detail messages were changed (see ChangeLog, 2008-01-10 entry)

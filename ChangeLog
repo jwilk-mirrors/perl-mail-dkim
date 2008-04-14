@@ -1,4 +1,9 @@
 2008-04-14: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Algorithm/dk_rsa_sha1.pm, rsa_sha1.pm: replace use of
+   Digest::SHA1 with equivalent Digest::SHA
+ * Makefile.PL: remove requirement for Digest::SHA1
+
+2008-04-14: Jason Long <jlong@messiah.edu>
  * Makefile.PL: bump version
 
  -- VERSION 0.31 --

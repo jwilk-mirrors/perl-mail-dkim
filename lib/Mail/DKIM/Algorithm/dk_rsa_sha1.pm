@@ -18,7 +18,7 @@ package Mail::DKIM::Algorithm::dk_rsa_sha1;
 use base "Mail::DKIM::Algorithm::Base";
 use Carp;
 use MIME::Base64;
-use Digest::SHA1;
+use Digest::SHA;
 
 sub finish_header
 {
@@ -79,7 +79,7 @@ sub init_digests
 	my $self = shift;
 
 	# initialize a SHA-1 Digest
-	$self->{header_digest} = new Digest::SHA1;
+	$self->{header_digest} = Digest::SHA->new(1);
 	$self->{body_digest} = $self->{header_digest};
 }
 
