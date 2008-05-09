@@ -8,6 +8,7 @@ Version 0.32
     We now use the more capable Digest::SHA module for SHA-1 and SHA-256.
   * bugfix:
     * granularity checking should be case-sensitive (issue #1938112).
+    * identity tag now uses quoted-printable encoding (issue #1839015).
 
 
 Version 0.31 - released 2008-04-14
