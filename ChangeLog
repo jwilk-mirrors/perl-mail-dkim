@@ -1,8 +1,15 @@
 2008-05-09: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Algorithm/dk_rsa_sha1.pm: when populating a DomainKey
+   signature's identity, record where the identity came from
+ * lib/Mail/DKIM/DkSignature.pm (identity_source): make the source of
+   the identity (i.e. sender header or from header) available as a
+   method
+
+2008-05-09: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Signature.pm (identity): do quoted-printable encoding/
    decoding for the i= tag (issue #1839015)
- * t/corpus/good_qp_1.txt, good_qp_2.txt, good_qp_3.txt: three test files
-   for identities using quoted-printable encoding
+ * t/corpus/good_qp_1.txt, good_qp_2.txt, good_qp_3.txt: three test
+   files for identities using quoted-printable encoding
 
 2008-04-14: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Signature.pm: documentation for get_tag()

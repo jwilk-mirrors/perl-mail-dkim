@@ -274,11 +274,38 @@ In list context, the header field names will be returned as a list.
 #sub headerlist
 # is in Signature.pm
 
+=head2 identity() - get the signing identity
+
+  my $i = $signature->identity;
+
+In DomainKey signatures, the signing identity is the first address
+found in the Sender header or the From header. This field is
+populated by the Verifier when processing a DomainKey signature.
+
+=cut
+
 sub identity
 {
 	my $self = shift;
 	croak "cannot change identity on " . ref($self) if @_;
 	return $self->{dk_identity};
+}
+
+=head2 identity_source() - determine which header had the identity
+
+  my $source = $signature->identity_source;
+
+If the message is being verified, this method will tell you which
+of the message headers was used to determine the signature identity.
+Possible values are "header.sender" and "header.from".
+
+=cut
+
+sub identity_source
+{
+	my $self = shift;
+	croak "unexpected argument" if @_;
+	return $self->{dk_identity_source};
 }
 
 # init_identity() - initialize the DomainKeys concept of identity
@@ -294,6 +321,7 @@ sub init_identity
 {
 	my $self = shift;
 	$self->{dk_identity} = shift;
+	$self->{dk_identity_source} = shift;
 }
 
 sub method

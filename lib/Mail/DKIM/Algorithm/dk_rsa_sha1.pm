@@ -33,10 +33,14 @@ sub finish_header
 		my $author = $self->{canon}->{interesting_header}->{from};
 		$author = defined($author) && (Mail::Address->parse($author))[0];
 
-		$s->init_identity(
-			$sender ? $sender->address :
-			$author ? $author->address :
-			undef);
+		if ($sender)
+		{
+			$s->init_identity($sender->address, "header.sender");
+		}
+		elsif ($author)
+		{
+			$s->init_identity($author->address, "header.from");
+		}
 	}
 	return;
 }
