@@ -1,9 +1,8 @@
 This file summarizes what's changed between releases of Mail-DKIM.
 See the ChangeLog file for the details.
 
-Version 0.32
+Version 0.32 - released 2008-06-03
 
- since 0.31:
   * removed requirement for Digest::SHA1 (issue #1832549).
     We now use the more capable Digest::SHA module for SHA-1 and SHA-256.
   * bugfixes:
