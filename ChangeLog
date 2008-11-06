@@ -3,6 +3,7 @@
    about an uninitialized value
  * lib/Mail/DKIM/Common.pm (message_originator, message_sender): if a
    From/Sender line is present, but blank, still return a valid object
+ * t/public_key.t: new test to check for DNS problems
 
 2008-05-09: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Algorithm/dk_rsa_sha1.pm: when populating a DomainKey

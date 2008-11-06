@@ -40,6 +40,7 @@ scripts/test_canonicalization.pl
 scripts/test_nowsp_rsa_sha1.pl
 t/Mail-DKIM.t
 t/policy.t
+t/public_key.t
 t/signature.t
 t/simple_canonicalization.t
 t/signer.t
