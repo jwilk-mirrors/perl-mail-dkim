@@ -51,6 +51,7 @@ Testing (some of this may already be implemented):
    - SERVFAIL
    - syntax error in public key record
  - test DNS timeout for signing policy
+ - test key records composed of fragmented TXT records
  - test signature options:
    - unspecified query type
    - query type of "dns/"
