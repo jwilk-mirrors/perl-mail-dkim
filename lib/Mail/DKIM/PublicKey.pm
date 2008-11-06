@@ -59,14 +59,14 @@ sub fetch
 	# perform DNS query for public key...
 	#   if the query takes too long, we should generate an error
 	#
-	my $resp = Mail::DKIM::DNS::query($host, "TXT");
-	unless ($resp)
+	my @resp = Mail::DKIM::DNS::query($host, "TXT");
+	unless (@resp)
 	{
 		# no response => NXDOMAIN
 		return;
 	}
 
-	foreach my $ans ($resp->answer) {
+	foreach my $ans (@resp) {
 		next unless $ans->type eq "TXT";
 		$strn = join "", $ans->char_str_list;
 	}

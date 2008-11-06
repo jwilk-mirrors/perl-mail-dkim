@@ -88,15 +88,15 @@ sub fetch
 	#   if the query takes too long, we should catch it and generate
 	#   an error
 	#
-	my $resp = Mail::DKIM::DNS::query($host, "TXT");
-	unless ($resp)
+	my @resp = Mail::DKIM::DNS::query($host, "TXT");
+	unless (@resp)
 	{
 		# no response => NXDOMAIN, use default policy
 		return $class->default;
 	}
 
 	my $strn;
-	foreach my $ans ($resp->answer) {
+	foreach my $ans (@resp) {
 		next unless $ans->type eq "TXT";
 		$strn = join "", $ans->char_str_list;
 	}

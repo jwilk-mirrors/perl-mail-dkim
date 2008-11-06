@@ -6,11 +6,15 @@
 use strict;
 use warnings;
 
-# this class contains a method to perform asynchronous DNS queries
+# This class contains a method to perform synchronous DNS queries.
+# Hopefully some day it will have a method to perform
+# asynchronous DNS queries.
 
 package Mail::DKIM::DNS;
 use Net::DNS;
 
+# query- now returns a list of RR objects
+#
 sub query
 {
 	my ($domain, $type) = @_;
@@ -44,7 +48,8 @@ sub query
 	alarm 0; #FIXME- restore previous alarm?
 	die $E if $E;
 
-	return $resp;
+	return () if not $resp;
+	return grep { lc $_->type eq lc $type } $resp->answer;
 }
 
 1;
