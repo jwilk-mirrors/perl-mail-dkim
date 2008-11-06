@@ -1,4 +1,7 @@
 2008-11-06: Jason Long <jlong@messiah.edu>
+ * t/signature.t: test Mark Martinec's bad-signature-wrapping bug
+
+2008-11-06: Jason Long <jlong@messiah.edu>
  * t/verifier.t: use a "fake" dns implementation, so that this test
    will pass no matter the user's state of dns
 

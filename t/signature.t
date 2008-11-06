@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::Simple tests => 9;
+use Test::Simple tests => 11;
 
 use Mail::DKIM::Signature;
 use Mail::DKIM::TextWrap;
@@ -43,3 +43,17 @@ $signature->prettify_safe;
 print "#SAFE--->\n" . $signature->as_string . "\n";
 $signature->prettify;
 print "#PRETTY->\n" . $signature->as_string . "\n";
+
+
+$unparsed = "DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ijs.si; s=jakla2;\n\tt=1225813757; bh=g3zLYH4xKxcPrHOD18z9YfpQcnk/GaJedfustWU5uGs=; b=";
+$signature = Mail::DKIM::Signature->parse($unparsed);
+ok($signature, "parse() works (III)");
+
+print "#BEFORE->\n" . $signature->as_string . "\n";
+$signature->data("blah");
+print "#AFTER-->\n" . $signature->as_string . "\n";
+my $first_part_1 = ($signature->as_string =~ /^(.*?b=)/s)[0];
+$signature->prettify_safe;
+print "#PRETTY->\n" . $signature->as_string . "\n";
+my $first_part_2 = ($signature->as_string =~ /^(.*?b=)/s)[0];
+ok($first_part_1 eq $first_part_2, "signature preserved with prettify_safe");
