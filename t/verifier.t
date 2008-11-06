@@ -6,18 +6,15 @@ use Test::More tests => 83;
 
 use Mail::DKIM::Verifier;
 
+my $homedir = (-d "t") ? "t" : ".";
+
 my $dkim = Mail::DKIM::Verifier->new();
 ok($dkim, "new() works");
 
 $dkim = Mail::DKIM::Verifier->new_object();
 ok($dkim, "new_object() works");
 
-my $srcfile = "t/test5.txt";
-unless (-f $srcfile)
-{
-	$srcfile = "test5.txt" if (-f "test5.txt");
-}
-my $sample_email = read_file($srcfile);
+my $sample_email = read_file("$homedir/test5.txt");
 ok($sample_email, "able to read sample email");
 ok($sample_email =~ /\015\012/, "sample has proper line endings");
 
@@ -156,15 +153,64 @@ sub test_email
 	my ($file, $expected_result) = @_;
 	print "# verifying message '$file'\n";
 	$dkim = Mail::DKIM::Verifier->new();
-	my $path = "t/corpus/" . $file;
-	unless (-f $path)
-	{
-		$path = "corpus/$file" if (-f "corpus/$file");
-	}
+	my $path = "$homedir/corpus/$file";
 	my $email = read_file($path);
 	$dkim->PRINT($email);
 	$dkim->CLOSE;
 	my $result = $dkim->result;
 	print "#   result: " . $dkim->result_detail . "\n";
 	ok($result eq $expected_result, "'$file' should '$expected_result'");
+}
+
+# override the DNS implementation, so that these tests do not
+# rely on DNS servers I have no control over
+my $CACHE;
+sub Mail::DKIM::DNS::fake_query
+{
+	my ($domain, $type) = @_;
+	die "can't lookup $type record" if $type ne "TXT";
+
+	unless ($CACHE)
+	{
+		open my $fh, "<", "$homedir/FAKE_DNS.dat"
+			or die "Error: cannot read $homedir/FAKE_DNS.dat: $!\n";
+		$CACHE = {};
+		while (<$fh>)
+		{
+			chomp;
+			next if /^\s*[#;]/ || /^\s*$/;
+			my ($k, $v) = split /\s+/, $_, 2;
+			$CACHE->{$k} = $v eq "NXDOMAIN" ? [] :
+				[ bless \$v, "FakeDNS::Record" ];
+		}
+		close $fh;
+	}
+
+	if (not exists $CACHE->{$domain})
+	{
+		warn "did not cache that DNS entry: $domain\n";
+		print STDERR ">>>\n";
+		print STDERR join("", (Mail::DKIM::DNS::orig_query($domain, $type))[0]->char_str_list) . "\n";
+		print STDERR "<<<\n";
+		die;
+	}
+
+	return @{$CACHE->{$domain}};
+}
+
+BEGIN {
+	*Mail::DKIM::DNS::orig_query = *Mail::DKIM::DNS::query;
+	*Mail::DKIM::DNS::query = *Mail::DKIM::DNS::fake_query;
+}
+
+package FakeDNS::Record;
+
+sub type
+{
+	return "TXT";
+}
+
+sub char_str_list
+{
+	return ${$_[0]};
 }

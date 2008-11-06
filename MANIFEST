@@ -38,6 +38,7 @@ scripts/dkimverify.pl
 scripts/test_bare_rsa_sha1.pl
 scripts/test_canonicalization.pl
 scripts/test_nowsp_rsa_sha1.pl
+t/FAKE_DNS.dat
 t/Mail-DKIM.t
 t/policy.t
 t/public_key.t
