@@ -138,7 +138,7 @@ sub message_originator
 	if ($self->{headers_by_name}->{from})
 	{
 		my @list = Mail::Address->parse($self->{headers_by_name}->{from});
-		return $list[0];
+		return $list[0] if @list;
 	}
 	return Mail::Address->new;
 }
@@ -151,12 +151,12 @@ sub message_sender
 	if ($self->{headers_by_name}->{sender})
 	{
 		my @list = Mail::Address->parse($self->{headers_by_name}->{sender});
-		return $list[0];
+		return $list[0] if @list;
 	}
 	if ($self->{headers_by_name}->{from})
 	{
 		my @list = Mail::Address->parse($self->{headers_by_name}->{from});
-		return $list[0];
+		return $list[0] if @list;
 	}
 	return Mail::Address->new;
 }

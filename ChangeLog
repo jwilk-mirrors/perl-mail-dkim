@@ -1,6 +1,8 @@
 2008-11-06: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Signature.pm (encode_qp, decode_qp): suppress a warning
    about an uninitialized value
+ * lib/Mail/DKIM/Common.pm (message_originator, message_sender): if a
+   From/Sender line is present, but blank, still return a valid object
 
 2008-05-09: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Algorithm/dk_rsa_sha1.pm: when populating a DomainKey
