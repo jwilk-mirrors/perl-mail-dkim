@@ -407,7 +407,8 @@ sub decode_qp
 	my $res = shift;
 
 	#TODO- should I worry about non-ASCII systems here?
-	$res =~ s/=([\da-fA-F]{2})/pack("C", hex($1))/ge;
+	$res =~ s/=([\da-fA-F]{2})/pack("C", hex($1))/ge
+		if defined $res;
 	return $res;
 }
 
@@ -422,7 +423,8 @@ sub encode_qp
 	my $DISALLOWED = qr/[^!"#\$%&'()*+,\-.\/0-9:;<>?\@A-Z[\\\]^_`a-z{|}~]/;
 
 	#TODO- should I worry about non-ASCII systems here?
-	$res =~ s/($DISALLOWED)/sprintf('=%02X', ord($1))/eg;
+	$res =~ s/($DISALLOWED)/sprintf('=%02X', ord($1))/eg
+		if defined $res;
 	return $res;
 }
 

@@ -1,3 +1,7 @@
+2008-11-06: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Signature.pm (encode_qp, decode_qp): suppress a warning
+   about an uninitialized value
+
 2008-05-09: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Algorithm/dk_rsa_sha1.pm: when populating a DomainKey
    signature's identity, record where the identity came from
