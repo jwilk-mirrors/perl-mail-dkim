@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::Simple tests => 14;
+use Test::Simple tests => 15;
 
 use Mail::DKIM::TextWrap;
 
@@ -80,6 +80,18 @@ check_output("colon-separated list, split before colons");
 ok($lines[0] eq "apple", "first line looks ok");
 ok($lines[1] eq ":orange", "second line looks ok");
 ok($lines[$#lines] =~ /:kiwi$/, "last line looks ok");
+
+$tw = Mail::DKIM::TextWrap->new(
+		Margin => 10,
+		Output => \$output,
+		);
+$tw->add("apple");
+$tw->add("orange");
+$tw->add("banana");
+$tw->add("apricot");
+$tw->finish;
+check_output("");
+ok(@lines == 1, "no wrapping took place");
 
 sub check_output
 {
