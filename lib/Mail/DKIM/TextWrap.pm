@@ -65,7 +65,8 @@ The default is C<undef>.
 =item Margin
 
 specifies how many characters to allow per line.
-The default is 72.
+The default is 72. If no place to line-break is found on a line, the
+line will extend beyond this margin.
 
 =item Separator
 
@@ -125,6 +126,7 @@ sub new
 		Separator => "\n",
 		cur => 0,
 		soft_space => "",
+		word => "",
 		%args,
 	};
 	$self->{Output} ||= \*STDOUT;
@@ -138,6 +140,7 @@ sub new
 # soft_space - contains added text that will not be printed if a linebreak
 #              occurs
 #
+# word - contains the current word
 
 # Internal methods:
 #
@@ -174,19 +177,7 @@ sub _calculate_new_column
   $tw->add("Mary had a little lamb.\n");
 
 You can add() all the text at once, or add() the text in parts by calling
-add() multiple times. If you are doing the latter, be aware that the
-text can be "wrapped" between add() calls, even if it does not match
-the "Break" pattern.
-
-For example, given a margin of 12, this will not wrap
-
-  $tw->add("Abcdefghijklmnopqrstuvwxyz");
-
-but this will
-
-  $tw->add("Abcdefgh");
-  $tw->add("ijklmnop");
-  $tw->add("qrstuvwxyz");
+add() multiple times.
 
 =cut
 
@@ -196,31 +187,30 @@ sub add
 	my $break_after = $self->{Break};
 	my $break_before = $self->{BreakBefore};
 	my $swallow = $self->{Swallow};
-	while (length $text)
+	$self->{word} .= $text;
+	while (length $self->{word})
 	{
-		my ($word, $remaining);
-		if (defined($break_before) and $text =~ /^(.+?)($break_before)(.*)$/s)
+		my $word;
+		if (defined($break_before) and $self->{word} =~ s/^(.+?)($break_before)/$2/s)
 		{
 			# note- $1 should have at least one character
 			$word = $1;
-			$remaining = $2 . $3;
 		}
-		elsif (defined($break_after) and $text =~ /^(.*?)($break_after)(.*)$/s)
+		elsif (defined($break_after) and $self->{word} =~ s/^(.*?)($break_after)//s)
 		{
 			$word = $1 . $2;
-			$remaining = $3;
 		}
 		else
 		{
-			$word = $text;
-			$remaining = "";
+			last;
 		}
 
+		die "assertion failed" unless length($word) >= 1;
+
 		my $next_soft_space;
-		if ($word =~ /^(.*)($swallow)$/s)
+		if ($word =~ s/($swallow)$//s)
 		{
-			$word = $1;
-			$next_soft_space = $2;
+			$next_soft_space = $1;
 		}
 		else
 		{
@@ -242,6 +232,7 @@ sub add
 				$self->output($self->{Separator});
 				$self->{soft_space} = "";
 				$self->{cur} = $w_sep;
+				$self->{word} = $word . $next_soft_space . $self->{word};
 				next;
 			}
 		}
@@ -249,7 +240,6 @@ sub add
 		$self->output($to_print);
 		$self->{soft_space} = $next_soft_space;
 		$self->{cur} = $new_pos;
-		$text = $remaining;
 	}
 }
 
@@ -265,7 +255,7 @@ in TextWrap's buffers will be output.
 sub finish
 {
 	my $self = shift;
-	$self->output($self->{soft_space});
+	$self->output($self->{soft_space} . $self->{word});
 	$self->reset;
 }
 
@@ -290,6 +280,7 @@ sub reset
 	my $self = shift;
 	$self->{cur} = 0;
 	$self->{soft_space} = "";
+	$self->{word} = "";
 }
 
 1;
