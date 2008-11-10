@@ -167,6 +167,7 @@ sub wrap
 			$raw_name =~ s/\s+$//;
 		}
 
+		$wrap->flush if ($wrap->{Break} || $wrap->{BreakBefore});
 		$wrap->{Break} = undef;
 		$wrap->{BreakBefore} = undef;
 		$did_first ? $wrap->add(";") : ($did_first = 1);
@@ -175,6 +176,7 @@ sub wrap
 		if ($tagtype eq "b64")
 		{
 			$raw_value =~ s/\s+//gs;   #removes all whitespace
+			$wrap->flush;
 			$wrap->{Break} = qr/./;
 		}
 		elsif ($tagtype eq "list")
@@ -182,6 +184,7 @@ sub wrap
 			$raw_value =~ s/\s+/ /gs;   #reduces any whitespace to single space
 			$raw_value =~ s/^\s|\s$//g; #trims preceding/trailing spaces
 			$raw_value =~ s/\s*:\s*/:/g;
+			$wrap->flush;
 			$wrap->{Break} = qr/[\s:]/;
 			$wrap->{BreakBefore} = qr/[:]/;
 		}
@@ -189,6 +192,7 @@ sub wrap
 		{
 			$raw_value =~ s/\s+/ /gs;   #reduces any whitespace to single space
 			$raw_value =~ s/^\s|\s$//g; #trims preceding/trailing spaces
+			$wrap->flush;
 			$wrap->{Break} = qr/\s/;
 		}
 		$wrap->add($raw_value);

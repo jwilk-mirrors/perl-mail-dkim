@@ -1,3 +1,9 @@
+2008-11-10: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/TextWrap.pm (flush): new method to explicitly allow a
+   break at the current point in the string
+ * lib/Mail/DKIM/KeyValueList.pm (wrap): call flush() whenever changing
+   TextWrap parameters (this should complete the fix for #2257046)
+
 2008-11-06: Jason Long <jlong@messiah.edu>
  * t/signature.t: test Mark Martinec's bad-signature-wrapping bug
 

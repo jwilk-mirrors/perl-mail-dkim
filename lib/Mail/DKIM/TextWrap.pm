@@ -255,8 +255,27 @@ in TextWrap's buffers will be output.
 sub finish
 {
 	my $self = shift;
-	$self->output($self->{soft_space} . $self->{word});
+	$self->flush;
 	$self->reset;
+}
+
+=head2 flush() - output the current partial word, if any
+
+  $tw->flush;
+
+Call this whenever changing TextWrap's parameters in the middle
+of a string of words. It explicitly allows a line-break at the
+current position in the string, regardless of whether it matches
+the current break pattern.
+
+=cut
+
+sub flush
+{
+	my $self = shift;
+	$self->output($self->{soft_space} . $self->{word});
+	$self->{soft_space} = "";
+	$self->{word} = "";
 }
 
 sub output
