@@ -3,6 +3,14 @@ See the ChangeLog file for the details.
 
 Version 0.33
 
+ since 0.32_5
+
+  * bugfixes:
+    * signature wrapping was still messed up, hopefully all bugs fixed
+	  now
+
+ since 0.32
+
   * bugfixes:
     * signature wrapping would sometimes cause improper preparation of
       DKIM signatures, with "simple" canonicalization (issue #2257046)
