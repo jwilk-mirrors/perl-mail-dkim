@@ -200,6 +200,11 @@ sub add
 		{
 			$word = $1 . $2;
 		}
+		elsif ($self->{NoBuffering})
+		{
+			$word = $self->{word};
+			$self->{word} = "";
+		}
 		else
 		{
 			last;
@@ -274,11 +279,8 @@ sub flush
 {
 	my $self = shift;
 
-	my $to_print = $self->{soft_space} . $self->{word};
-	$self->output($to_print);
-	$self->{cur} = _calculate_new_column($self->{cur}, $to_print);
-	$self->{soft_space} = "";
-	$self->{word} = "";
+	local $self->{NoBuffering} = 1;
+	$self->add("");
 }
 
 sub output
