@@ -160,17 +160,18 @@ sub wrap
 	{
 		my $tagname = $tag->{name};
 		my $tagtype = $args{Tags}->{$tagname} || $args{Default} || "";
-		my ($raw_name, $raw_value) = split(/=/, $tag->{raw}, 2);
-		unless ($args{PreserveNames})
-		{
-			$raw_name =~ s/^\s*/ /;
-			$raw_name =~ s/\s+$//;
-		}
 
-		$wrap->flush if ($wrap->{Break} || $wrap->{BreakBefore});
 		$wrap->{Break} = undef;
 		$wrap->{BreakBefore} = undef;
 		$did_first ? $wrap->add(";") : ($did_first = 1);
+
+		my ($raw_name, $raw_value) = split(/=/, $tag->{raw}, 2);
+		unless ($args{PreserveNames})
+		{
+			$wrap->flush; #allow a break before the tag name
+			$raw_name =~ s/^\s*/ /;
+			$raw_name =~ s/\s+$//;
+		}
 		$wrap->add($raw_name . "=");
 
 		if ($tagtype eq "b64")
