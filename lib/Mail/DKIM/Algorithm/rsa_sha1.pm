@@ -24,14 +24,7 @@ sub init_digests
 
 	# initialize a SHA-1 Digest
 	$self->{header_digest} = Digest::SHA->new(1);
-	if ($self->{draft_version} eq "01")
-	{
-		$self->{body_digest} = Digest::SHA->new(1);
-	}
-	else
-	{
-		$self->{body_digest} = $self->{header_digest};
-	}
+	$self->{body_digest} = Digest::SHA->new(1);
 }
 
 sub sign

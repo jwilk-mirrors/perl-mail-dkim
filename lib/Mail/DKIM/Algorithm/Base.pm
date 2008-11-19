@@ -35,7 +35,6 @@ sub init
 	croak "no signature" unless $self->{Signature};
 
 	$self->{mode} = $self->{Signature}->signature ? "verify" : "sign";
-	$self->{draft_version} ||= "01";
 
 	# allows subclasses to set the header_digest and body_digest
 	# properties
@@ -48,12 +47,10 @@ sub init
 	my $body_class = $self->get_canonicalization_class($body_method);
 	$self->{canon} = $header_class->new(
 			output_digest => $self->{header_digest},
-			draft_version => $self->{draft_version},
 			Signature => $self->{Signature},
 			Debug_Canonicalization => $self->{Debug_Canonicalization});
 	$self->{body_canon} = $body_class->new(
 			output_digest => $self->{body_digest},
-			draft_version => $self->{draft_version},
 			Signature => $self->{Signature},
 			Debug_Canonicalization => $self->{Debug_Canonicalization});
 }
