@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::Simple tests => 15;
+use Test::Simple tests => 16;
 
 use Mail::DKIM::TextWrap;
 
@@ -92,6 +92,19 @@ $tw->add("apricot");
 $tw->finish;
 check_output("");
 ok(@lines == 1, "no wrapping took place");
+
+$tw = Mail::DKIM::TextWrap->new(
+		Margin => 10,
+		Output => \$output,
+		);
+foreach (qw(apple orange banana apricot))
+{
+	$tw->add($_);
+	$tw->flush;
+}
+$tw->finish;
+check_output("");
+ok(!(grep { length($_) > 10 } @lines), "no long lines");
 
 sub check_output
 {
