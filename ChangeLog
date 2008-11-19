@@ -2,7 +2,8 @@
  * t/signature.t: further checks for prettify signatures (found a case
    where the new code caused a regression)
  * lib/Mail/DKIM/TextWrap.pm (flush): remember to update cur position
-   when flushing text
+   when flushing text; use a "may_break" internal variable to know
+   whether a linebreak is acceptable; other fixes
  * t/textwrap.t: another test case illustrating failure in TextWrap.pm
 
 2008-11-10: Jason Long <jlong@messiah.edu>
