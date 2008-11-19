@@ -92,11 +92,6 @@ sub finish_header
 			}
 		}
 	}
-
-	unless ($self->{draft_version} && $self->{draft_version} eq "01")
-	{
-		$self->output("\015\012");
-	}
 }
 
 sub add_body
