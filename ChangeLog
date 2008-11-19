@@ -1,4 +1,9 @@
 2008-11-19: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Signature.pm, DkSignature.pm (DEFAULT_PREFIX): new
+   method which determines what prefix to use in as_string, prettify,
+   etc.
+
+2008-11-19: Jason Long <jlong@messiah.edu>
  * t/signature.t: further checks for prettify signatures (found a case
    where the new code caused a regression)
  * lib/Mail/DKIM/TextWrap.pm (flush): remember to update cur position

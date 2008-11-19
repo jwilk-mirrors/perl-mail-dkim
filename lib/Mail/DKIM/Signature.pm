@@ -164,7 +164,7 @@ sub as_string
 {
 	my $self = shift;
 
-	my $prefix = $self->{prefix} || "DKIM-Signature:";
+	my $prefix = $self->{prefix} || $self->DEFAULT_PREFIX;
 
 	return $prefix . $self->SUPER::as_string;
 }
@@ -174,7 +174,7 @@ sub as_string_debug
 {
 	my $self = shift;
 
-	my $prefix = $self->{prefix} || "DKIM-Signature:";
+	my $prefix = $self->{prefix} || $self->DEFAULT_PREFIX;
 
 	return $prefix . join(";", map { ">" . $_->{raw} . "<" } @{$self->{tags}});
 }
@@ -426,6 +426,11 @@ sub encode_qp
 	$res =~ s/($DISALLOWED)/sprintf('=%02X', ord($1))/eg
 		if defined $res;
 	return $res;
+}
+
+sub DEFAULT_PREFIX
+{
+	return "DKIM-Signature:";
 }
 
 =head2 domain() - get or set the domain (d=) field
@@ -807,7 +812,7 @@ sub prettify
 {
 	my $self = shift;
 	$self->wrap(
-		Start => length($self->{prefix} || "DKIM-Signature:"),
+		Start => length($self->{prefix} || $self->DEFAULT_PREFIX),
 		Tags => {
 			b => "b64",
 			bh => "b64",
@@ -829,7 +834,7 @@ sub prettify_safe
 {
 	my $self = shift;
 	$self->wrap(
-		Start => length($self->{prefix} || "DKIM-Signature:"),
+		Start => length($self->{prefix} || $self->DEFAULT_PREFIX),
 		Tags => {
 			b => "b64",
 			},

@@ -102,15 +102,6 @@ the DomainKey-Signature that gets prepended to a signed message.
 
 =cut
 
-sub as_string
-{
-	my $self = shift;
-
-	my $prefix = $self->{prefix} || "DomainKey-Signature:";
-
-	return $prefix . $self->Mail::DKIM::KeyValueList::as_string;
-}
-
 sub as_string_without_data
 {
 	croak "as_string_without_data not implemented";
@@ -170,6 +161,11 @@ sub canonicalization
 
 	return lc($self->get_tag("c")) || "simple";
 }	
+
+sub DEFAULT_PREFIX
+{
+	return "DomainKey-Signature:";
+}
 
 =head2 domain() - get or set the domain (d=) field
 
