@@ -273,7 +273,10 @@ the current break pattern.
 sub flush
 {
 	my $self = shift;
-	$self->output($self->{soft_space} . $self->{word});
+
+	my $to_print = $self->{soft_space} . $self->{word};
+	$self->output($to_print);
+	$self->{cur} = _calculate_new_column($self->{cur}, $to_print);
 	$self->{soft_space} = "";
 	$self->{word} = "";
 }
