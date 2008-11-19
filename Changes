@@ -3,6 +3,11 @@ See the ChangeLog file for the details.
 
 Version 0.33
 
+ since 0.32_6
+ 
+  * removed support for pre-standardized DKIM signatures (i.e. these
+    are DKIM signatures without a v= or bh= tag).
+
  since 0.32_5
 
   * bugfixes:

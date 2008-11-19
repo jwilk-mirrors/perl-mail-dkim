@@ -1,4 +1,9 @@
 2008-11-19: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Algorithm/*, lib/Mail/DKIM/Canonicalization/*,
+   lib/Mail/DKIM/Signature.pm, t/verifier.t: remove support and tests
+   for the prestandardized DKIM signatures (issue #1871948)
+
+2008-11-19: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Signature.pm, DkSignature.pm (DEFAULT_PREFIX): new
    method which determines what prefix to use in as_string, prettify,
    etc.
