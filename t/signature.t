@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::Simple tests => 11;
+use Test::Simple tests => 12;
 
 use Mail::DKIM::Signature;
 use Mail::DKIM::TextWrap;
@@ -43,6 +43,7 @@ $signature->prettify_safe;
 print "#SAFE--->\n" . $signature->as_string . "\n";
 $signature->prettify;
 print "#PRETTY->\n" . $signature->as_string . "\n";
+check_pretty($signature->as_string);
 
 
 $unparsed = "DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ijs.si; s=jakla2;\n\tt=1225813757; bh=g3zLYH4xKxcPrHOD18z9YfpQcnk/GaJedfustWU5uGs=; b=";
@@ -57,3 +58,12 @@ $signature->prettify_safe;
 print "#PRETTY->\n" . $signature->as_string . "\n";
 my $first_part_2 = ($signature->as_string =~ /^(.*?b=)/s)[0];
 ok($first_part_1 eq $first_part_2, "signature preserved with prettify_safe");
+
+sub check_pretty
+{
+	my $str = shift;
+	my @lines = split /\n/s, $str;
+
+	my $any_long_lines = grep { length($_) > 72 } @lines;
+	ok(!$any_long_lines, "any lines exceed 72 characters");
+}
