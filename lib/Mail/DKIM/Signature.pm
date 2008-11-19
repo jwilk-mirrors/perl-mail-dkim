@@ -289,8 +289,8 @@ sub canonicalization
 	my ($c1, $c2) = split(/\//, $c, 2);
 	if (not defined $c2)
 	{
-		# default body canonicalization depends on header canonicalization
-		$c2 = $c1 eq "nowsp" ? "nowsp" : "simple";
+		# default body canonicalization is "simple"
+		$c2 = "simple";
 	}
 
 	if (wantarray)
