@@ -186,7 +186,7 @@ sub wrap
 			$raw_value =~ s/^\s|\s$//g; #trims preceding/trailing spaces
 			$raw_value =~ s/\s*:\s*/:/g;
 			$wrap->flush;
-			$wrap->{Break} = qr/[\s:]/;
+			$wrap->{Break} = qr/[\s]/;
 			$wrap->{BreakBefore} = qr/[:]/;
 		}
 		elsif ($tagtype eq "")
