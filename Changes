@@ -6,6 +6,10 @@ Version 0.33
   * bugfixes:
     * signature wrapping would sometimes cause improper preparation of
       DKIM signatures, with "simple" canonicalization (issue #2257046)
+  * test scripts:
+    * the included corpus is now verified using a fake-DNS resolver,
+      which means the test corpus can validate even when your DNS
+      servers are really slow
 
 
 Version 0.32 - released 2008-06-03
