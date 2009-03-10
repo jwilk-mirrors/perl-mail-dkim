@@ -3,6 +3,11 @@ See the ChangeLog file for the details.
 
 Version 0.34
 
+ since 0.33_5
+
+  * fixed a bug in one of the test scripts, caused by the changes in
+    0.33_5
+
  since 0.33
  
   * removed support for pre-standardized DKIM signatures (i.e. these
