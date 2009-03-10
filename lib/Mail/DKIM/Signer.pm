@@ -97,7 +97,7 @@ L<Mail::DKIM::PrivateKey> object.
 package Mail::DKIM::Signer;
 use base "Mail::DKIM::Common";
 use Carp;
-our $VERSION = 0.33;
+our $VERSION = 0.34;
 
 # PROPERTIES
 #

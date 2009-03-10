@@ -1,4 +1,4 @@
-Mail-DKIM version 0.33
+Mail-DKIM version 0.34
 ======================
 
 This module implements the various components of the DKIM and DomainKeys
