@@ -1,6 +1,14 @@
 This file summarizes what's changed between releases of Mail-DKIM.
 See the ChangeLog file for the details.
 
+Version 0.34
+
+ since 0.33
+ 
+  * removed support for pre-standardized DKIM signatures (i.e. these
+    are DKIM signatures without a v= or bh= tag).
+
+
 Version 0.33 - released 2009-03-10
 
   * bugfixes:

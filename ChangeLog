@@ -1,3 +1,8 @@
+2009-03-10: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Algorithm/*, lib/Mail/DKIM/Canonicalization/*,
+   lib/Mail/DKIM/Signature.pm, t/verifier.t: remove support and tests
+   for the prestandardized DKIM signatures (issue #1871948)
+
  -- VERSION 0.33 --
 
 2009-03-10: Jason Long <jlong@messiah.edu>
