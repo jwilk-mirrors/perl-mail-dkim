@@ -29,7 +29,6 @@ ok(1, "finish_message() works");
 my $expected = "from :	Jason
 Subject:  this is the
   subject
-
 This is the body.
 Another line of the body.
 

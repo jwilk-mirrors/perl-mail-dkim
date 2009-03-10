@@ -1,4 +1,8 @@
 2009-03-10: Jason Long <jlong@messiah.edu>
+ * t/simple_canonicalization.t: fix simple-canonicalization test, which
+   broke when I removed support for prestandardized DKIM signatures
+
+2009-03-10: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Algorithm/*, lib/Mail/DKIM/Canonicalization/*,
    lib/Mail/DKIM/Signature.pm, t/verifier.t: remove support and tests
    for the prestandardized DKIM signatures (issue #1871948)
