@@ -1,20 +1,7 @@
 This file summarizes what's changed between releases of Mail-DKIM.
 See the ChangeLog file for the details.
 
-Version 0.33
-
- since 0.32_6
- 
-  * removed support for pre-standardized DKIM signatures (i.e. these
-    are DKIM signatures without a v= or bh= tag).
-
- since 0.32_5
-
-  * bugfixes:
-    * signature wrapping was still messed up, hopefully all bugs fixed
-	  now
-
- since 0.32
+Version 0.33 - released 2009-03-10
 
   * bugfixes:
     * signature wrapping would sometimes cause improper preparation of
