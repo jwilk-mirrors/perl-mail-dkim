@@ -2,16 +2,29 @@
 
 use strict;
 use warnings;
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use Mail::DKIM::Verifier;
 
+#
+# this public key exists
+#
 my $pubkey = Mail::DKIM::PublicKey->fetch(
 		Protocol => "dns",
 		Selector => "test1",
 		Domain => "messiah.edu",
 		);
-ok($pubkey);
+ok($pubkey, "public key exists");
+
+#
+# this public key is "NXDOMAIN"
+#
+$pubkey = Mail::DKIM::PublicKey->fetch(
+		Protocol => "dns",
+		Selector => "nonexistent",
+		Domain => "messiah.edu",
+		);
+ok(!$pubkey, "public key should not exist");
 
 $pubkey = eval { Mail::DKIM::PublicKey->fetch(
 		Protocol => "dns",
@@ -21,7 +34,8 @@ $pubkey = eval { Mail::DKIM::PublicKey->fetch(
 my $E = $@;
 print "# error was $E\n";
 ok(!$pubkey
-	and $E and $E =~ /timeout/);
+	&& $E && $E =~ /timeout/,
+	"timeout error fetching public key");
 
 $pubkey = eval { Mail::DKIM::PublicKey->fetch(
 		Protocol => "dns",
@@ -31,4 +45,5 @@ $pubkey = eval { Mail::DKIM::PublicKey->fetch(
 $E = $@;
 print "# error was $E\n";
 ok(!$pubkey
-	and $E);
+	&& $E,
+	"SERVFAIL dns error fetching public key");
