@@ -569,6 +569,43 @@ sub fetch_sender_policy
 			);
 }
 
+=head2 fetch_policies() - retrieves signing policies from DNS
+
+  my @policies = $dkim->fetch_policies();
+  foreach my $policy (@policies)
+  {
+      $policy_result = $policy->apply($dkim);
+      # $policy_result is one of "accept", "reject", "neutral"
+  }
+
+This method searches for and returns any signing policies that would
+apply to this message. Signing policies are selected based on the
+domain that the message *claims* to be from. So, for example, if
+a message claims to be from security@bank, and forwarded by
+trusted@listserv, when in reality the message came from foe@evilcorp,
+this method would check for signing policies for security@bank and
+trusted@listserv. The signing policies might tell whether
+foe@evilcorp (the real sender) is allowed to send mail claiming
+to be from your bank or your listserv.
+
+I say "might tell", because in reality this is still really hard to
+specify with any accuracy. In addition, most senders do not publish
+useful policies.
+
+=cut
+
+sub fetch_policies
+{
+	my $self = shift;
+
+	my $sender_policy = eval { $self->fetch_sender_policy() };
+	my $author_policy = eval { $self->fetch_author_policy() };
+	return (
+		$sender_policy ? $sender_policy : (),
+		$author_policy ? $author_policy : (),
+		);
+}
+
 =head2 load() - load the entire message from a file handle
 
   $dkim->load($file_handle);

@@ -1,4 +1,8 @@
 2009-03-24: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Verifier.pm (fetch_policies): new method for fetching
+   all applicable policies, and is guaranteed not to "die".
+
+2009-03-24: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/DNS.pm: use a global variable to specify what Timeout
    to use
  * lib/Mail/DKIM/DNS.pm: detect DNS resolver errors and report them
