@@ -35,7 +35,7 @@ $pubkey = eval { Mail::DKIM::PublicKey->fetch(
 my $E = $@;
 print "# got error: $E" if $E;
 ok(!$pubkey
-	&& $E && $E =~ /timeout/,
+	&& $E && $E =~ /(timeout|timed? out)/,
 	"timeout error fetching public key");
 
 $pubkey = eval { Mail::DKIM::PublicKey->fetch(
@@ -46,5 +46,5 @@ $pubkey = eval { Mail::DKIM::PublicKey->fetch(
 $E = $@;
 print "# got error: $E" if $E;
 ok(!$pubkey
-	&& $E,
+	&& $E && $E =~ /SERVFAIL/,
 	"SERVFAIL dns error fetching public key");
