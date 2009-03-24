@@ -5,6 +5,7 @@ use warnings;
 use Test::More tests => 4;
 
 use Mail::DKIM::Verifier;
+$Mail::DKIM::DNS::TIMEOUT = 3;
 
 #
 # this public key exists
@@ -32,7 +33,7 @@ $pubkey = eval { Mail::DKIM::PublicKey->fetch(
 		Domain => "blackhole.messiah.edu",
 		) };
 my $E = $@;
-print "# error was $E\n";
+print "# got error: $E" if $E;
 ok(!$pubkey
 	&& $E && $E =~ /timeout/,
 	"timeout error fetching public key");
@@ -43,7 +44,7 @@ $pubkey = eval { Mail::DKIM::PublicKey->fetch(
 		Domain => "blackhole2.messiah.edu",
 		) };
 $E = $@;
-print "# error was $E\n";
+print "# got error: $E" if $E;
 ok(!$pubkey
 	&& $E,
 	"SERVFAIL dns error fetching public key");

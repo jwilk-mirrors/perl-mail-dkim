@@ -12,6 +12,7 @@ use warnings;
 
 package Mail::DKIM::DNS;
 use Net::DNS;
+our $TIMEOUT = 10;
 
 # query- now returns a list of RR objects
 #
@@ -31,7 +32,7 @@ sub query
 	{
 		# set a 10 second timeout
 		local $SIG{ALRM} = sub { die "DNS query timeout for $domain\n" };
-		alarm 10;
+		alarm $TIMEOUT;
 
 		# the query itself could cause an exception, which would prevent
 		# us from resetting the alarm before leaving the eval {} block

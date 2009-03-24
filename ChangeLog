@@ -1,3 +1,8 @@
+2009-03-24: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/DNS.pm: use a global variable to specify what Timeout
+   to use
+ * t/public_key.t: test various DNS failures
+
 2009-03-10: Jason Long <jlong@messiah.edu>
  * t/simple_canonicalization.t: fix simple-canonicalization test, which
    broke when I removed support for prestandardized DKIM signatures
