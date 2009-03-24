@@ -27,7 +27,8 @@ Verifier:
  - provide mechanism in the API to run the DNS lookups in parallel with
    other processing (e.g. the SpamAssassin plugin would want to start the
    DNS queries as early as possible, but continue processing other aspects
-   of the message while waiting for the DNS queries to complete)
+   of the message while waiting for the DNS queries to complete).
+   Net::DNS::Async may be useful here.
 
 Policy:
  - make it possible to determine explicit vs implicit default policy (DONE)
