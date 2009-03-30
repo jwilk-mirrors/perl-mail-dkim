@@ -94,6 +94,8 @@ t/corpus/badkey_10.txt
 t/corpus/badkey_11.txt
 t/corpus/badkey_12.txt
 t/corpus/badkey_13.txt
+t/corpus/badkey_14.txt
+t/corpus/badkey_15.txt
 t/corpus/goodkey_1.txt
 t/corpus/goodkey_2.txt
 t/corpus/goodkey_3.txt

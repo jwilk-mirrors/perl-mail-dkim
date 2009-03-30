@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 95;
+use Test::More tests => 99;
 
 use Mail::DKIM::Verifier;
 
@@ -145,6 +145,10 @@ ok($dkim->result_detail =~ /public key/, "detail mentions public key");
 test_email("badkey_12.txt", "invalid"); # public key g= != i= by case
 ok($dkim->result_detail =~ /public key/, "detail mentions public key");
 test_email("badkey_13.txt", "invalid"); # public key g= matches From but not i=
+ok($dkim->result_detail =~ /public key/, "detail mentions public key");
+test_email("badkey_14.txt", "invalid"); # dns error
+ok($dkim->result_detail =~ /public key/, "detail mentions public key");
+test_email("badkey_15.txt", "invalid"); # dns error
 ok($dkim->result_detail =~ /public key/, "detail mentions public key");
 
 

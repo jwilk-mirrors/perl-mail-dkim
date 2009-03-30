@@ -19,3 +19,5 @@ jakla2._domainkey.ijs.si  v=DKIM1; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCvWSe
 shan._domainkey.vmt2.cis.att.net  v=DKIM1; k=rsa; h=sha1:sha256:sha512;n=send%20comments%20to%20tony%40att%2Ecom; g=*; s=*;p=MHwwDQYJKoZIhvcNAQEBBQADawAwaAJhALSQ1y/+tHT1d9XvpiVap4Z+GFaydEmDgfC48m3wLLmDqfKBADWYIqrCnfKPvZPzGYzo+aJMEiAOTtiNxPWYToiTfJlTpn2YyEEz6OUIXw0uc+NfEQviN4QQr0jVX9yRjwIDAQAB
 foo._domainkey.vmt2.cis.att.net  v=DKIM1; k=rsa; n=send%20comments%20to%20tony%40att%2Ecom; g=*; s=*;p=MHwwDQYJKoZIhvcNAQEBBQADawAwaAJhALSQ1y/+tHT1d9XvpiVap4Z+GFaydEmDgfC48m3wLLmDqfKBADWYIqrCnfKPvZPzGYzo+aJMEiAOTtiNxPWYToiTfJlTpn2YyEEz6OUIXw0uc+NfEQviN4QQr0jVX9yRjwIDAQAB
 nonexistent._domainkey.messiah.edu NXDOMAIN
+test3._domainkey.blackhole.messiah.edu ~~Query timed out~~
+test3._domainkey.blackhole2.messiah.edu ~~SERVFAIL~~

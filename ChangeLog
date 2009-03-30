@@ -1,6 +1,7 @@
 2009-03-30: Jason Long <jlong@messiah.edu>
  * t/verifier.t: add support for testing DNS failures; add tests for
    detail messages of public key errors
+ * t/verifier.t: add some tests of DNS failures
 
 2009-03-30: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Signature.pm (get_public_key): remember errors and
