@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 83;
+use Test::More tests => 95;
 
 use Mail::DKIM::Verifier;
 
@@ -121,19 +121,31 @@ test_email("goodkey_4.txt", "pass"); # public key with implied g
 # test problems with the public key
 #
 test_email("badkey_1.txt", "invalid"); # public key NXDOMAIN
+ok($dkim->result_detail =~ /public key/, "detail mentions public key");
 test_email("badkey_2.txt", "invalid"); # public key REVOKED
+ok($dkim->result_detail =~ /public key/, "detail mentions public key");
 test_email("badkey_3.txt", "invalid"); # public key unsupported v= tag
+ok($dkim->result_detail =~ /public key/, "detail mentions public key");
 test_email("badkey_4.txt", "invalid"); # public key syntax error
 ok($dkim->result_detail =~ /public key/, "detail mentions public key");
 test_email("badkey_5.txt", "invalid"); # public key unsupported k= tag
+ok($dkim->result_detail =~ /public key/, "detail mentions public key");
 test_email("badkey_6.txt", "invalid"); # public key unsupported s= tag
+ok($dkim->result_detail =~ /public key/, "detail mentions public key");
 test_email("badkey_7.txt", "invalid"); # public key unsupported h= tag
+ok($dkim->result_detail =~ /public key/, "detail mentions public key");
 test_email("badkey_8.txt", "invalid"); # public key unmatched g= tag
+ok($dkim->result_detail =~ /public key/, "detail mentions public key");
 test_email("badkey_9.txt", "invalid"); # public key empty g= tag
+ok($dkim->result_detail =~ /public key/, "detail mentions public key");
 test_email("badkey_10.txt", "invalid"); # public key requires i == d
+ok($dkim->result_detail =~ /public key/, "detail mentions public key");
 test_email("badkey_11.txt", "invalid"); # public key unmatched h= tag
+ok($dkim->result_detail =~ /public key/, "detail mentions public key");
 test_email("badkey_12.txt", "invalid"); # public key g= != i= by case
+ok($dkim->result_detail =~ /public key/, "detail mentions public key");
 test_email("badkey_13.txt", "invalid"); # public key g= matches From but not i=
+ok($dkim->result_detail =~ /public key/, "detail mentions public key");
 
 
 sub read_file
@@ -180,7 +192,8 @@ sub Mail::DKIM::DNS::fake_query
 			chomp;
 			next if /^\s*[#;]/ || /^\s*$/;
 			my ($k, $v) = split /\s+/, $_, 2;
-			$CACHE->{$k} = $v eq "NXDOMAIN" ? [] :
+			$CACHE->{$k} = ($v =~ /^~~(.*)~~$/) ? "$1" :
+				$v eq "NXDOMAIN" ? [] :
 				[ bless \$v, "FakeDNS::Record" ];
 		}
 		close $fh;
@@ -195,7 +208,14 @@ sub Mail::DKIM::DNS::fake_query
 		die;
 	}
 
-	return @{$CACHE->{$domain}};
+	if (ref $CACHE->{$domain})
+	{
+		return @{$CACHE->{$domain}};
+	}
+	else
+	{
+		die "DNS error: $CACHE->{$domain}\n";
+	}
 }
 
 BEGIN {
