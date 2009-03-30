@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 99;
+use Test::More tests => 101;
 
 use Mail::DKIM::Verifier;
 
@@ -22,16 +22,11 @@ $dkim->PRINT($sample_email);
 $dkim->CLOSE;
 
 my $result = $dkim->result;
-ok($result, "result() works");
-
-SKIP: 
+ok($result eq "pass", "result() works and gave expected answer");
+if ($result ne "pass")
 {
-	skip "older-prestandard DKIM signatures", 5;
-	test_email("good_ietf00_1.txt", "pass");
-	test_email("good_ietf00_2.txt", "pass");
-	test_email("good_ietf00_3.txt", "pass");
-	test_email("good_ietf00_4.txt", "pass");
-	test_email("good_ietf00_5.txt", "pass");
+	print "result=$result\n";
+	print "result detail=" . $dkim->result_detail . "\n";
 }
 
 test_email("mine_ietf01_1.txt", "pass");
@@ -39,6 +34,11 @@ test_email("mine_ietf01_2.txt", "pass");
 test_email("mine_ietf01_3.txt", "pass");
 test_email("mine_ietf01_4.txt", "pass");
 test_email("mine_ietf05_1.txt", "pass");
+test_email("good_ietf00_1.txt", "pass");
+test_email("good_ietf00_2.txt", "pass");
+test_email("good_ietf00_3.txt", "pass");
+test_email("good_ietf00_4.txt", "pass");
+test_email("good_ietf00_5.txt", "pass");
 test_email("good_ietf01_1.txt", "pass");
 test_email("good_ietf01_2.txt", "pass");
 test_email("good_rfc4871_3.txt", "pass");  # tests extra tags in signature
@@ -146,10 +146,12 @@ test_email("badkey_12.txt", "invalid"); # public key g= != i= by case
 ok($dkim->result_detail =~ /public key/, "detail mentions public key");
 test_email("badkey_13.txt", "invalid"); # public key g= matches From but not i=
 ok($dkim->result_detail =~ /public key/, "detail mentions public key");
-test_email("badkey_14.txt", "invalid"); # dns error
+test_email("badkey_14.txt", "invalid"); # dns error (timeout)
 ok($dkim->result_detail =~ /public key/, "detail mentions public key");
-test_email("badkey_15.txt", "invalid"); # dns error
+ok($dkim->result_detail =~ /timed? ?out/i, "type of dns failure");
+test_email("badkey_15.txt", "invalid"); # dns error (SERVFAIL)
 ok($dkim->result_detail =~ /public key/, "detail mentions public key");
+ok($dkim->result_detail =~ /SERVFAIL/, "type of dns failure");
 
 
 sub read_file
