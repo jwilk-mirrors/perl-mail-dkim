@@ -320,6 +320,11 @@ sub location
 	return $self->{Domain};
 }
 
+sub name
+{
+	return "sender";
+}
+
 =head2 note() - get or set the human readable notes (n=) tag
 
 Human readable notes regarding the record. Undef if no notes specified.

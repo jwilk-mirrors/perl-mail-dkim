@@ -213,6 +213,11 @@ sub location
 	return $self->{Domain};
 }
 
+sub name
+{
+	return "author";
+}
+
 =head2 policy() - get or set the outbound signing policy (dkim=) tag
 
   my $sp = $policy->policy;

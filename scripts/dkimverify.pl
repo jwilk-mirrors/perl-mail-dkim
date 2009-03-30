@@ -48,24 +48,13 @@ foreach my $signature ($dkim->signatures)
 	print "verify result: " . $signature->result_detail . "\n";
 }
 
-my $author_policy = $dkim->fetch_author_policy;
-if ($author_policy)
+foreach my $policy ($dkim->fetch_policies)
 {
-	print "author policy result: " . $author_policy->apply($dkim) . "\n";
-}
-else
-{
-	print "author policy result: not found\n";
-}
+	my $policy_name = $policy->name;
+	print "$policy_name policy result: ";
 
-my $dk_policy = $dkim->fetch_sender_policy;
-if ($dk_policy)
-{
-	print "sender policy result: " . $dk_policy->apply($dkim) . "\n";
-}
-else
-{
-	print "sender policy result: not found\n";
+	my $policy_result = $policy->apply($dkim);
+	print "$policy_result\n";
 }
 
 __END__
