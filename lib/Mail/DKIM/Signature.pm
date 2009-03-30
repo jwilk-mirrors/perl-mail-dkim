@@ -492,6 +492,34 @@ sub get_algorithm_class
 	return $class;
 }
 
+# [private method]
+# fetch_public_key() - actually performs the DNS query for getting the key
+#
+# This method will C<die> if an error occurs.
+#
+sub fetch_public_key
+{
+	my $self = shift;
+
+	my $pubk = Mail::DKIM::PublicKey->fetch(
+		Protocol => $self->protocol,
+		Selector => $self->selector,
+		Domain => $self->domain);
+	unless ($pubk)
+	{
+		die "not available\n";
+	}
+
+	if ($pubk->revoked)
+	{
+		# FIXME- the key was checked in fetch(), so if the
+		# key was really revoked, we shouldn't have gotten here
+		die "revoked\n";
+	}
+
+	return $pubk;
+}
+
 =head2 get_public_key() - fetches the public key referenced by this signature
 
   my $pubkey = $signature->get_public_key;
@@ -510,30 +538,21 @@ sub get_public_key
 {
 	my $self = shift;
 
-	unless (exists $self->{public})
+	# this ensures we only try fetching once, even if an error occurs
+	unless ($self->{public} || $self->{public_error})
 	{
-		# this ensures we only try fetching once, even if an error occurs
-		$self->{public} = undef;
-
-		my $pubk = Mail::DKIM::PublicKey->fetch(
-			Protocol => $self->protocol,
-			Selector => $self->selector,
-			Domain => $self->domain);
-		unless ($pubk)
-		{
-			die "not available\n";
-		}
-
-		if ($pubk->revoked)
-		{
-			# FIXME- the key was checked in fetch(), so if the
-			# key was really revoked, we shouldn't have gotten here
-			die "revoked\n";
-		}
-
-		$self->{public} = $pubk;
+		$self->{public} = eval { $self->fetch_public_key };
+		$self->{public_error} = $@;
 	}
-	return $self->{public};
+
+	if ($self->{public})
+	{
+		return $self->{public};
+	}
+	else
+	{
+		die $self->{public_error};
+	}
 }
 
 =head2 get_tag() - access the raw value of a tag in this signature

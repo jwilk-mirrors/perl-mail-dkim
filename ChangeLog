@@ -1,4 +1,8 @@
 2009-03-30: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Signature.pm (get_public_key): remember errors and
+   always report them the same way
+
+2009-03-30: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Policy.pm, DkPolicy.pm: new method "name" to give a
    short name of the policy
  * scripts/dkimverify.pl: use the new fetch_policies() api to list
