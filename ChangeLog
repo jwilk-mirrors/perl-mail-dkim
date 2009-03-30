@@ -64,6 +64,7 @@
    about an uninitialized value
  * lib/Mail/DKIM/Common.pm (message_originator, message_sender): if a
    From/Sender line is present, but blank, still return a valid object
+   (issue #2126559)
  * t/public_key.t: new test to check for DNS problems
 
  -- VERSION 0.32 --
