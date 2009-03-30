@@ -32,13 +32,27 @@ sub new {
 	bless $self, $type;
 }
 
-# my $public_key = Mail::DKIM::PublicKey->fetch(
-#                     Protocol => "dns",
-#                   );
-# Protocol: from the q= tag of the signature, usually "dns"
-# Selector: from the s= tag of the signature
-# Domain: from the d= tag of the signature
-#
+=head1 CONSTRUCTOR
+
+=head2 fetch() - retrieve a public key record from DNS
+
+  my $public_key = Mail::DKIM::PublicKey->fetch(
+                      Protocol => "dns",
+                      Selector => "brisbane",
+                      Domain => "example.com",
+                    );
+
+If the public key is found, a L<Mail::DKIM::PublicKey> object
+is returned, representing the information found in DNS.
+If the public key does not exist in DNS, then C<undef> is
+returned.
+If a DNS error occurs while fetching the key, then this method
+will C<die>.
+If the public key was found, but is not valid (e.g. it is "revoked"),
+then this method will C<die>.
+
+=cut
+
 sub fetch
 {
 	my $class = shift;
@@ -80,6 +94,10 @@ sub fetch
 	$self->check;
 	return $self;
 }
+
+=head1 METHODS
+
+=cut
 
 # check syntax of the public key
 # throw an error if any errors are detected
