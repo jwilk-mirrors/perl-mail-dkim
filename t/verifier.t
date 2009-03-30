@@ -219,8 +219,11 @@ sub Mail::DKIM::DNS::fake_query
 }
 
 BEGIN {
+	unless ($ENV{use_real_dns})
+	{
 	*Mail::DKIM::DNS::orig_query = *Mail::DKIM::DNS::query;
 	*Mail::DKIM::DNS::query = *Mail::DKIM::DNS::fake_query;
+	}
 }
 
 package FakeDNS::Record;
