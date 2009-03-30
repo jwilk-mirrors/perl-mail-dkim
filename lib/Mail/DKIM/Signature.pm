@@ -786,6 +786,9 @@ sub result
 
   my $detail = $signature->result_detail;
 
+An explanation of possible detail messages can be found in the
+documentation for L<Mail::DKIM::Verifier/result_detail>.
+
 =cut
 
 sub result_detail

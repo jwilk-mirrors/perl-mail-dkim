@@ -1,4 +1,8 @@
 2009-03-30: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Verifier.pm: document a "temperror" result, which
+   I will soon provide support for
+
+2009-03-30: Jason Long <jlong@messiah.edu>
  * t/verifier.t: add support for testing DNS failures; add tests for
    detail messages of public key errors
  * t/verifier.t: add some tests of DNS failures

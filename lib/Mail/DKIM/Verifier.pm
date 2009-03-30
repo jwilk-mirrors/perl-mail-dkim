@@ -671,7 +671,15 @@ does not contain a correct value for the message.
 =item invalid
 
 Returned if a DKIM-Signature could not be checked because of a problem
-in the signature itself or the public key record.
+in the signature itself or the public key record. I.e. the signature
+could not be processed.
+
+=item temperror
+
+Returned if a DKIM-Signature could not be checked due to some error
+which is likely transient in nature, such as a temporary inability
+to retrieve a public key. A later attempt may produce a better
+result.
 
 =item none
 
@@ -681,6 +689,9 @@ Returned if no DKIM-Signature headers (valid or invalid) were found.
 
 In case of multiple signatures, the "best" result will be returned.
 Best is defined as "pass", followed by "fail", "invalid", and "none".
+To examine the results of individual signatures, use the L</signatures>
+method to retrieve the signature objects. See
+L<Mail::DKIM::Signature/result>.
 
 =cut
 
@@ -688,7 +699,7 @@ Best is defined as "pass", followed by "fail", "invalid", and "none".
 
   my $detail = $dkim->result_detail;
 
-The detail is constructed by taking the result (i.e. one of "pass", "fail",
+The detail is constructed by taking the result (e.g. "pass", "fail",
 "invalid" or "none") and appending any details provided by the verification
 process in parenthesis.
 
