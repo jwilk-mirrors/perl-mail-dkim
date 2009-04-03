@@ -33,8 +33,9 @@ Verifier:
 Policy:
  - make it possible to determine explicit vs implicit default policy (DONE)
  - lookup BOTH draft-allman-dkim-ssp policy AND rfc4870(historical) policy
+   (DONE)
  - this will probably be: lookup allman policy, and if not found, then try
-   rfc4870(historical) policy
+   rfc4870(historical) policy (REJECTED)
 
 Signer:
  - allow DomainKeys signatures without using a policy object
