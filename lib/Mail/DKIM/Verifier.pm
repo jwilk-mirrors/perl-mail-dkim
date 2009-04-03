@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2005-2007 Messiah College. All rights reserved.
+# Copyright 2005-2009 Messiah College. All rights reserved.
 # Jason Long <jlong@messiah.edu>
 
 # Copyright (c) 2004 Anthony D. Urso. All rights reserved.
@@ -569,43 +569,6 @@ sub fetch_sender_policy
 			);
 }
 
-=head2 fetch_policies() - retrieves signing policies from DNS
-
-  my @policies = $dkim->fetch_policies();
-  foreach my $policy (@policies)
-  {
-      $policy_result = $policy->apply($dkim);
-      # $policy_result is one of "accept", "reject", "neutral"
-  }
-
-This method searches for and returns any signing policies that would
-apply to this message. Signing policies are selected based on the
-domain that the message *claims* to be from. So, for example, if
-a message claims to be from security@bank, and forwarded by
-trusted@listserv, when in reality the message came from foe@evilcorp,
-this method would check for signing policies for security@bank and
-trusted@listserv. The signing policies might tell whether
-foe@evilcorp (the real sender) is allowed to send mail claiming
-to be from your bank or your listserv.
-
-I say "might tell", because in reality this is still really hard to
-specify with any accuracy. In addition, most senders do not publish
-useful policies.
-
-=cut
-
-sub fetch_policies
-{
-	my $self = shift;
-
-	my $sender_policy = eval { $self->fetch_sender_policy() };
-	my $author_policy = eval { $self->fetch_author_policy() };
-	return (
-		$sender_policy ? $sender_policy : (),
-		$author_policy ? $author_policy : (),
-		);
-}
-
 =head2 load() - load the entire message from a file handle
 
   $dkim->load($file_handle);
@@ -648,6 +611,43 @@ The "sender" is the mailbox of the agent responsible for the actual
 transmission of the message. For example, if a secretary were to send a
 message for another person, the "sender" would be the secretary and
 the "originator" would be the actual author.
+
+=head2 policies() - retrieves applicable signing policies from DNS
+
+  my @policies = $dkim->policies;
+  foreach my $policy (@policies)
+  {
+      $policy_result = $policy->apply($dkim);
+      # $policy_result is one of "accept", "reject", "neutral"
+  }
+
+This method searches for and returns any signing policies that would
+apply to this message. Signing policies are selected based on the
+domain that the message *claims* to be from. So, for example, if
+a message claims to be from security@bank, and forwarded by
+trusted@listserv, when in reality the message came from foe@evilcorp,
+this method would check for signing policies for security@bank and
+trusted@listserv. The signing policies might tell whether
+foe@evilcorp (the real sender) is allowed to send mail claiming
+to be from your bank or your listserv.
+
+I say "might tell", because in reality this is still really hard to
+specify with any accuracy. In addition, most senders do not publish
+useful policies.
+
+=cut
+
+sub policies
+{
+	my $self = shift;
+
+	my $sender_policy = eval { $self->fetch_sender_policy() };
+	my $author_policy = eval { $self->fetch_author_policy() };
+	return (
+		$sender_policy ? $sender_policy : (),
+		$author_policy ? $author_policy : (),
+		);
+}
 
 
 =head2 result() - access the result of the verification
@@ -771,7 +771,7 @@ Jason Long, E<lt>jlong@messiah.eduE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2006-2007 by Messiah College
+Copyright (C) 2006-2009 by Messiah College
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.6 or,

@@ -48,7 +48,7 @@ foreach my $signature ($dkim->signatures)
 	print "verify result: " . $signature->result_detail . "\n";
 }
 
-foreach my $policy ($dkim->fetch_policies)
+foreach my $policy ($dkim->policies)
 {
 	my $policy_name = $policy->name;
 	print "$policy_name policy result: ";

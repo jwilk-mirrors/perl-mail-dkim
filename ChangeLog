@@ -1,3 +1,8 @@
+2009-04-03: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Verifier.pm: rename fetch_policies() to policies()
+ * scripts/dkimverify.pl: replace use of fetch_policies() with
+   policies()
+
 2009-03-30: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Verifier.pm: document a "temperror" result, which
    I will soon provide support for
