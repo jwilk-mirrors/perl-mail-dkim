@@ -27,6 +27,9 @@ $pubkey = Mail::DKIM::PublicKey->fetch(
 		);
 ok(!$pubkey, "public key should not exist");
 
+SKIP:
+{
+	skip "these errors vary depending on where you are", 2;
 $pubkey = eval { Mail::DKIM::PublicKey->fetch(
 		Protocol => "dns",
 		Selector => "foo",
@@ -48,3 +51,4 @@ print "# got error: $E" if $E;
 ok(!$pubkey
 	&& $E && $E =~ /SERVFAIL/,
 	"SERVFAIL dns error fetching public key");
+}
