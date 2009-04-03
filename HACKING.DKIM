@@ -109,3 +109,16 @@ SpamAssassin will want to create the DKIM verifier and give it the
 message header early so that the DNS queries can be emitted. Then
 when the DNS responses are received, it can come back and give the
 verifier the rest of the message.
+
+Considering this, it might be useful to provide a slightly different
+API for SpamAssassin. One that explicitly specifies the header
+boundaries (when it expects DNS queries to be emitted), and the
+end of message (when the DNS responses are ready, or it's ok to block
+until they are). E.g.
+
+  $dkim = Verifier->new(Resolver => $my_custom_resolver);
+  $dkim->process_header($entire_header);
+  $dkim->process_body($entire_message_body);
+  $my_custom_resolver->wait_for_responses();
+  $dkim->do_verification();
+  my $result = $dkim->result;
