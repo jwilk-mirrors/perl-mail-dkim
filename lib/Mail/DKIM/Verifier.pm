@@ -555,14 +555,14 @@ The result of the apply() method is one of: "accept", "reject", "neutral".
 sub fetch_sender_policy
 {
 	my $self = shift;
-	use Mail::DKIM::Policy;
+	use Mail::DKIM::DkPolicy;
 
 	# determine addresses found in the "From" and "Sender" headers
 	my $author = $self->message_originator->address;
 	my $sender = $self->message_sender->address;
 
 	# fetch the policy
-	return Mail::DKIM::Policy->fetch(
+	return Mail::DKIM::DkPolicy->fetch(
 			Protocol => "dns",
 			Author => $author,
 			Sender => $sender,

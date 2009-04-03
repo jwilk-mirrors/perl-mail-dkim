@@ -4,23 +4,23 @@ use strict;
 use warnings;
 use Test::Simple tests => 12;
 
-use Mail::DKIM::Policy;
+use Mail::DKIM::DkPolicy;
 use Mail::DKIM::DkimPolicy;
 
 my $policy;
-$policy = Mail::DKIM::Policy->new();
+$policy = Mail::DKIM::DkPolicy->new();
 ok($policy, "new() works");
 
-$policy = Mail::DKIM::Policy->parse(String => "o=~; t=y");
+$policy = Mail::DKIM::DkPolicy->parse(String => "o=~; t=y");
 ok($policy, "parse() works");
 
-$policy = Mail::DKIM::Policy->fetch(
+$policy = Mail::DKIM::DkPolicy->fetch(
 		Protocol => "dns",
 		Domain => "messiah.edu");
 ok($policy, "fetch() works (requires DNS)");
 ok(!$policy->is_implied_default_policy, "not the default policy");
 
-$policy = Mail::DKIM::Policy->parse(String => "");
+$policy = Mail::DKIM::DkPolicy->parse(String => "");
 ok($policy, "parse() works (no tags)");
 
 ok(!defined($policy->note), "note tag has default value");
@@ -35,7 +35,7 @@ ok(!$policy->testing, "testing flag has default value");
 #$policy->testing(1);
 #ok($policy->testing, "testing flag has been changed");
 
-$policy = Mail::DKIM::Policy->fetch(
+$policy = Mail::DKIM::DkPolicy->fetch(
 		Protocol => "dns",
 		Sender => 'alfred@nobody.messiah.edu',
 		);
@@ -53,7 +53,7 @@ sub debug_policies
 		print "# $domain:\n";
 
 		print "#  DomainKeys: ";
-		my $policy = Mail::DKIM::Policy->fetch(
+		my $policy = Mail::DKIM::DkPolicy->fetch(
 			Protocol => "dns",
 			Domain => $domain);
 		if ($policy->is_implied_default_policy)

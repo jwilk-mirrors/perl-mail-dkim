@@ -12,6 +12,7 @@ lib/Mail/DKIM/Algorithm/rsa_sha1.pm
 lib/Mail/DKIM/Algorithm/rsa_sha256.pm
 lib/Mail/DKIM/AuthorDomainPolicy.pm
 lib/Mail/DKIM/DNS.pm
+lib/Mail/DKIM/DkPolicy.pm
 lib/Mail/DKIM/DkimPolicy.pm
 lib/Mail/DKIM/Policy.pm
 lib/Mail/DKIM/Key.pm

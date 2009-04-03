@@ -1,4 +1,11 @@
 2009-04-03: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/DkPolicy.pm: moved the DomainKeys-specific policy
+   stuff from Policy.pm to here
+ * t/policy.t: change tests to use DkPolicy instead of Policy
+ * lib/Mail/DKIM/Verifier.pm (fetch_sender_policy): use DkPolicy
+   class instead of Policy class
+
+2009-04-03: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/AuthorDomainPolicy.pm: first draft of ADSP support
 
 2009-04-03: Jason Long <jlong@messiah.edu>

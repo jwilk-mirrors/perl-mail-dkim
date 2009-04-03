@@ -3,6 +3,13 @@ See the ChangeLog file for the details.
 
 Version 0.34
 
+ since 0.33_6
+
+  * renamed Mail::DKIM::Policy to Mail::DKIM::DkPolicy. Programs using
+    the former name to create policy objects directly (though it would
+    be more expected to fetch the objects through Mail::DKIM::Verifier)
+    should update their code
+
  since 0.33_5
 
   * fixed a bug in one of the test scripts, caused by the changes in
