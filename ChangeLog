@@ -1,4 +1,7 @@
 2009-04-03: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/AuthorDomainPolicy.pm: first draft of ADSP support
+
+2009-04-03: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Verifier.pm: rename fetch_policies() to policies()
  * scripts/dkimverify.pl: replace use of fetch_policies() with
    policies()
