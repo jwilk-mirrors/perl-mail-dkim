@@ -1,3 +1,7 @@
+2009-04-04: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Verifier.pm (fetch_author_domain_policies): new method
+   for fetching ADSP records for a particular message
+
 2009-04-03: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/DkPolicy.pm: moved the DomainKeys-specific policy
    stuff from Policy.pm to here

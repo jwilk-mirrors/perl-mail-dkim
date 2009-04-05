@@ -532,6 +532,26 @@ sub fetch_author_policy
 			);
 }
 
+sub fetch_author_domain_policies
+{
+	my $self = shift;
+	use Mail::DKIM::AuthorDomainPolicy;
+
+	return () unless $self->{headers_by_name}->{from};
+	my @list = Mail::Address->parse(
+		$self->{headers_by_name}->{from}
+		);
+	my @authors = map { $_->address } @list;
+
+	# fetch the policies
+	return map {
+		Mail::DKIM::DkimPolicy->fetch(
+			Protocol => "dns",
+			Author => $_,
+			)
+		} @authors;
+}
+
 =head2 fetch_sender_policy() - retrieves a signing policy from DNS
 
   my $policy = $dkim->fetch_sender_policy;
@@ -646,6 +666,7 @@ sub policies
 	return (
 		$sender_policy ? $sender_policy : (),
 		$author_policy ? $author_policy : (),
+		$self->fetch_author_domain_policies(),
 		);
 }
 
