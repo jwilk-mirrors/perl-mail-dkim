@@ -11,6 +11,7 @@ Version 0.34
     should update their code
   * new API for fetching sender/author signing policies,
     see Verifier::fetch_policies()
+  * initial support for ADSP (author-domain-signing-practices)
   * better detection of DNS resolver errors
 
  since 0.33_5
