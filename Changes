@@ -9,6 +9,9 @@ Version 0.34
     the former name to create policy objects directly (though it would
     be more expected to fetch the objects through Mail::DKIM::Verifier)
     should update their code
+  * new API for fetching sender/author signing policies,
+    see Verifier::fetch_policies()
+  * better detection of DNS resolver errors
 
  since 0.33_5
 
