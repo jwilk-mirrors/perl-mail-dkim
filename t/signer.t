@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::Simple tests => 15;
+use Test::Simple tests => 16;
 
 use Mail::DKIM::Signer;
 
@@ -111,4 +111,24 @@ $dkim = Mail::DKIM::Signer->new(
 my $E = $@;
 print "# $E" if $E;
 ok($E, "new() with bogus key file dies as expected");
+}
+
+{ # TEST signing a message with no header
+
+	my $dkim = Mail::DKIM::Signer->new(
+			Algorithm => "rsa-sha1",
+			Method => "relaxed",
+			Domain => "example.org",
+			Selector => "test",
+			KeyFile => $keyfile);
+
+	my $sample_email = <<END_OF_SAMPLE;
+this message has no header
+END_OF_SAMPLE
+$sample_email =~ s/\n/\015\012/gs;
+
+	$dkim->PRINT($sample_email);
+	$dkim->CLOSE;
+
+	ok($dkim->signature, "signature() works");
 }
