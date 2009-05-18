@@ -3,6 +3,12 @@ See the ChangeLog file for the details.
 
 Version 0.34
 
+ since 0.33_7
+
+  * bugfix:
+    * Signer object would die if first line of input wasn't a header
+      (rt.cpan.org issue #46179)
+
  since 0.33_6
 
   * renamed Mail::DKIM::Policy to Mail::DKIM::DkPolicy. Programs using
