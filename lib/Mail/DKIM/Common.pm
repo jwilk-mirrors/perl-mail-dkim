@@ -68,6 +68,17 @@ sub handle_header
 	$self->{headers_by_name}->{$field_name} = $contents;
 }
 
+sub init
+{
+	my $self = shift;
+	$self->SUPER::init(@_);
+
+	#initialize variables
+	$self->{headers} = [];
+	$self->{headers_by_name} = {};
+	$self->{header_field_names} = [];
+}
+
 sub load
 {
 	my $self = shift;

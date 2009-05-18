@@ -1,5 +1,7 @@
 2009-05-18: Jason Long <jlong@messiah.edu>
  * t/signer.t: add a test-case of a message without a header
+ * lib/Mail/DKIM/Common.pm (init): initialize variables used by methods
+   in this class; fixes RT.CPAN.ORG bug #46179
 
 2009-04-04: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Verifier.pm (fetch_author_domain_policies): new method
