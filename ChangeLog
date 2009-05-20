@@ -2,6 +2,7 @@
  * lib/Mail/DKIM.pm: rewrite the description section of the Mail::DKIM
    man page
  * lib/Mail/DKIM/Verifier.pm: document fetch_author_domain_policies()
+ * Makefile.PL: release 0.34
 
 2009-05-18: Jason Long <jlong@messiah.edu>
  * t/signer.t: add a test-case of a message without a header

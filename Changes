@@ -1,34 +1,25 @@
 This file summarizes what's changed between releases of Mail-DKIM.
 See the ChangeLog file for the details.
 
-Version 0.34
+Version 0.34 - released 2009-05-20
 
- since 0.33_7
+  * New/changed functionality:
+    * support for ADSP (author-domain-signing-practices) records
+    * removed support for pre-standardized DKIM signatures (i.e. these
+      are DKIM signatures without a v= or bh= tag).
+    * DNS resolver errors are detected and reported as such
 
-  * bugfix:
+  * API changes:
+    * renamed Mail::DKIM::Policy to Mail::DKIM::DkPolicy. Programs using
+      the former name to create policy objects directly (though it would
+      be more expected to fetch the objects through
+      Mail::DKIM::Verifier) should update their code
+    * new policies() method in Mail::DKIM::Verifier for fetching all
+      applicable sender/author signing policies
+
+  * bugfixes:
     * Signer object would die if first line of input wasn't a header
       (rt.cpan.org issue #46179)
-
- since 0.33_6
-
-  * renamed Mail::DKIM::Policy to Mail::DKIM::DkPolicy. Programs using
-    the former name to create policy objects directly (though it would
-    be more expected to fetch the objects through Mail::DKIM::Verifier)
-    should update their code
-  * new API for fetching sender/author signing policies,
-    see Verifier::fetch_policies()
-  * initial support for ADSP (author-domain-signing-practices)
-  * better detection of DNS resolver errors
-
- since 0.33_5
-
-  * fixed a bug in one of the test scripts, caused by the changes in
-    0.33_5
-
- since 0.33
- 
-  * removed support for pre-standardized DKIM signatures (i.e. these
-    are DKIM signatures without a v= or bh= tag).
 
 
 Version 0.33 - released 2009-03-10
