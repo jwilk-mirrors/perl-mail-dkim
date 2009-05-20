@@ -38,30 +38,38 @@ Mail::DKIM - Signs/verifies Internet mail with DKIM/DomainKey signatures
 
 =head1 DESCRIPTION
 
-This Perl module is part of the dkimproxy program, located at
-http://jason.long.name/dkimproxy/. I've tried to abstract out the DKIM
-parts into this module, for use in other programs.
+This module implements the various components of the DKIM and
+DomainKeys message-signing and verifying standards for Internet mail.
+It currently tries to implement these specifications:
 
-The Mail::DKIM module uses an object-oriented interface. You use one of
+=over
+
+=item RFC4871, for DKIM
+
+=item RFC4870, for DomainKeys
+
+=back
+
+The module uses an object-oriented interface. You use one of
 two different classes, depending on whether you are signing or verifying
-a message. To sign, use the L<Mail::DKIM::Signer> class. To verify, use the
-L<Mail::DKIM::Verifier> class. Simple, eh?
+a message. To sign, use the L<Mail::DKIM::Signer> class. To verify, use
+the L<Mail::DKIM::Verifier> class. Simple, eh?
 
 =head1 SEE ALSO
 
 L<Mail::DKIM::Signer>,
 L<Mail::DKIM::Verifier>
 
-http://jason.long.name/dkimproxy/
+http://dkimproxy.sourceforge.net/
 
 =head1 KNOWN BUGS
 
-The DKIM standard is still in development, so by the time you read this,
-this module may already be broken with regards to the latest DKIM
-specification.
+Problems passing `make test' seem to usually point at a faulty DNS
+configuration on your machine, or something weird about your OpenSSL
+libraries.
 
-The "sender signing policy" component is still under construction. The
-sender signing policy is supposed to identify the practice of the message
+The "author signing policy" component is still under construction. The
+author signing policy is supposed to identify the practice of the message
 author, so you could for example reject a message from an author who claims
 they always sign their messages. See L<Mail::DKIM::Policy>.
 
@@ -71,7 +79,7 @@ Jason Long, E<lt>jlong@messiah.eduE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2006-2007 by Messiah College
+Copyright (C) 2006-2007, 2009 by Messiah College
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.6 or,
