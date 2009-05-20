@@ -500,19 +500,12 @@ and verifies the signature.
   my $policy = $dkim->fetch_author_policy;
   my $policy_result = $policy->apply($dkim);
 
-The "author" policy, as I call it, is the DKIM Sender Signing Practices
+This method retrieves the DKIM Sender Signing Practices
 record as described in Internet Draft draft-ietf-dkim-ssp-00-01dc.
-I call it the "author" policy because it is keyed to the email address
-in the From: header, i.e. the author of the message.
+This Internet Draft is now obsolete; this method is only kept for
+backward-compatibility purposes.
 
-The IETF is still actively working on this Internet Draft, so the
-exact mechanisms are subject to change.
-
-If the email being verified has no From header at all
-(which violates email standards),
-then this method will C<die>.
-
-The result of the apply() method is one of: "accept", "reject", "neutral".
+Please use the L</"policies()"> method instead.
 
 =cut
 
@@ -531,6 +524,28 @@ sub fetch_author_policy
 			Author => $author,
 			);
 }
+
+=head2 fetch_author_domain_policies() - retrieves ADSP records from DNS
+
+  my @policies = $dkim->fetch_author_domain_policies;
+  foreach my $policy (@policies)
+  {
+      my $policy_result = $policy->apply($dkim);
+  }
+
+This method will retrieve all applicable
+"author-domain-signing-practices" published in DNS for this message.
+Author policies are keyed to the email address(es) in the From: header,
+i.e. the claimed author of the message.
+
+This method returns a *list* of policy records, since there is allowed
+to be zero or multiple email addresses in the From: header.
+
+The result of the apply() method is one of: "accept", "reject", "neutral".
+
+See also: L</"policies()">.
+
+=cut
 
 sub fetch_author_domain_policies
 {
@@ -569,6 +584,8 @@ get an email address (which violates email standards),
 then this method will C<die>.
 
 The result of the apply() method is one of: "accept", "reject", "neutral".
+
+See also: L</"policies()">.
 
 =cut
 
