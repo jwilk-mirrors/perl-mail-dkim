@@ -495,36 +495,6 @@ to be read into memory at once.
 This method finishes the canonicalization process, computes a hash,
 and verifies the signature.
 
-=head2 fetch_author_policy() - retrieves a signing policy from DNS
-
-  my $policy = $dkim->fetch_author_policy;
-  my $policy_result = $policy->apply($dkim);
-
-This method retrieves the DKIM Sender Signing Practices
-record as described in Internet Draft draft-ietf-dkim-ssp-00-01dc.
-This Internet Draft is now obsolete; this method is only kept for
-backward-compatibility purposes.
-
-Please use the L</"policies()"> method instead.
-
-=cut
-
-sub fetch_author_policy
-{
-	my $self = shift;
-	my ($author) = @_;
-	use Mail::DKIM::DkimPolicy;
-
-	# determine address found in the "From"
-	$author ||= $self->message_originator->address;
-
-	# fetch the policy
-	return Mail::DKIM::DkimPolicy->fetch(
-			Protocol => "dns",
-			Author => $author,
-			);
-}
-
 =head2 fetch_author_domain_policies() - retrieves ADSP records from DNS
 
   my @policies = $dkim->fetch_author_domain_policies;
@@ -565,6 +535,36 @@ sub fetch_author_domain_policies
 			Author => $_,
 			)
 		} @authors;
+}
+
+=head2 fetch_author_policy() - retrieves a signing policy from DNS
+
+  my $policy = $dkim->fetch_author_policy;
+  my $policy_result = $policy->apply($dkim);
+
+This method retrieves the DKIM Sender Signing Practices
+record as described in Internet Draft draft-ietf-dkim-ssp-00-01dc.
+This Internet Draft is now obsolete; this method is only kept for
+backward-compatibility purposes.
+
+Please use the L</"policies()"> method instead.
+
+=cut
+
+sub fetch_author_policy
+{
+	my $self = shift;
+	my ($author) = @_;
+	use Mail::DKIM::DkimPolicy;
+
+	# determine address found in the "From"
+	$author ||= $self->message_originator->address;
+
+	# fetch the policy
+	return Mail::DKIM::DkimPolicy->fetch(
+			Protocol => "dns",
+			Author => $author,
+			);
 }
 
 =head2 fetch_sender_policy() - retrieves a signing policy from DNS
