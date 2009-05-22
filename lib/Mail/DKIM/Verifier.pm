@@ -43,6 +43,19 @@ Mail::DKIM::Verifier - verifies a DKIM-signed message
   # what is the result of the verify?
   my $result = $dkim->result;
 
+  # there might be multiple signatures, what is the result per signature?
+  foreach my $signature ($dkim->signatures)
+  {
+      print "signature identity: " . $signature->identity . "\n";
+      print "verify result: " . $signature->result_detail . "\n";
+  }
+
+  # the alleged author of the email may specify how to handle email
+  foreach my $policy ($dkim->policies)
+  {
+      die "fraudulent message" if ($policy->apply($dkim) eq "reject");
+  }
+
 =cut
 
 =head1 DESCRIPTION
@@ -54,7 +67,7 @@ message has been completely read, the signatures are verified and the
 results of the verification can be accessed.
 
 To use the verifier, first create the verifier object. Then start
-"feeding" it the email message to be verified. When all the headers
+"feeding" it the email message to be verified. When all the _headers_
 have been read, the verifier:
 
  1. checks whether any DomainKeys/DKIM signatures were found
@@ -62,8 +75,15 @@ have been read, the verifier:
  3. sets up the appropriate algorithms and canonicalization objects
  4. canonicalizes the headers and computes the header hash
 
-Then, when the body of the message has been completely fed into the
+Then, when the _body_ of the message has been completely fed into the
 verifier, the body hash is computed and the signatures are verified.
+
+The results of the verification can be checked with L</"result()">
+or L</"signatures()">.
+
+Messages that do not verify may be checked against the alleged sender's
+published signing policy with L</"policies()"> and
+L<Mail::DKIM::Policy/"apply()">.
 
 =head1 CONSTRUCTOR
 
