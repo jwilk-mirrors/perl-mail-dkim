@@ -87,7 +87,9 @@ L<Mail::DKIM::Policy/"apply()">.
 
 =head1 CONSTRUCTOR
 
-=head2 new() - construct an object-oriented verifier
+=head2 new()
+
+Constructs an object-oriented verifier.
 
   my $dkim = Mail::DKIM::Verifier->new();
 
@@ -498,7 +500,9 @@ sub finish_body
 
 =head1 METHODS
 
-=head2 PRINT() - feed part of the message to the verifier
+=head2 PRINT()
+
+Feeds part of the message to the verifier.
 
   $dkim->PRINT("a line of the message\015\012");
   $dkim->PRINT("more of");
@@ -508,14 +512,18 @@ Feeds content of the message being verified into the verifier.
 The API is designed this way so that the entire message does NOT need
 to be read into memory at once.
 
-=head2 CLOSE() - call this when finished feeding in the message
+=head2 CLOSE()
+
+Call this when finished feeding in the message.
 
   $dkim->CLOSE;
 
 This method finishes the canonicalization process, computes a hash,
 and verifies the signature.
 
-=head2 fetch_author_domain_policies() - retrieves ADSP records from DNS
+=head2 fetch_author_domain_policies()
+
+Retrieves ADSP records from DNS.
 
   my @policies = $dkim->fetch_author_domain_policies;
   foreach my $policy (@policies)
@@ -557,7 +565,9 @@ sub fetch_author_domain_policies
 		} @authors;
 }
 
-=head2 fetch_author_policy() - retrieves a signing policy from DNS
+=head2 fetch_author_policy()
+
+Retrieves a signing policy from DNS.
 
   my $policy = $dkim->fetch_author_policy;
   my $policy_result = $policy->apply($dkim);
@@ -587,7 +597,9 @@ sub fetch_author_policy
 			);
 }
 
-=head2 fetch_sender_policy() - retrieves a signing policy from DNS
+=head2 fetch_sender_policy()
+
+Retrieves a signing policy from DNS.
 
   my $policy = $dkim->fetch_sender_policy;
   my $policy_result = $policy->apply($dkim);
@@ -626,7 +638,9 @@ sub fetch_sender_policy
 			);
 }
 
-=head2 load() - load the entire message from a file handle
+=head2 load()
+
+Load the entire message from a file handle.
 
   $dkim->load($file_handle);
 
@@ -634,7 +648,9 @@ Reads a complete message from the designated file handle,
 feeding it into the verifier. The message must use <CRLF> line
 terminators (same as the SMTP protocol).
 
-=head2 message_originator() - access the "From" header
+=head2 message_originator()
+
+Access the "From" header.
 
   my $address = $dkim->message_originator;
 
@@ -650,7 +666,9 @@ To get just the email address part, do:
 
 See also L</"message_sender()">.
 
-=head2 message_sender() - access the "From" or "Sender" header
+=head2 message_sender()
+
+Access the "From" or "Sender" header.
 
   my $address = $dkim->message_sender;
 
@@ -669,7 +687,9 @@ transmission of the message. For example, if a secretary were to send a
 message for another person, the "sender" would be the secretary and
 the "originator" would be the actual author.
 
-=head2 policies() - retrieves applicable signing policies from DNS
+=head2 policies()
+
+Retrieves applicable signing policies from DNS.
 
   my @policies = $dkim->policies;
   foreach my $policy (@policies)
@@ -708,7 +728,9 @@ sub policies
 }
 
 
-=head2 result() - access the result of the verification
+=head2 result()
+
+Access the result of the verification.
 
   my $result = $dkim->result;
 
@@ -753,7 +775,9 @@ L<Mail::DKIM::Signature/result>.
 
 =cut
 
-=head2 result_detail() - access the result, plus details if available
+=head2 result_detail()
+
+Access the result, plus details if available.
 
   my $detail = $dkim->result_detail;
 
@@ -794,7 +818,9 @@ The following are possible results from the result_detail() method:
   invalid (public key: OpenSSL error: ...)
   none
 
-=head2 signature() - access the message's DKIM signature
+=head2 signature()
+
+Access the message's DKIM signature.
 
   my $sig = $dkim->signature;
 
@@ -807,7 +833,9 @@ Best is defined as "pass", followed by "fail", "invalid", and "none".
 
 =cut
 
-=head2 signatures() - access all of this message's signatures
+=head2 signatures()
+
+Access all of this message's signatures.
 
   my @all_signatures = $dkim->signatures;
 
