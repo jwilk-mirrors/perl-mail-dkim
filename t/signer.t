@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::Simple tests => 16;
+use Test::Simple tests => 17;
 
 use Mail::DKIM::Signer;
 
@@ -152,9 +152,8 @@ END_OF_SAMPLE
 	$sample_email .= ("\n" x 250000);
 	$sample_email =~ s/\n/\015\012/gs;
 
-print STDERR "# putting in a nasty message\n";
+	# older, broken, versions of Mail::DKIM will hang here
 	$dkim->PRINT($sample_email);
-print STDERR "# finished putting in the nasty message\n";
 	$dkim->CLOSE;
 
 	ok($dkim->signature, "signature() works");
