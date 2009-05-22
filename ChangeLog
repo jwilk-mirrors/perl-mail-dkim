@@ -1,3 +1,5 @@
+ -- VERSION 0.35 --
+
 2009-05-22: Jason Long <jlong@messiah.edu>
  * t/signer.t: add a test-case of a message with 10000's of blank
    lines; this seems to DoS the canonicalization routines
