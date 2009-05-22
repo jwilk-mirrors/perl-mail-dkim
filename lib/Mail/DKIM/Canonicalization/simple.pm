@@ -68,9 +68,10 @@ sub canonicalize_body
 		}
 	}
 
-	if ($multiline =~ s/((?:\015\012){2,})\z/\015\012/)
+	while ($multiline =~ /\015\012\015\012\z/)
 	{	# count & strip trailing empty lines
-		$empty_lines += length($1)/2 - 1;
+		chop $multiline; chop $multiline;
+		$empty_lines++;
 	}
 
 	$self->{canonicalize_body_empty_lines} = $empty_lines;
