@@ -1,6 +1,9 @@
 2009-05-22: Jason Long <jlong@messiah.edu>
  * t/signer.t: add a test-case of a message with 10000's of blank
    lines; this seems to DoS the canonicalization routines
+ * lib/Mail/DKIM/Canonicalization/{simple,relaxed,dk_simple}.pm:
+   fix for bug reported on amavis-user list, patch provided by
+   Mark Martinec. Thanks!
 
  -- VERSION 0.34 --
 
