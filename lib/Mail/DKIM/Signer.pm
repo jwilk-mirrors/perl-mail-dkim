@@ -51,7 +51,9 @@ Mail::DKIM::Signer - generates a DKIM signature for a message
 
 =head1 CONSTRUCTOR
 
-=head2 new() - construct an object-oriented signer
+=head2 new()
+
+Construct an object-oriented signer.
 
   # create a signer using the default policy
   my $dkim = Mail::DKIM::Signer->new(
@@ -287,7 +289,9 @@ sub finish_body
 
 =head1 METHODS
 
-=head2 PRINT() - feed part of the message to the signer
+=head2 PRINT()
+
+Feed part of the message to the signer.
 
   $dkim->PRINT("a line of the message\015\012");
 
@@ -295,14 +299,18 @@ Feeds content of the message being signed into the signer.
 The API is designed this way so that the entire message does NOT need
 to be read into memory at once.
 
-=head2 CLOSE() - call this when finished feeding in the message
+=head2 CLOSE()
+
+Call this when finished feeding in the message.
 
   $dkim->CLOSE;
 
 This method finishes the canonicalization process, computes a hash,
 and generates a signature.
 
-=head2 add_signature() - used by signer policy to create a new signature
+=head2 add_signature()
+
+Used by signer policy to create a new signature.
 
   $dkim->add_signature(new Mail::DKIM::Signature(...));
 
@@ -328,7 +336,9 @@ sub add_signature
 	return;
 }
 
-=head2 algorithm() - get or set the selected algorithm
+=head2 algorithm()
+
+Get or set the selected algorithm.
 
   $alg = $dkim->algorithm;
 
@@ -346,7 +356,9 @@ sub algorithm
 	return $self->{Algorithm};
 }
 
-=head2 domain() - get or set the selected domain
+=head2 domain()
+
+Get or set the selected domain.
 
   $alg = $dkim->domain;
 
@@ -364,7 +376,9 @@ sub domain
 	return $self->{Domain};
 }
 
-=head2 load() - load the entire message from a file handle
+=head2 load()
+
+Load the entire message from a file handle.
 
   $dkim->load($file_handle);
 
@@ -374,7 +388,9 @@ terminators (same as the SMTP protocol).
 
 =cut
 
-=head2 headers() - determine which headers to put in signature
+=head2 headers()
+
+Determine which headers to put in signature.
 
   my $headers = $dkim->headers;
 
@@ -426,7 +442,9 @@ sub want_header
 	return scalar grep { lc($_) eq lc($header_name) } @DEFAULT_HEADERS;
 }
 
-=head2 key() - get or set the private key object
+=head2 key()
+
+Get or set the private key object.
 
   my $key = $dkim->key;
 
@@ -448,7 +466,9 @@ sub key
 	return $self->{Key};
 }
 
-=head2 key_file() - get or set the filename containing the private key
+=head2 key_file()
+
+Get or set the filename containing the private key.
 
   my $filename = $dkim->key_file;
 
@@ -470,7 +490,9 @@ sub key_file
 	return $self->{KeyFile};
 }
 
-=head2 method() - get or set the selected canonicalization method
+=head2 method()
+
+Get or set the selected canonicalization method.
 
   $alg = $dkim->method;
 
@@ -488,7 +510,9 @@ sub method
 	return $self->{Method};
 }
 
-=head2 message_originator() - access the "From" header
+=head2 message_originator()
+
+Access the "From" header.
 
   my $address = $dkim->message_originator;
 
@@ -504,7 +528,9 @@ To get just the email address part, do:
 
 See also L</"message_sender()">.
 
-=head2 message_sender() - access the "From" or "Sender" header
+=head2 message_sender()
+
+Access the "From" or "Sender" header.
 
   my $address = $dkim->message_sender;
 
@@ -526,7 +552,9 @@ the "originator" would be the actual author.
 
 =cut
 
-=head2 selector() - get or set the current key selector
+=head2 selector()
+
+Get or set the current key selector.
 
   $alg = $dkim->selector;
 
@@ -544,7 +572,9 @@ sub selector
 	return $self->{Selector};
 }
 
-=head2 signature() - access the generated signature object
+=head2 signature()
+
+Access the generated signature object.
 
   my $signature = $dkim->signature;
 
@@ -556,7 +586,9 @@ The signature should be B<prepended> to the message to make the
 resulting message. At the very least, it should precede any headers
 that were signed.
 
-=head2 signatures() - access list of generated signature objects
+=head2 signatures()
+
+Access list of generated signature objects.
 
   my @signatures = $dkim->signatures;
 

@@ -118,7 +118,9 @@ sub parse
 These methods are supported by all classes implementing the
 L<Mail::DKIM::Policy> interface.
 
-=head2 apply() - apply the policy to the results of a DKIM verifier
+=head2 apply()
+
+Apply the policy to the results of a DKIM verifier.
 
   my $result = $policy->apply($dkim_verifier);
 
@@ -170,7 +172,9 @@ sub apply
 	return "neutral";
 }
 
-=head2 is_implied_default_policy() - is this policy implied?
+=head2 is_implied_default_policy()
+
+Is this policy implied?
 
   my $is_implied = $policy->is_implied_default_policy;
 
@@ -187,7 +191,9 @@ sub is_implied_default_policy
 	return ($self == $default_policy);
 }
 
-=head2 location() - where the policy was fetched from
+=head2 location()
+
+Where the policy was fetched from.
 
 This is generally a domain name, the domain name where the policy
 was published.
@@ -203,7 +209,9 @@ sub location
 	return $self->{Domain};
 }
 
-=head2 name() - identify what type of policy this is
+=head2 name()
+
+Identify what type of policy this is.
 
 This currently returns strings like "sender", "author", and "ADSP".
 It is subject to change in the next version of Mail::DKIM.
