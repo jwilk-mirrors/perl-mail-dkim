@@ -769,9 +769,9 @@ Returned if no DKIM-Signature headers (valid or invalid) were found.
 
 In case of multiple signatures, the "best" result will be returned.
 Best is defined as "pass", followed by "fail", "invalid", and "none".
-To examine the results of individual signatures, use the L</signatures>
+To examine the results of individual signatures, use the L</"signatures()">
 method to retrieve the signature objects. See
-L<Mail::DKIM::Signature/result>.
+L<Mail::DKIM::Signature/"result()">.
 
 =cut
 
