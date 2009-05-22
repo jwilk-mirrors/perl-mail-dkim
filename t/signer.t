@@ -149,7 +149,7 @@ Comment: what is a comment
 
 this is a sample message
 END_OF_SAMPLE
-	$sample_email .= ("\n" x 250000);
+	$sample_email .= ("\n" x 50000);
 	$sample_email =~ s/\n/\015\012/gs;
 
 	# older, broken, versions of Mail::DKIM will hang here
