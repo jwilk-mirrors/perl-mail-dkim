@@ -1,7 +1,11 @@
 This file summarizes what's changed between releases of Mail-DKIM.
 See the ChangeLog file for the details.
 
-Version 0.35
+Version 0.35 - released 2009-05-22
+
+  * bugfixes:
+    * fixed a runaway regular expression in the canonicalization
+      routines (patch provided by Mark Martinec)
 
 
 Version 0.34 - released 2009-05-20
