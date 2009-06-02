@@ -3,6 +3,10 @@ See the ChangeLog file for the details.
 
 Version 0.36
 
+  * API changes:
+    * restore the as_string() method which was accidentally removed
+      in version 0.34
+
 
 Version 0.35 - released 2009-05-22
 

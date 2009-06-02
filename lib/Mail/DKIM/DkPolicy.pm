@@ -189,13 +189,6 @@ sub apply
 	return "neutral";
 }
 
-=head2 as_string() - the policy as a string
-
-Note that the string returned by this method will not necessarily have
-the tags ordered the same as the text record found in DNS.
-
-=cut
-
 =head2 flags() - get or set the flags (t=) tag
 
 A vertical-bar separated list of flags.

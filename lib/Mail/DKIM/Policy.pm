@@ -172,6 +172,21 @@ sub apply
 	return "neutral";
 }
 
+=head2 as_string() - the policy as a string
+
+Note that the string returned by this method will not necessarily have
+the tags ordered the same as the text record found in DNS.
+
+=cut
+
+sub as_string
+{
+       my $self = shift;
+
+       return join("; ", map { "$_=" . $self->{tags}->{$_} }
+               keys %{$self->{tags}});
+}
+
 =head2 is_implied_default_policy()
 
 Is this policy implied?
