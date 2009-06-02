@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::Simple tests => 12;
+use Test::Simple tests => 13;
 
 use Mail::DKIM::DkPolicy;
 use Mail::DKIM::DkimPolicy;
@@ -34,6 +34,8 @@ ok($policy->policy eq "-", "policy tag has been changed");
 ok(!$policy->testing, "testing flag has default value");
 #$policy->testing(1);
 #ok($policy->testing, "testing flag has been changed");
+
+ok($policy->as_string, "as_string() method is implemented");
 
 $policy = Mail::DKIM::DkPolicy->fetch(
 		Protocol => "dns",

@@ -1,3 +1,6 @@
+2009-06-02: Jason Long <jlong@messiah.edu>
+ * t/policy.t: test for the as_string() method
+
  -- VERSION 0.36 --
 
 2009-06-02: Jason Long <jlong@messiah.edu>
