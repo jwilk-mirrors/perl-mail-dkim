@@ -1,3 +1,5 @@
+ -- VERSION 0.36 --
+
 2009-06-02: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Policy.pm (as_string): restore this method which was
    accidentally removed in 0.34.
