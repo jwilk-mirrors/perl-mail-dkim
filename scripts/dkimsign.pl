@@ -79,7 +79,7 @@ $dkim->CLOSE;
 if ($debugfh)
 {
 	close $debugfh;
-	print STDERR "wrong canonicalized message to $debug_canonicalization\n";
+	print STDERR "wrote canonicalized message to $debug_canonicalization\n";
 }
 
 print $dkim->signature->as_string . "\n";

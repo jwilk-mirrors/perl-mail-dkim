@@ -1,4 +1,7 @@
 2009-06-09: Jason Long <jlong@messiah.edu>
+ * scripts/dkimsign.pl: fix typo in the debugging output
+
+2009-06-09: Jason Long <jlong@messiah.edu>
  * t/signer.t: test case for bug 2803465: space between header field
    name and colon cause signature to skip that header
  * lib/Mail/DKIM/Common.pm (add_header): fix regexp so that a space
