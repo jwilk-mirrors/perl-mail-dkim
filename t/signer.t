@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::Simple tests => 17;
+use Test::Simple tests => 20;
 
 use Mail::DKIM::Signer;
 
@@ -157,4 +157,31 @@ END_OF_SAMPLE
 	$dkim->CLOSE;
 
 	ok($dkim->signature, "signature() works");
+}
+
+{ # TEST signing a message with obsolete header syntax
+
+	my $dkim = Mail::DKIM::Signer->new(
+			Algorithm => "rsa-sha1",
+			Method => "relaxed",
+			Domain => "example.org",
+			Selector => "test",
+			KeyFile => $keyfile);
+
+	my $sample_email = <<END_OF_SAMPLE;
+From : jason <jason\@example.org>
+Subject: hi there
+Comment: what is a comment
+
+this is a sample message
+END_OF_SAMPLE
+	$sample_email =~ s/\n/\015\012/gs;
+	$dkim->PRINT($sample_email);
+	$dkim->CLOSE;
+
+	ok($dkim->signature, "signature() works");
+
+	my $sigstr = $dkim->signature->as_string;
+	ok($sigstr =~ /subject/i, "subject was signed");
+	ok($sigstr =~ /from/i, "from was signed");
 }
