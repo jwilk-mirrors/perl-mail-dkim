@@ -1,6 +1,9 @@
 2009-06-09: Jason Long <jlong@messiah.edu>
  * t/signer.t: test case for bug 2803465: space between header field
    name and colon cause signature to skip that header
+ * lib/Mail/DKIM/Common.pm (add_header): fix regexp so that a space
+   between the header field name and the colon is not treated as part
+   of the header field name (issue #2803465)
 
 2009-06-02: Jason Long <jlong@messiah.edu>
  * t/policy.t: test for the as_string() method

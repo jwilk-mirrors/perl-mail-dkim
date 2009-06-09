@@ -33,7 +33,7 @@ sub add_header
 		$algorithm->add_header($line);
 	}
 
-	if ($line =~ /^([^:]+)\s*:(.*)/s)
+	if ($line =~ /^([^:]+?)\s*:(.*)/s)
 	{
 		my $field_name = lc $1;
 		my $contents = $2;
