@@ -20,6 +20,18 @@ use Mail::DKIM::DNS;
 
 Mail::DKIM::AuthorDomainPolicy - represents an Author Domain Signing Practices (ADSP) record
 
+=head1 DESCRIPTION
+
+The Author Domain Signing Policies (ADSP) record can be published by any
+domain to help a receiver know what to do when it encounters an unsigned
+message claiming to originate from that domain.
+
+The record is published as a DNS TXT record at _adsp._domainkey.DOMAIN
+where DOMAIN is the domain of the message's "From" address.
+
+More details about this record can be found by reading the specification
+itself at L<http://tools.ietf.org/html/draft-ietf-dkim-ssp-10>.
+
 =head1 CONSTRUCTORS
 
 =head2 fetch() - lookup an ADSP record in DNS

@@ -20,6 +20,23 @@ use Mail::DKIM::DNS;
 
 Mail::DKIM::DkimPolicy - represents a DKIM Sender Signing Practices record
 
+=head1 DESCRIPTION
+
+The Sender Signing Practices (SSP) record can be published by any
+domain to help a receiver know what to do when it encounters an unsigned
+message claiming to originate from that domain.
+
+The record is published as a DNS TXT record at _policy._domainkey.DOMAIN
+where DOMAIN is the domain of the message's "From" address.
+
+This record format has been superceded by ADSP. See
+L<Mail::DKIM::AuthorDomainPolicy> for information about ADSP.
+It is implemented here because at one time it appeared this is what
+would be standardized by the IETF. It will be removed from Mail::DKIM
+at some point in the future.
+The last version of the SSP specification can be found at
+L<http://tools.ietf.org/html/draft-ietf-dkim-ssp-02>.
+
 =head1 CONSTRUCTORS
 
 =head2 fetch() - lookup a DKIM signing practices record

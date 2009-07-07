@@ -1,3 +1,7 @@
+2009-07-07: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/AuthorDomainPolicy.pm, DkimPolicy.pm: add a
+   description of the class to the documentation
+
 2009-06-09: Jason Long <jlong@messiah.edu>
  * scripts/dkimsign.pl: fix typo in the debugging output
 
