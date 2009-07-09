@@ -292,9 +292,11 @@ sub signall_strict
 
 =item *
 
-If a sender signing policy is not found for a given domain, the
-fetch() method should search the parent domains, according to
-section 4 of the dkim-ssp Internet Draft.
+Section 4.3 of the specification says to perform a query on the
+domain itself just to see if it exists. This class is not
+currently doing that, i.e. it might report NXDOMAIN because
+_adsp._domainkey.example.org is nonexistent, but it should
+not be treated the same as example.org being nonexistent.
 
 =back
 
