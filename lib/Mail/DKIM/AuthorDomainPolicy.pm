@@ -34,7 +34,9 @@ itself at L<http://tools.ietf.org/html/draft-ietf-dkim-ssp-10>.
 
 =head1 CONSTRUCTORS
 
-=head2 fetch() - lookup an ADSP record in DNS
+=head2 fetch()
+
+Lookup an ADSP record in DNS.
 
   my $policy = Mail::DKIM::AuthorDomainPolicy->fetch(
             Protocol => "dns",
@@ -66,7 +68,9 @@ sub get_lookup_name
 	return "_adsp._domainkey." . $prms->{Domain};
 }
 
-=head2 new() - construct a default policy object
+=head2 new()
+
+Construct a default policy object.
 
   my $policy = Mail::DKIM::AuthorDomainPolicy->new;
 
@@ -89,7 +93,9 @@ sub default
 
 =head1 METHODS
 
-=head2 apply() - apply the policy to the results of a DKIM verifier
+=head2 apply()
+
+Apply the policy to the results of a DKIM verifier.
 
   my $result = $policy->apply($dkim_verifier);
 
@@ -158,7 +164,9 @@ sub apply
 	return "neutral";
 }
 
-=head2 is_implied_default_policy() - is this policy implied?
+=head2 is_implied_default_policy()
+
+Tells whether this policy implied.
 
   my $is_implied = $policy->is_implied_default_policy;
 
@@ -175,7 +183,9 @@ sub is_implied_default_policy
 	return ($self == $default_policy);
 }
 
-=head2 location() - where the policy was fetched from
+=head2 location()
+
+Tells where the policy was fetched from.
 
 If the policy is domain-wide, this will be domain where the policy was
 published.
@@ -198,7 +208,9 @@ sub name
 	return "ADSP";
 }
 
-=head2 policy() - get or set the outbound signing policy (dkim=) tag
+=head2 policy()
+
+Get or set the outbound signing policy (dkim=) tag.
 
   my $sp = $policy->policy;
 
@@ -244,7 +256,9 @@ sub policy
 	}
 }
 
-=head2 signall() - true if policy is "all"
+=head2 signall()
+
+True if policy is "all".
 
 =cut
 
@@ -256,7 +270,9 @@ sub signall
 		($self->policy =~ /all/i);
 }
 
-=head2 signall_discardable() - true if policy is "strict"
+=head2 signall_discardable()
+
+True if policy is "strict".
 
 =cut
 
