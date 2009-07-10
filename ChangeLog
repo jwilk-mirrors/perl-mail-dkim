@@ -1,4 +1,8 @@
 2009-07-09: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Verifier.pm: wasn't using the right API to get
+   the ADSP policy
+
+2009-07-09: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/AuthorDomainPolicy.pm, DkimPolicy.pm: changed the
    format of how methods are documented
 
