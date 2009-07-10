@@ -2,10 +2,11 @@
 
 use strict;
 use warnings;
-use Test::Simple tests => 13;
+use Test::More tests => 15;
 
 use Mail::DKIM::DkPolicy;
 use Mail::DKIM::DkimPolicy;
+use Mail::DKIM::AuthorDomainPolicy;
 
 my $policy;
 $policy = Mail::DKIM::DkPolicy->new();
@@ -43,6 +44,32 @@ $policy = Mail::DKIM::DkPolicy->fetch(
 		);
 ok($policy, "fetch() returns policy for nonexistent domain");
 ok($policy->is_implied_default_policy, "yep, it's the default policy");
+
+SKIP:
+{
+	skip "these tests fail when run on the other side of my firewall", 2
+		unless ($ENV{DNS_TESTS} && $ENV{DNS_TESTS} > 1);
+
+	$policy = eval { Mail::DKIM::AuthorDomainPolicy->fetch(
+			Protocol => "dns",
+			Domain => "blackhole.messiah.edu",
+			) };
+	my $E = $@;
+	print "# got error: $E" if $E;
+	ok(!$policy
+		&& $E && $E =~ /(timeout|timed? out)/,
+		"timeout error fetching policy");
+
+	$policy = eval { Mail::DKIM::AuthorDomainPolicy->fetch(
+			Protocol => "dns",
+			Domain => "blackhole2.messiah.edu",
+			) };
+	$E = $@;
+	print "# got error: $E" if $E;
+	ok(!$policy
+		&& $E && $E =~ /SERVFAIL/,
+		"SERVFAIL dns error fetching policy");
+}
 
 #debug_policies(qw(yahoo.com hotmail.com gmail.com));
 #debug_policies(qw(paypal.com ebay.com));
