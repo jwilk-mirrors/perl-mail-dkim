@@ -65,7 +65,7 @@ sub fetch
 	unless (@resp)
 	{
 		# no response => NXDOMAIN, use default policy
-		return $class->_handle_dns_failure(\%prms, $@);
+		return $class->default;
 	}
 
 	my $strn;
@@ -84,16 +84,6 @@ sub fetch
 			String => $strn,
 			Domain => $prms{Domain},
 			);
-}
-
-# something for subclasses to override, e.g. see AuthorDomainPolicy
-# $error_code can be "NXDOMAIN" or "NODATA"
-sub _handle_dns_failure
-{
-	my $class = shift;
-	my ($prms, $error_code) = @_;
-
-	return $class->default;
 }
 
 sub parse

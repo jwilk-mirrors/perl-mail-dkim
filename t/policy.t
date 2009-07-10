@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 16;
+use Test::More tests => 19;
 
 use Mail::DKIM::DkPolicy;
 use Mail::DKIM::DkimPolicy;
@@ -44,6 +44,14 @@ $policy = Mail::DKIM::DkPolicy->fetch(
 		);
 ok($policy, "fetch() returns policy for nonexistent domain");
 ok($policy->is_implied_default_policy, "yep, it's the default policy");
+
+$policy = Mail::DKIM::AuthorDomainPolicy->fetch(
+		Protocol => "dns",
+		Domain => "nonexistent-subdomain.messiah.edu",
+		);
+ok($policy, "fetch() returns policy for nonexistent domain");
+ok(!$policy->is_implied_default_policy, "shouldn't be the default policy");
+ok($policy->policy eq "NXDOMAIN", "got policy of NXDOMAIN");
 
 SKIP:
 {

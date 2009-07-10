@@ -1,4 +1,12 @@
 2009-07-10: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Policy.pm: revert ability for subclasses to
+   override behavior of no-results DNS query
+ * lib/Mail/DKIM/AuthorDomainPolicy.pm: if ADSP record is not found,
+   check whether the domain itself exists
+ * t/policy.t: add a test for the ADSP record causing a DNS error
+   but the domain itself still existing
+
+2009-07-10: Jason Long <jlong@messiah.edu>
  * t/public_key.t: refine the testing for DNS timeouts and SERVFAIL
    errors
  * t/policy.t: add some tests for DNS failures during policy queries

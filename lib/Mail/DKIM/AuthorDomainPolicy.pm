@@ -53,6 +53,45 @@ will "die".
 
 =cut
 
+sub fetch
+{
+	my $class = shift;
+	my %prms = @_;
+
+	my $self = eval { $class->SUPER::fetch(%prms) };
+	my $E = $@;
+
+	if ($self && !$self->is_implied_default_policy)
+	{
+		return $self;
+	}
+
+	# didn't find a policy; check the domain itself
+	{
+		#FIXME- not good to have this code duplicated between
+		#here and get_lookup_name()
+		#
+		if ($prms{Author} && !$prms{Domain})
+		{
+			$prms{Domain} = ($prms{Author} =~ /\@([^@]*)$/ and $1);
+		}
+
+		unless ($prms{Domain})
+		{
+			die "no domain to fetch policy for\n";
+		}
+
+		my @resp = Mail::DKIM::DNS::query($prms{Domain}, "MX");
+		if (!@resp && $@ eq "NXDOMAIN")
+		{
+			return $class->nxdomain_policy;
+		}
+	}
+
+	die $E if $E;
+	return $self;
+}
+	
 # get_lookup_name() - determine name of record to fetch
 #
 sub get_lookup_name
@@ -74,24 +113,6 @@ sub get_lookup_name
 
 	# IETF seems poised to create policy records this way
 	return "_adsp._domainkey." . $prms->{Domain};
-}
-
-sub _handle_dns_failure
-{
-	my $class = shift;
-	my ($prms, $error_code) = @_;
-
-	if ($error_code eq "NXDOMAIN")
-	{
-		my @resp = Mail::DKIM::DNS::query($prms->{Domain}, "MX");
-		if (!@resp && $@ eq "NXDOMAIN")
-		{
-			# the domain itself does not exist
-			die "Error: domain is out of scope\n";
-		}
-	}
-
-	return $class->default;
 }
 
 =head2 new()
@@ -117,6 +138,19 @@ sub default
 	return $DEFAULT_POLICY;
 }
 
+#undocumented private class method
+our $NXDOMAIN_POLICY;
+sub nxdomain_policy
+{
+	my $class = shift;
+	if (!$NXDOMAIN_POLICY)
+	{
+		$NXDOMAIN_POLICY = $class->new;
+		$NXDOMAIN_POLICY->policy("NXDOMAIN");
+	}
+	return $NXDOMAIN_POLICY;
+}
+	
 =head1 METHODS
 
 =head2 apply()
