@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 15;
+use Test::More tests => 16;
 
 use Mail::DKIM::DkPolicy;
 use Mail::DKIM::DkimPolicy;
@@ -47,7 +47,7 @@ ok($policy->is_implied_default_policy, "yep, it's the default policy");
 
 SKIP:
 {
-	skip "these tests fail when run on the other side of my firewall", 2
+	skip "these tests fail when run on the other side of my firewall", 3
 		unless ($ENV{DNS_TESTS} && $ENV{DNS_TESTS} > 1);
 
 	$policy = eval { Mail::DKIM::AuthorDomainPolicy->fetch(
@@ -63,6 +63,19 @@ SKIP:
 	$policy = eval { Mail::DKIM::AuthorDomainPolicy->fetch(
 			Protocol => "dns",
 			Domain => "blackhole2.messiah.edu",
+			) };
+	$E = $@;
+	print "# got error: $E" if $E;
+	ok(!$policy
+		&& $E && $E =~ /SERVFAIL/,
+		"SERVFAIL dns error fetching policy");
+
+	# test a policy record where _domainkey.DOMAIN gives a
+	# DNS error, but DOMAIN itself is valid
+	
+	$policy = eval { Mail::DKIM::AuthorDomainPolicy->fetch(
+			Protocol => "dns",
+			Domain => "blackhole3.messiah.edu",
 			) };
 	$E = $@;
 	print "# got error: $E" if $E;
