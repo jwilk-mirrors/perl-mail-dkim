@@ -43,6 +43,14 @@ Lookup an ADSP record in DNS.
             Author => 'jsmith@example.org',
           );
 
+If the ADSP record is found and appears to be valid, an object
+containing that record's information will be constructed and returned.
+If the ADSP record is blank or simply does not exist, an object
+representing the default policy will be returned instead.
+(See also L</"is_implied_default_policy()">.)
+If a DNS error occurs (e.g. SERVFAIL or time-out), this method
+will "die".
+
 =cut
 
 # get_lookup_name() - determine name of record to fetch
@@ -252,6 +260,11 @@ All mail from the domain is expected to be signed, using a valid Author
 signature, and the author is so confident that non-signed mail claiming
 to be from this domain can be automatically discarded by the recipient's
 mail server.
+
+=item C<"NXDOMAIN">
+
+The domain is out of scope, i.e., the domain does not exist in the
+DNS.
 
 =back
 
