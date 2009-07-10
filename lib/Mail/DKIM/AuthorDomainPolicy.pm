@@ -68,6 +68,24 @@ sub get_lookup_name
 	return "_adsp._domainkey." . $prms->{Domain};
 }
 
+sub _handle_dns_failure
+{
+	my $class = shift;
+	my ($prms, $error_code) = @_;
+
+	if ($error_code eq "NXDOMAIN")
+	{
+		my @resp = Mail::DKIM::DNS::query($prms->{Domain}, "MX");
+		if (!@resp && $@ eq "NXDOMAIN")
+		{
+			# the domain itself does not exist
+			die "Error: domain is out of scope\n";
+		}
+	}
+
+	return $class->default;
+}
+
 =head2 new()
 
 Construct a default policy object.

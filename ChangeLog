@@ -1,4 +1,10 @@
 2009-07-09: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Policy.pm: allow subclasses to override behavior
+   when DNS query returns no records
+ * lib/Mail/DKIM/AuthorDomainPolicy.pm: when DNS query returns no
+   records, check the domain itself and possibly die.
+
+2009-07-09: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Verifier.pm: wasn't using the right API to get
    the ADSP policy
 
