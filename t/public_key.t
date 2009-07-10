@@ -29,7 +29,9 @@ ok(!$pubkey, "public key should not exist");
 
 SKIP:
 {
-	skip "these errors vary depending on where you are", 2;
+	skip "these errors vary depending on where you are", 2
+		unless ($ENV{DNS_TESTS} && $ENV{DNS_TESTS} > 1);
+
 $pubkey = eval { Mail::DKIM::PublicKey->fetch(
 		Protocol => "dns",
 		Selector => "foo",

@@ -1,3 +1,7 @@
+2009-07-10: Jason Long <jlong@messiah.edu>
+ * t/public_key.t: refine the testing for DNS timeouts and SERVFAIL
+   errors
+
 2009-07-09: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Policy.pm: allow subclasses to override behavior
    when DNS query returns no records
