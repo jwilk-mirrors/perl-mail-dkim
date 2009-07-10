@@ -3,6 +3,10 @@ See the ChangeLog file for the details.
 
 Version 0.37
 
+  * New/changed functionality:
+    * ADSP records now check whether the domain itself exists, in
+      accordance to the ADSP specification
+
   * bugfixes:
     * fixed regexp used to detect header field names (issue #2803465)
 
