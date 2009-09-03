@@ -9,6 +9,7 @@ Version 0.37
 
   * bugfixes:
     * fixed regexp used to detect header field names (issue #2803465)
+    * various fixes to ADSP checking
 
 
 Version 0.36 - released 2009-06-02

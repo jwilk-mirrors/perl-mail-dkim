@@ -336,7 +336,7 @@ sub signall_strict
 	my $self = shift;
 
 	return $self->policy &&
-		($self->policy =~ /strict/i);
+		($self->policy =~ /discardable/i);
 }
 
 1;

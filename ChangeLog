@@ -1,3 +1,9 @@
+2009-09-02: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/AuthorDomainPolicy.pm: use d= tag not i= tag when
+   checking for first-party signatures; fix for testing() method
+   not found error; fix for "all" and "discardable" not doing the
+   right thing
+   
 2009-08-14: Jason Long <jlong@messiah.edu>
  * sample_mime_lite.pl: a sample script showing how to use Mail::DKIM
    with MIME::Lite
