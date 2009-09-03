@@ -42,6 +42,7 @@ scripts/test_canonicalization.pl
 scripts/test_nowsp_rsa_sha1.pl
 t/FAKE_DNS.dat
 t/Mail-DKIM.t
+t/adsp.t
 t/policy.t
 t/public_key.t
 t/signature.t
