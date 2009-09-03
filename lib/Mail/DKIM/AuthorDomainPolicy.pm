@@ -211,14 +211,6 @@ sub apply
 	return "accept" if $first_party;
 	return "reject" if ($self->signall_strict);
 
-	if ($self->signall)
-	{
-		# is there ANY valid signature?
-		my $verify_result = $dkim->result;
-		return "accept" if $verify_result eq "pass";
-	}
-
-	return "reject" if ($self->signall);
 	return "neutral";
 }
 
