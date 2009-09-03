@@ -30,7 +30,7 @@ The record is published as a DNS TXT record at _adsp._domainkey.DOMAIN
 where DOMAIN is the domain of the message's "From" address.
 
 More details about this record can be found by reading the specification
-itself at L<http://tools.ietf.org/html/draft-ietf-dkim-ssp-10>.
+itself at L<http://tools.ietf.org/html/rfc5617>.
 
 =head1 CONSTRUCTORS
 
@@ -190,7 +190,7 @@ sub apply
 	my ($dkim) = @_;
 
 	# first_party indicates whether there is a DKIM signature with
-	# an i= tag matching the address in the From: header
+	# a d= tag matching the address in the From: header
 	my $first_party;
 
 	my @passing_signatures = grep {
@@ -199,8 +199,8 @@ sub apply
 
 	foreach my $signature (@passing_signatures)
 	{
-		my $oa = $dkim->message_originator->address;
-		if ($signature->identity_matches($oa))
+		my $author_domain = $dkim->message_originator->host;
+		if (lc $author_domain eq lc $signature->domain)
 		{
 			# found a first party signature
 			$first_party = 1;
