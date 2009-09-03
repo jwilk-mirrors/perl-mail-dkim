@@ -208,10 +208,8 @@ sub apply
 		}
 	}
 
-	#TODO - consider testing flag?
-
 	return "accept" if $first_party;
-	return "reject" if ($self->signall_strict && !$self->testing);
+	return "reject" if ($self->signall_strict);
 
 	if ($self->signall)
 	{
@@ -220,7 +218,7 @@ sub apply
 		return "accept" if $verify_result eq "pass";
 	}
 
-	return "reject" if ($self->signall && !$self->testing);
+	return "reject" if ($self->signall);
 	return "neutral";
 }
 
