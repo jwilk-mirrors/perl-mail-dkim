@@ -1,7 +1,7 @@
 This file summarizes what's changed between releases of Mail-DKIM.
 See the ChangeLog file for the details.
 
-Version 0.37
+Version 0.37 - released 2009-09-08
 
   * New/changed functionality:
     * ADSP records now check whether the domain itself exists, in
