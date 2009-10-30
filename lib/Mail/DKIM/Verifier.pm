@@ -111,7 +111,7 @@ is written to the referenced string or file handle.
 package Mail::DKIM::Verifier;
 use base "Mail::DKIM::Common";
 use Carp;
-our $VERSION = 0.37;
+our $VERSION = 0.38;
 
 sub init
 {

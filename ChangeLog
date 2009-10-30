@@ -1,3 +1,5 @@
+ -- VERSION 0.37 --
+
 2009-09-02: Jason Long <jlong@messiah.edu>
  * t/adsp.t: a test script for checking AuthorDomainPolicy.pm
  * lib/Mail/DKIM/AuthorDomainPolicy.pm: use d= tag not i= tag when
