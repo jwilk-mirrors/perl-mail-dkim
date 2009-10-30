@@ -35,6 +35,8 @@ sub query
 	#   if the query takes too long, we should generate an error
 	#
 	my $resp;
+	my $remaining_time = alarm(0);  # check time left, stop the timer
+	my $deadline = time + $remaining_time;
 	eval
 	{
 		# set a 10 second timeout
@@ -53,7 +55,15 @@ sub query
 		die $E if $E;
 	};
 	my $E = $@;
-	alarm 0; #FIXME- restore previous alarm?
+	alarm 0;
+	# restart the timer if it was active
+	if ($remaining_time > 0)
+	{
+		my $dt = $deadline - time;
+		# make sure the timer expiration will trigger a signal,
+		# even at the expense of stretching the interval by one second
+		alarm($dt < 1 ? 1 : $dt);
+	}
 	die $E if $E;
 
 	if ($resp)

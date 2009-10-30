@@ -3,6 +3,9 @@ See the ChangeLog file for the details.
 
 Version 0.38
 
+  * bugfixes:
+    * DNS lookup overrides alarm() signal (issue #2854325)
+
 
 Version 0.37 - released 2009-09-08
 

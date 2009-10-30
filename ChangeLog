@@ -1,3 +1,7 @@
+2009-09-08: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/DNS.pm: restart timer after a DNS lookup; based on a
+   patch contributed by Mark Martinec
+
  -- VERSION 0.37 --
 
 2009-09-02: Jason Long <jlong@messiah.edu>
