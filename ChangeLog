@@ -1,3 +1,6 @@
+2009-12-14: Jason Long <jlong@messiah.edu>
+ * MANIFEST: include sample_mime_lite.pl script in tarball
+
 2009-09-08: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/DNS.pm: restart timer after a DNS lookup; based on a
    patch contributed by Mark Martinec
