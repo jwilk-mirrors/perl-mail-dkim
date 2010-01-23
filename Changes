@@ -3,6 +3,14 @@ See the ChangeLog file for the details.
 
 Version 0.38
 
+  * New/changed functionality:
+    * DNS lookups can now be started asynchronously; the queries are
+      created as the header is parsed; the results are not actually
+      needed until the entire message has been read. (The Mail::DKIM
+      module does not yet do the queries asynchrously; this is just
+      the infrastructure so that the queries can be asynchronous in
+      the future.)
+
   * bugfixes:
     * DNS lookup overrides alarm() signal (issue #2854325)
 
