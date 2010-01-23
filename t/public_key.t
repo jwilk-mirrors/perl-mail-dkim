@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use Mail::DKIM::Verifier;
 $Mail::DKIM::DNS::TIMEOUT = 3;
@@ -26,6 +26,7 @@ $pubkey = Mail::DKIM::PublicKey->fetch(
 		Domain => "messiah.edu",
 		);
 ok(!$pubkey, "public key should not exist");
+ok($@ =~ /^NXDOMAIN$/, "reason given is NXDOMAIN");
 
 SKIP:
 {
