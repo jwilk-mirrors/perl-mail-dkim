@@ -97,10 +97,14 @@ sub query_async
 
 	my $waiter = sub {
 		my @resp;
+		my $warning;
 		eval {
 			@resp = query($domain, $type);
+			$warning = $@;
+			undef $@;
 		};
 		$@ and return $on_error->($@);
+		$@ = $warning;
 		return $on_success->(@resp);
 	};
 	return $waiter;

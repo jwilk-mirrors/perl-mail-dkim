@@ -1,4 +1,10 @@
 2010-01-23: Jason Long <jlong@messiah.edu>
+ * t/public_key.t: test that DNS failure reason is given, when
+   DNS returns no results
+ * lib/Mail/DKIM/DNS.pm: bugfix (introduced by async_dns branch):
+   preserve $@ in case of no error
+
+2010-01-23: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/{DNS,Signature,PublicKey,Policy}.pm: merged my
    "async dns" branch
 
