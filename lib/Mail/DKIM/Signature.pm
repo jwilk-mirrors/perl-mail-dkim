@@ -493,31 +493,50 @@ sub get_algorithm_class
 }
 
 # [private method]
-# fetch_public_key() - actually performs the DNS query for getting the key
+# fetch_public_key() - initiate a DNS query for fetching the key
 #
-# This method will C<die> if an error occurs.
+# This method does NOT return the public key.
+# Use get_public_key() for that.
 #
 sub fetch_public_key
 {
 	my $self = shift;
+	return if exists $self->{public_key_query};
 
-	my $pubk = Mail::DKIM::PublicKey->fetch(
-		Protocol => $self->protocol,
-		Selector => $self->selector,
-		Domain => $self->domain);
-	unless ($pubk)
+	my $on_success = sub {
+			if ($_[0]) {
+				$self->{public} = $_[0];
+			} else {
+				$self->{public_error} = "not available\n";
+			}
+		};
+
+	$self->{public_key_query} =
+		Mail::DKIM::PublicKey->fetch_async(
+			Protocol => $self->protocol,
+			Selector => $self->selector,
+			Domain => $self->domain,
+			Callbacks => {
+			Success => $on_success,
+			Error => sub { $self->{public_error} = shift },
+			},
+			);
+	return;
+}
+
+#EXPERIMENTAL
+sub _refetch_public_key
+{
+	my $self = shift;
+	if ($self->{public_key_query})
 	{
-		die "not available\n";
+		# clear the existing query by waiting for it to complete
+		$self->{public_key_query}->();
 	}
-
-	if ($pubk->revoked)
-	{
-		# FIXME- the key was checked in fetch(), so if the
-		# key was really revoked, we shouldn't have gotten here
-		die "revoked\n";
-	}
-
-	return $pubk;
+	delete $self->{public_key_query};
+	delete $self->{public};
+	delete $self->{public_error};
+	$self->fetch_public_key;
 }
 
 =head2 get_public_key() - fetches the public key referenced by this signature
@@ -539,13 +558,19 @@ sub get_public_key
 	my $self = shift;
 
 	# this ensures we only try fetching once, even if an error occurs
-	unless ($self->{public} || $self->{public_error})
+	if (not exists $self->{public_key_query})
 	{
-		$self->{public} = eval { $self->fetch_public_key };
-		$self->{public_error} = $@;
+		$self->fetch_public_key;
 	}
 
-	if ($self->{public})
+	if ($self->{public_key_query})
+	{
+		# wait for public key query to finish
+		$self->{public_key_query}->();
+		$self->{public_key_query} = 0;
+	}
+
+	if (exists $self->{public})
 	{
 		return $self->{public};
 	}
