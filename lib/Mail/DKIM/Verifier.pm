@@ -381,7 +381,6 @@ sub finish_header
 {
 	my $self = shift;
 
-print STDERR "in finish_header()\n";
 	# Signatures we found and were successfully parsed are stored in
 	# $self->{signatures}. If none were found, our result is "none".
 
@@ -445,7 +444,6 @@ sub _check_and_verify_signature
 		{
 			my $E = $@;
 			chomp $E;
-			print STDERR "E=$E\n";
 			$self->{signature_reject_reason} = "public key: $E";
 			return ("invalid", $self->{signature_reject_reason});
 		}
@@ -486,7 +484,6 @@ sub finish_body
 {
 	my $self = shift;
 
-print STDERR "in finish_body()\n";
 	foreach my $algorithm (@{$self->{algorithms}})
 	{
 		# finish canonicalizing
