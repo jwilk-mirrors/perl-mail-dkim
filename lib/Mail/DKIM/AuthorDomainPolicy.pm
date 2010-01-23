@@ -129,6 +129,17 @@ sub new
 	return $class->parse(String => "");
 }
 
+=head2 parse()
+
+Construct an ADSP record from a string.
+
+  my $policy = Mail::DKIM::AuthorDomainPolicy->parse(
+          String => "dkim=all",
+          Domain => "aaa.example",
+      );
+
+=cut
+
 #undocumented private class method
 our $DEFAULT_POLICY;
 sub default
