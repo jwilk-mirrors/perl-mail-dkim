@@ -77,4 +77,33 @@ sub query
 	die "DNS error: $@\n";
 }
 
+# query_async() - perform a DNS query asynchronously
+#
+#   my $waiter = query_async("example.org", "TXT",
+#                        Callbacks => {
+#                                Success => \&on_success,
+#                                Error => \&on_error,
+#                                },
+#                            );
+#   my $result = $waiter->();
+#
+sub query_async
+{
+	my ($domain, $type, %prms) = @_;
+
+	my $callbacks = $prms{Callbacks} || {};
+	my $on_success = $callbacks->{Success} || sub { $_[0] };
+	my $on_error = $callbacks->{Error} || sub { die $_[0] };
+
+	my $waiter = sub {
+		my @resp;
+		eval {
+			@resp = query($domain, $type);
+		};
+		$@ and return $on_error->($@);
+		return $on_success->(@resp);
+	};
+	return $waiter;
+}
+
 1;
