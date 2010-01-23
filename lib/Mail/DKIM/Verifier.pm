@@ -157,6 +157,7 @@ sub handle_header
 		{
 			my $signature = Mail::DKIM::Signature->parse($line);
 			$self->add_signature($signature);
+			$signature->fetch_public_key;
 		};
 		if ($@)
 		{
@@ -176,6 +177,7 @@ sub handle_header
 		{
 			my $signature = Mail::DKIM::DkSignature->parse($line);
 			$self->add_signature($signature);
+			$signature->fetch_public_key;
 		};
 		if ($@)
 		{
@@ -379,6 +381,7 @@ sub finish_header
 {
 	my $self = shift;
 
+print STDERR "in finish_header()\n";
 	# Signatures we found and were successfully parsed are stored in
 	# $self->{signatures}. If none were found, our result is "none".
 
@@ -407,29 +410,6 @@ sub finish_header
 				$self->{signature_reject_reason});
 			next;
 		}
-
-		# get public key
-		my $pkey;
-		eval
-		{
-			$pkey = $signature->get_public_key;
-		};
-		if ($@)
-		{
-			my $E = $@;
-			chomp $E;
-			$self->{signature_reject_reason} = "public key: $E";
-			$signature->result("invalid",
-				$self->{signature_reject_reason});
-			next;
-		}
-
-		unless ($self->check_public_key($signature, $pkey))
-		{
-			$signature->result("invalid",
-				$self->{signature_reject_reason});
-			next;
-		}
 	}
 
 	# stop processing signatures that are already known to be invalid
@@ -448,14 +428,32 @@ sub finish_header
 	}
 }
 
-sub finish_body
+sub _check_and_verify_signature
 {
 	my $self = shift;
+	my ($algorithm) = @_;
 
-	foreach my $algorithm (@{$self->{algorithms}})
-	{
-		# finish canonicalizing
-		$algorithm->finish_body;
+		# check signature
+		my $signature = $algorithm->signature;
+		# get public key
+		my $pkey;
+		eval
+		{
+			$pkey = $signature->get_public_key;
+		};
+		if ($@)
+		{
+			my $E = $@;
+			chomp $E;
+			print STDERR "E=$E\n";
+			$self->{signature_reject_reason} = "public key: $E";
+			return ("invalid", $self->{signature_reject_reason});
+		}
+
+		unless ($self->check_public_key($signature, $pkey))
+		{
+			return ("invalid", $self->{signature_reject_reason});
+		}
 
 		# verify signature
 		my $result;
@@ -481,6 +479,20 @@ sub finish_body
 			$result = "fail";
 			$details = $E;
 		}
+	return ($result, $details);
+}
+
+sub finish_body
+{
+	my $self = shift;
+
+print STDERR "in finish_body()\n";
+	foreach my $algorithm (@{$self->{algorithms}})
+	{
+		# finish canonicalizing
+		$algorithm->finish_body;
+
+		my ($result, $details) = $self->_check_and_verify_signature($algorithm);
 
 		# save the results of this signature verification
 		$algorithm->{result} = $result;
