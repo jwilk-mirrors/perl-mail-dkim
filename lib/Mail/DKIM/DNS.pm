@@ -91,16 +91,31 @@ sub query_async
 {
 	my ($domain, $type, %prms) = @_;
 
+print STDERR "DEBUGDNS: initiating query '$type' on '$domain'\n"; ##DEBUGDNS##
 	my $callbacks = $prms{Callbacks} || {};
 	my $on_success = $callbacks->{Success} || sub { $_[0] };
 	my $on_error = $callbacks->{Error} || sub { die $_[0] };
 
 	my $waiter = sub {
 		my @resp;
+		my $warning;
 		eval {
 			@resp = query($domain, $type);
+			$warning = $@;
+			undef $@;
 		};
+
+if ($@) { print STDERR "DEBUGDNS: '$domain' got error '$@'\n"; } ##DEBUGDNS##
+
 		$@ and return $on_error->($@);
+		$@ = $warning;
+
+if (@resp) {                                                     ##DEBUGDNS##
+	print STDERR "DEBUGDNS: '$domain' got a result!\n";      ##DEBUGDNS##
+} else {                                                         ##DEBUGDNS##
+	print STDERR "DEBUGDNS: '$domain' no result ($@)\n";     ##DEBUGDNS##
+}                                                                ##DEBUGDNS##
+
 		return $on_success->(@resp);
 	};
 	return $waiter;
