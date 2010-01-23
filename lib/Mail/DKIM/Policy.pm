@@ -49,41 +49,56 @@ support any and all policies found for a message.
 sub fetch
 {
 	my $class = shift;
+	my $waiter = $class->fetch_async(@_);
+	return $waiter->();
+}
+
+sub fetch_async
+{
+	my $class = shift;
 	my %prms = @_;
 
 	($prms{'Protocol'} eq "dns")
 		or die "invalid protocol '$prms{Protocol}'\n";
 
 	my $host = $class->get_lookup_name(\%prms);
+	my %callbacks = %{$prms{Callbacks} || {}};
+	my $on_success = $callbacks{Success} || sub { $_[0] };
+	$callbacks{Success} = sub {
+			my $resp = shift;
+			unless ($resp)
+			{
+				# no response => NXDOMAIN, use default policy
+				return $on_success->($class->default);
+			}
+
+			my $strn;
+			foreach my $ans ($resp) {
+				next unless $ans->type eq "TXT";
+				$strn = join "", $ans->char_str_list;
+			}
+
+			unless ($strn)
+			{
+				# empty record found in DNS, use default policy
+				return $on_success->($class->default);
+			}
+
+			my $self = $class->parse(
+					String => $strn,
+					Domain => $prms{Domain},
+					);
+			return $on_success->($self);
+		};
 
 	#
 	# perform DNS query for domain policy...
-	#   if the query takes too long, we should catch it and generate
-	#   an error
 	#
-	my @resp = Mail::DKIM::DNS::query($host, "TXT");
-	unless (@resp)
-	{
-		# no response => NXDOMAIN, use default policy
-		return $class->default;
-	}
-
-	my $strn;
-	foreach my $ans (@resp) {
-		next unless $ans->type eq "TXT";
-		$strn = join "", $ans->char_str_list;
-	}
-
-	unless ($strn)
-	{
-		# empty record found in DNS, use default policy
-		return $class->default;
-	}
-
-	return $class->parse(
-			String => $strn,
-			Domain => $prms{Domain},
+	my $waiter = Mail::DKIM::DNS::query_async(
+			$host, "TXT",
+			Callbacks => \%callbacks,
 			);
+	return $waiter;
 }
 
 sub parse

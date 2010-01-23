@@ -1,4 +1,7 @@
 --BEGIN "ASYNC DNS"
+2007-07-10: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Policy.pm: new fetch_async method, seems to work
+
 2009-07-10: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Signature.pm: new fetch_public_key method,
    which starts an asynchronous query for the public key
