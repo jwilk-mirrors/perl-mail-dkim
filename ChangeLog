@@ -1,5 +1,10 @@
 --BEGIN "ASYNC DNS"
 2009-07-10: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/PublicKey.pm: new fetch_async method: starts a
+   query and returns a subref that when called will complete the
+   query
+
+2009-07-10: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/DNS.pm: new query_async method: starts a query and
    returns a subref that when called will complete the query
 --END "ASYNC DNS"

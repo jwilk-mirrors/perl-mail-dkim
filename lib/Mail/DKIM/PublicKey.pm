@@ -56,10 +56,31 @@ then this method will C<die>.
 sub fetch
 {
 	my $class = shift;
+	my $waiter = $class->fetch_async(@_);
+	my $self = $waiter->();
+	return $self;
+}
+
+#EXPERIMENTAL1
+# my $x = Mail::DKIM::PublicKey->fetch_async(
+#                     Protocol => "dns",
+#                     etc.,
+#                   );
+# my $public_key = $x->();
+
+#EXPERIMENTAL2
+# my ($pubk, $E);
+# my $x = Mail::DKIM::PublicKey->fetch_async(
+#                     Protocol => "dns",
+#                     etc.,
+#                     Callbacks => { },
+#                   );
+# return $x->();
+
+sub fetch_async
+{
+	my $class = shift;
 	my %prms = @_;
-
-	my $strn;
-
 
 	my ($query_type, $query_options) = split(/\//, $prms{Protocol}, 2);
 	if (lc($query_type) ne "dns")
@@ -67,32 +88,42 @@ sub fetch
 		die "unknown query type '$query_type'\n";
 	}
 
-	my $host = $prms{'Selector'} . "._domainkey." . $prms{'Domain'};
+	my $host = $prms{Selector} . "._domainkey." . $prms{Domain};
+	my %callbacks = %{$prms{Callbacks} || {}};
+	my $on_success = $callbacks{Success} || sub { $_[0] };
+	$callbacks{Success} = sub {
+			my @resp = @_;
+			unless (@resp)
+			{
+				# no response => NXDOMAIN
+				return $on_success->();
+			}
+
+			my $strn;
+			foreach my $ans (@resp) {
+				next unless $ans->type eq "TXT";
+				$strn = join "", $ans->char_str_list;
+				last;
+			}
+
+			$strn or
+				return $on_success->();
+
+			my $self = $class->parse($strn);
+			$self->{Selector} = $prms{'Selector'};
+			$self->{Domain} = $prms{'Domain'};
+			$self->check;
+			return $on_success->($self);
+		};
 
 	#
 	# perform DNS query for public key...
-	#   if the query takes too long, we should generate an error
 	#
-	my @resp = Mail::DKIM::DNS::query($host, "TXT");
-	unless (@resp)
-	{
-		# no response => NXDOMAIN
-		return;
-	}
-
-	foreach my $ans (@resp) {
-		next unless $ans->type eq "TXT";
-		$strn = join "", $ans->char_str_list;
-	}
-
-	$strn or
-		return;
-
-	my $self = $class->parse($strn);
-	$self->{Selector} = $prms{'Selector'};
-	$self->{Domain} = $prms{'Domain'};
-	$self->check;
-	return $self;
+	my $waiter = Mail::DKIM::DNS::query_async(
+			$host, "TXT",
+			Callbacks => \%callbacks,
+			);
+	return $waiter;
 }
 
 =head1 METHODS
