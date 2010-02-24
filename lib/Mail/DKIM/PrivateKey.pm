@@ -138,6 +138,7 @@ sub convert {
 	return 1;
 }
 
+#deprecated
 sub sign
 {
 	my $self = shift;
@@ -147,12 +148,27 @@ sub sign
 	return $self->cork->sign($mail);
 }
 
+#deprecated- use sign_digest() instead
 sub sign_sha1_digest
 {
 	my $self = shift;
 	my ($digest) = @_;
 	return $self->sign_digest("SHA-1", $digest);
 }
+
+=head2 sign_digest()
+
+Cryptographically sign the given message digest.
+
+  $key->sign_digest("SHA-1", sha1("my message text"));
+
+The first parameter is the name of the digest: one of "SHA-1", "SHA-256".
+
+The second parameter is the message digest as a binary string.
+
+The result should be the signed digest as a binary string.
+
+=cut
 
 sub sign_digest
 {
