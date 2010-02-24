@@ -721,11 +721,17 @@ sub identity_matches
 	return lc($addr) eq lc($id);
 }
 
-=head2 key() - get or set the key object
+=head2 key() - get or set the private key object
 
   my $key = $signature->key;
 
   $signature->key(Mail::DKIM::PrivateKey->load(File => "private.key"));
+
+The private key is used for signing messages.
+It is not used for verifying messages.
+
+The key object can be any object that implements the
+L<sign_digest()|Mail::DKIM::PrivateKey/"sign_digest()"> method.
 
 =cut
 

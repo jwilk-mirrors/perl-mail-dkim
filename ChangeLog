@@ -1,4 +1,8 @@
 2010-02-24: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Signer.pm: document use of an alternate object for
+   PrivateKey objects
+
+2010-02-24: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Signer.pm: import PrivateKey.pm in this module,
    rather than in the Algorithm modules
 

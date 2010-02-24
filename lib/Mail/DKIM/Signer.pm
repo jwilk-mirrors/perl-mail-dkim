@@ -455,6 +455,9 @@ Get or set the private key object.
 
   $dkim->key(Mail::DKIM::PrivateKey->load(File => "private.key"));
 
+The key object can be any object that implements the
+L<sign_digest() method|Mail::DKIM::PrivateKey/"sign_digest()">.
+
 If you use this method to specify a private key,
 do not use L</"key_file()">.
 
