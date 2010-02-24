@@ -10,7 +10,7 @@
 use strict;
 use warnings;
 
-use Mail::DKIM::Signature;
+use Mail::Address;
 
 package Mail::DKIM::Common;
 use base "Mail::DKIM::MessageParser";
