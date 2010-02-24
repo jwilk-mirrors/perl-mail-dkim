@@ -94,7 +94,7 @@ sub sign
 	my ($private_key) = @_;
 
 	my $digest = $self->{header_digest}->digest;
-	my $signature = $private_key->sign_sha1_digest($digest);
+	my $signature = $private_key->sign_digest("SHA-1", $digest);
 
 	return encode_base64($signature, "");
 }
@@ -109,7 +109,7 @@ sub verify
 
 	my $digest = $self->{header_digest}->digest;
 	my $sig = decode_base64($base64);
-	return $public_key->verify_sha1_digest($digest, $sig);
+	return $public_key->verify_digest("SHA-1", $digest, $sig);
 }
 
 sub finish_message

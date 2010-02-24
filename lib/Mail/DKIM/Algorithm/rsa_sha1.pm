@@ -34,7 +34,7 @@ sub sign
 	my ($private_key) = @_;
 
 	my $digest = $self->{header_digest}->digest;
-	my $signature = $private_key->sign_sha1_digest($digest);
+	my $signature = $private_key->sign_digest("SHA-1", $digest);
 
 	return encode_base64($signature, "");
 }
@@ -49,7 +49,7 @@ sub verify
 
 	my $sig = decode_base64($base64);
 	my $digest = $self->{header_digest}->digest;
-	return unless $public_key->verify_sha1_digest($digest, $sig);
+	return unless $public_key->verify_digest("SHA-1", $digest, $sig);
 	return $self->check_body_hash;
 }
 

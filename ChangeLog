@@ -1,5 +1,7 @@
 2010-02-24: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/PrivateKey.pm: document the sign_digest() method
+ * lib/Mail/DKIM/Algorithm/*: use sign_digest() rather than
+   sign_sha1_digest()
 
 2010-01-23: Jason Long <jlong@messiah.edu>
  * t/public_key.t: test that DNS failure reason is given, when
