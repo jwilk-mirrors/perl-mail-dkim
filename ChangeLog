@@ -1,4 +1,8 @@
 2010-02-24: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Signer.pm: import PrivateKey.pm in this module,
+   rather than in the Algorithm modules
+
+2010-02-24: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/PrivateKey.pm: document the sign_digest() method
  * lib/Mail/DKIM/Algorithm/*: use sign_digest() rather than
    sign_sha1_digest()

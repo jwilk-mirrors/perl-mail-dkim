@@ -10,7 +10,6 @@
 use strict;
 use warnings;
 
-use Mail::DKIM::PrivateKey;
 use Mail::DKIM::Canonicalization::dk_simple;
 use Mail::DKIM::Canonicalization::dk_nofws;
 

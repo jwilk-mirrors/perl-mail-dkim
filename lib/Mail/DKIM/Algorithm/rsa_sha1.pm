@@ -10,8 +10,6 @@
 use strict;
 use warnings;
 
-use Mail::DKIM::PrivateKey;
-
 package Mail::DKIM::Algorithm::rsa_sha1;
 use base "Mail::DKIM::Algorithm::Base";
 use Carp;

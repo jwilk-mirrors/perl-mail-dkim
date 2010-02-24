@@ -11,6 +11,7 @@ use strict;
 use warnings;
 
 use Mail::DKIM::Algorithm::rsa_sha1;
+use Mail::DKIM::PrivateKey;
 use Mail::DKIM::Signature;
 use Mail::Address;
 
