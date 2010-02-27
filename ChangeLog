@@ -1,3 +1,7 @@
+2010-02-27: Jason Long <jlong@messiah.edu>
+ * t/external_signer.t: test use of an alternate object for Key
+   during a "sign" operation
+
 2010-02-24: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Signer.pm: document use of an alternate object for
    PrivateKey objects
