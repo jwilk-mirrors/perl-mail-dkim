@@ -479,6 +479,8 @@ Get or set the private key object.
 
 The key object can be any object that implements the
 L<sign_digest() method|Mail::DKIM::PrivateKey/"sign_digest()">.
+(Providing your own object can be useful if your actual keys
+are stored out-of-process.)
 
 If you use this method to specify a private key,
 do not use L</"key_file()">.

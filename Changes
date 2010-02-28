@@ -14,6 +14,10 @@ Version 0.38
   * bugfixes:
     * DNS lookup overrides alarm() signal (issue #2854325)
 
+  * documentation updates:
+    * document use of custom PrivateKey object, for external signing
+    * describe how to get "pretty signatures" in Signer.pm
+
 
 Version 0.37 - released 2009-09-08
 

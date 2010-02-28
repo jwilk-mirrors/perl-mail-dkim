@@ -732,6 +732,8 @@ It is not used for verifying messages.
 
 The key object can be any object that implements the
 L<sign_digest()|Mail::DKIM::PrivateKey/"sign_digest()"> method.
+(Providing your own object can be useful if your actual keys
+are stored out-of-process.)
 
 =cut
 
