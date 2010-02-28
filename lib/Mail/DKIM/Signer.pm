@@ -20,6 +20,7 @@ Mail::DKIM::Signer - generates a DKIM signature for a message
 =head1 SYNOPSIS
 
   use Mail::DKIM::Signer;
+  use Mail::DKIM::TextWrap;  #recommended
 
   # create a signer object
   my $dkim = Mail::DKIM::Signer->new(

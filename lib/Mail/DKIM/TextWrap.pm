@@ -10,7 +10,14 @@ use Carp;
 
 Mail::DKIM::TextWrap - text wrapping module written for use with DKIM
 
-=head1 SYNOPSIS
+=head1 SYNOPSIS (FOR MAIL::DKIM USERS)
+
+  use Mail::DKIM::TextWrap;
+
+Just add the above line to any program that uses L<Mail::DKIM::Signer>
+and your signatures will automatically be wrapped to 72 characters.
+
+=head1 SYNOPSIS (FOR OTHER USERS)
 
   my $output = "";
   my $tw = Mail::DKIM::TextWrap->new(
