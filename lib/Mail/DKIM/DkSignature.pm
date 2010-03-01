@@ -23,6 +23,21 @@ Mail::DKIM::DkSignature - represents a DomainKeys-Signature header
 
 =head1 CONSTRUCTORS
 
+=head2 new()
+
+Create a new DomainKey signature from parameters
+
+  my $signature = Mail::DKIM::DkSignature->new(
+                      [ Algorithm => "rsa-sha1", ]
+                      [ Signature => $base64, ]
+                      [ Method => "simple", ]
+                      [ Domain => "example.org", ]
+                      [ Headers => "from:subject:date:message-id", ]
+                      [ Query => "dns", ]
+                      [ Selector => "alpha", ]
+                      [ Key => $private_key, ]
+                  );
+
 =cut
 
 sub new {
@@ -43,9 +58,11 @@ sub new {
 	return $self;
 }
 
-=head2 parse() - create a new signature from a DomainKey-Signature header
+=head2 parse()
 
-  my $sig = parse Mail::DKIM::DkSignature(
+Create a new signature from a DomainKey-Signature header
+
+  my $sig = Mail::DKIM::DkSignature->parse(
                   "DomainKey-Signature: a=rsa-sha1; b=yluiJ7+0=; c=nofws"
             );
 
@@ -90,7 +107,9 @@ sub parse
 
 =cut
 
-=head2 as_string() - the signature header as a string
+=head2 as_string()
+
+Convert the signature header as a string.
 
   print $signature->as_string . "\n";
 
@@ -118,7 +137,9 @@ sub body_hash
 	croak "body_hash not implemented";
 }
 
-=head2 algorithm() - get or set the algorithm (a=) field
+=head2 algorithm()
+
+Get or set the algorithm (a=) field
 
 The algorithm used to generate the signature.
 Defaults to "rsa-sha1", an RSA-signed SHA-1 digest.
@@ -137,7 +158,9 @@ sub algorithm
 	return lc $self->get_tag("a") || 'rsa-sha1';
 }	
 
-=head2 canonicalization() - get or set the canonicalization (c=) field
+=head2 canonicalization()
+
+Get or set the canonicalization (c=) field.
 
   $signature->canonicalization("nofws");
   $signature->canonicalization("simple");
@@ -168,7 +191,9 @@ sub DEFAULT_PREFIX
 	return "DomainKey-Signature:";
 }
 
-=head2 domain() - get or set the domain (d=) field
+=head2 domain()
+
+Get or set the domain (d=) field.
 
   my $d = $signature->domain;          # gets the domain value
   $signature->domain("example.org");   # sets the domain value
@@ -251,7 +276,9 @@ sub hash_algorithm
 	return $algorithm eq "rsa-sha1" ? "sha1" : undef;
 }
 
-=head2 headerlist() - get or set the signed header fields (h=) field
+=head2 headerlist()
+
+Get or set the signed header fields (h=) field.
 
   $signature->headerlist("a:b:c");
 
@@ -271,7 +298,9 @@ In list context, the header field names will be returned as a list.
 #sub headerlist
 # is in Signature.pm
 
-=head2 identity() - get the signing identity
+=head2 identity()
+
+Get the signing identity.
 
   my $i = $signature->identity;
 
@@ -288,7 +317,9 @@ sub identity
 	return $self->{dk_identity};
 }
 
-=head2 identity_source() - determine which header had the identity
+=head2 identity_source()
+
+Determine which header had the identity.
 
   my $source = $signature->identity_source;
 
@@ -326,7 +357,9 @@ sub method
 	croak "method not implemented (use canonicalization instead)";
 }	
 
-=head2 protocol() - get or set the query methods (q=) field
+=head2 protocol()
+
+Get or set the query methods (q=) field.
 
 A colon-separated list of query methods used to retrieve the public
 key (default is "dns").
@@ -344,7 +377,9 @@ sub protocol {
 	return !defined($self->get_tag("q")) ? 'dns' : $self->get_tag("q");
 }	
 
-=head2 selector() - get or set the selector (s=) field
+=head2 selector()
+
+Get or set the selector (s=) field.
 
 The selector subdivides the namespace for the "d=" (domain) tag.
 
@@ -352,7 +387,9 @@ The selector subdivides the namespace for the "d=" (domain) tag.
 
 # same as parent class
 
-=head2 signature() - get or set the signature data (b=) field
+=head2 signature()
+
+Get or set the signature data (b=) field.
 
 The signature data. Whitespace is automatically stripped from the
 returned value.
@@ -381,7 +418,7 @@ Jason Long, E<lt>jlong@messiah.eduE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2006-2007 by Messiah College
+Copyright (C) 2006-2007,2010 by Messiah College
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.6 or,
