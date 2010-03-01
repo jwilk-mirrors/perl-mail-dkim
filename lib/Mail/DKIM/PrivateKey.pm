@@ -66,7 +66,7 @@ sub load
 
 	if ($prms{'Data'}) {
 		$self->{'DATA'} = $prms{'Data'};
-	} elsif ($prms{'File'}) {	
+	} elsif (defined $prms{'File'}) {	
 		my @data;
 		open FILE, "<", $prms{'File'}
 			or die "Error: cannot read $prms{File}: $!\n";
