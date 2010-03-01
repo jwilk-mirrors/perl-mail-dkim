@@ -70,7 +70,7 @@ Constructs a signature by parsing the provided DomainKey-Signature header
 content. You do not have to include the header name
 (i.e. "DomainKey-Signature:")
 but it is recommended, so the header name can be preserved and returned
-the same way in as_string().
+the same way in L</"as_string()">.
 
 Note: The input to this constructor is in the same format as the output
 of the as_string method.
@@ -306,7 +306,7 @@ Get the signing identity.
 
 In DomainKey signatures, the signing identity is the first address
 found in the Sender header or the From header. This field is
-populated by the Verifier when processing a DomainKey signature.
+populated by the L<Verifier|Mail::DKIM::Verifier> when processing a DomainKey signature.
 
 =cut
 
