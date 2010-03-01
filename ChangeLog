@@ -1,3 +1,7 @@
+2010-03-01: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/DkSignature.pm (new): accept Key parameter when
+   constructing a DomainKey signature object
+
 2010-02-27: Jason Long <jlong@messiah.edu>
  * t/external_signer.t: test use of an alternate object for Key
    during a "sign" operation

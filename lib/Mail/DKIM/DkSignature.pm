@@ -38,6 +38,7 @@ sub new {
 	$self->headerlist($prms{'Headers'});
 	$self->protocol($prms{'Query'} || "dns");
 	$self->selector($prms{'Selector'});
+	$self->key($prms{'Key'}) if defined $prms{'Key'};
 
 	return $self;
 }
