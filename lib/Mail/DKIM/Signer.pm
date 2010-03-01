@@ -57,8 +57,8 @@ signatures for a given message. You create an object of this class,
 specifying the parameters of the signature you wish to create, or
 specifying a callback function so that the signature parameters can
 be determined later. Next, you feed it the entire message using
-L<"/PRINT()">, completing with L<"/CLOSE()">. Finally, use the
-L<"/signatures()"> method to access the generated signatures.
+L</"PRINT()">, completing with L</"CLOSE()">. Finally, use the
+L</"signatures()"> method to access the generated signatures.
 
 =head2 Pretty Signatures
 
