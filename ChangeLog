@@ -1,3 +1,8 @@
+2010-03-31: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/DkSignature.pm, Signature.pm: avoid calling lc() on
+   an undefined value (this generates warnings in Perl 5.12.x).
+   Patch contributed by Mark Martinec.
+
 2010-03-01: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/PrivateKey.pm (load): fix bug where a private key file
    named '0' could not be loaded

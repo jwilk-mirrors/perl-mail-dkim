@@ -155,7 +155,8 @@ sub algorithm
 		$self->set_tag("a", shift);
 	}
 
-	return lc $self->get_tag("a") || 'rsa-sha1';
+	my $a = $self->get_tag("a");
+	return defined $a && $a ne '' ? lc $a : 'rsa-sha1';
 }	
 
 =head2 canonicalization()
@@ -212,7 +213,8 @@ sub domain
 		$self->set_tag("d", shift);
 	}
 
-	return lc $self->get_tag("d");
+	my $d = $self->get_tag("d");
+	return defined $d ? lc $d : undef;
 }	
 
 sub expiration

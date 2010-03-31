@@ -144,7 +144,8 @@ sub algorithm
 		$self->set_tag("a", shift);
 	}
 
-	return lc $self->get_tag("a");
+	my $a = $self->get_tag("a");
+	return defined $a ? lc $a : undef;
 }	
 
 =head2 as_string() - the signature header as a string
@@ -281,7 +282,8 @@ sub canonicalization
 		$self->set_tag("c", join("/", @_));
 	}
 
-	my $c = lc $self->get_tag("c");
+	my $c = $self->get_tag("c");
+	$c = lc $c  if defined $c;
 	if (not $c)
 	{
 		$c = "simple/simple";
@@ -456,7 +458,8 @@ sub domain
 		$self->set_tag("d", shift);
 	}
 
-	return lc $self->get_tag("d");
+	my $d = $self->get_tag("d");
+	return defined $d ? lc $d : undef;
 }	
 
 =head2 expiration() - get or set the signature expiration (x=) field
