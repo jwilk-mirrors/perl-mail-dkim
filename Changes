@@ -1,7 +1,7 @@
 This file summarizes what's changed between releases of Mail-DKIM.
 See the ChangeLog file for the details.
 
-Version 0.38
+Version 0.38 - released 2010-03-31
 
   * New/changed functionality:
     * DNS lookups can now be started asynchronously; the queries are
