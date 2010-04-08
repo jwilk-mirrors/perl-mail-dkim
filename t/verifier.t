@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 101;
+use Test::More tests => 104;
 
 use Mail::DKIM::Verifier;
 
@@ -86,6 +86,9 @@ test_email("dk_headers_1.txt", "pass");
 test_email("dk_headers_2.txt", "pass");
 test_email("bad_dk_1.txt", "invalid"); # sig. domain != From header (no Sender)
 test_email("bad_dk_2.txt", "invalid"); # added Sender header, no h= tag
+test_email("bad_dk_3.txt", "invalid"); # no q= tag
+test_email("bad_dk_4.txt", "invalid"); # empty q= tag
+test_email("bad_dk_5.txt", "invalid"); # unrecognized q= tag
 test_email("dk_multiple_1.txt", "pass");
 my @dksigs = $dkim->signatures;
 ok(@dksigs == 2, "found two signatures");

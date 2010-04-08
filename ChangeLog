@@ -1,3 +1,7 @@
+2010-04-08: Jason Long <jlong@messiah.edu>
+ * t/verifier.t: wrote some tests for DomainKey signatures with empty,
+   missing, or invalid q= tag values
+   
  -- VERSION 0.38 --
 
 2010-03-31: Jason Long <jlong@messiah.edu>

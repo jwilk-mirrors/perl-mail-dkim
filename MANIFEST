@@ -81,6 +81,9 @@ t/corpus/multiple_1.txt
 t/corpus/multiple_2.txt
 t/corpus/bad_dk_1.txt
 t/corpus/bad_dk_2.txt
+t/corpus/bad_dk_3.txt
+t/corpus/bad_dk_4.txt
+t/corpus/bad_dk_5.txt
 t/corpus/bad_ietf01_1.txt
 t/corpus/bad_ietf01_2.txt
 t/corpus/bad_ietf01_3.txt
