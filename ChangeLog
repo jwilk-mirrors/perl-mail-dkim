@@ -1,7 +1,10 @@
 2010-04-08: Jason Long <jlong@messiah.edu>
  * t/verifier.t: wrote some tests for DomainKey signatures with empty,
    missing, or invalid q= tag values
-   
+ * lib/Mail/DKIM/Verifier.pm: move use of check_signature_identity() out
+   of finish_header() and into check_and_verify_signature(); this fixes
+   an issue with getting wrong error codes when q= tag is broken.
+
  -- VERSION 0.38 --
 
 2010-03-31: Jason Long <jlong@messiah.edu>
