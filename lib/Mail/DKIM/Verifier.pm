@@ -112,6 +112,7 @@ package Mail::DKIM::Verifier;
 use base "Mail::DKIM::Common";
 use Carp;
 our $VERSION = 0.39;
+our $MAX_SIGNATURES_TO_PROCESS = 50;
 
 sub init
 {
@@ -197,6 +198,10 @@ sub add_signature
 	my $self = shift;
 	croak "wrong number of arguments" unless (@_ == 1);
 	my ($signature) = @_;
+
+	# ignore signature headers once we've seen 50 or so
+	# this protects against abuse.
+	return if (@{$self->{signatures}} > $MAX_SIGNATURES_TO_PROCESS);
 
 	push @{$self->{signatures}}, $signature;
 

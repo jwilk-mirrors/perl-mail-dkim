@@ -6,6 +6,8 @@ Version 0.39
   * bugfixes:
     * fix issue with getting wrong error codes when q= tag is empty
       (issue #3011005)
+    * anti-abuse- prevent a message with thousands of signatures from
+      trashing the whole computer (issue #3010997)
 
 
 Version 0.38 - released 2010-03-31

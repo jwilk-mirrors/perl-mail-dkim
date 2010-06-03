@@ -1,3 +1,8 @@
+2010-06-03: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Verifier.pm: prevent abuse- if a message has more than
+   50 signatures headers, we start ignoring them (it's unreasonable for
+   a message to have more than a very few signature headers).
+
 2010-04-08: Jason Long <jlong@messiah.edu>
  * t/verifier.t: wrote some tests for DomainKey signatures with empty,
    missing, or invalid q= tag values
