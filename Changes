@@ -3,6 +3,10 @@ See the ChangeLog file for the details.
 
 Version 0.39
 
+  * bugfixes:
+    * fix issue with getting wrong error codes when q= tag is empty
+      (issue #3011005)
+
 
 Version 0.38 - released 2010-03-31
 
