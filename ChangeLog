@@ -1,4 +1,8 @@
 2010-06-11: Jason Long <jlong@messiah.edu>
+ * t/signer_dk.t: create regression tests for DomainKeys signature
+   generation
+
+2010-06-11: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Verifier.pm, Signer.pm, Algorithm/Base.pm
    (finish_header): provide reference to entire list of headers at
    completion of header, so that canonicalizers do not need to store
