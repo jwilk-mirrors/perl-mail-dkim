@@ -7,6 +7,9 @@
    parsed, rather only canonicalize header within finish_header()
  * lib/Mail/DKIM/Canonicalization/DkCommon.pm: do not store header as
    parsed, rather only canonicalize header within finish_header()
+ * lib/Mail/DKIM/Canonicalization/Base.pm (finish_header): change API
+ * t/simple_canonicalization.t: update for the API change of
+   Canonicalization/Base.pm
 
 2010-06-03: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Verifier.pm: prevent abuse- if a message has more than

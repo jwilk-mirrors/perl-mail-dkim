@@ -15,9 +15,14 @@ my $method = Mail::DKIM::Canonicalization::simple->new(
 		Signature => $signature);
 ok($method, "new() works");
 
-$method->add_header("from :\tJason\015\012");
-$method->add_header("Subject:  this is the\015\012  subject\015\012");
-$method->finish_header;
+my @tmp_headers = (
+	"from :\tJason\015\012",
+	"Subject:  this is the\015\012  subject\015\012",
+	);
+
+$method->add_header($tmp_headers[0]);
+$method->add_header($tmp_headers[1]);
+$method->finish_header(Headers => \@tmp_headers);
 
 $method->add_body("This is the body.\015\012");
 $method->add_body("Another line of the body.\015\12");
