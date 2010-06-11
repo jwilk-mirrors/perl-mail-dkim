@@ -21,7 +21,6 @@ sub init
 
 	$self->{body_count} = 0;
 	$self->{body_truncated} = 0;
-	$self->{myheaders} = [];
 
 	# these canonicalization methods require signature to use
 	$self->{Signature}
@@ -31,19 +30,14 @@ sub init
 # similar to code in DkCommon.pm
 sub add_header
 {
-	my $self = shift;
-	my ($line) = @_;
-
-	#croak "header parse error \"$line\"" unless ($line =~ /:/);
-
-	$line =~ s/\015\012\z//s;
-	push @{$self->{myheaders}},
-		$self->canonicalize_header($line) . "\015\012";
+	#Note: canonicalization of headers is performed
+	#in finish_header()
 }
 
 sub finish_header
 {
 	my $self = shift;
+	my %args = @_;
 
 	# Headers are canonicalized in the order specified by the h= tag.
 	# However, in the case of multiple instances of the same header name,
@@ -55,7 +49,7 @@ sub finish_header
 	# Since the bottom-most headers are to get precedence, we reverse
 	# the headers here... (now the first header matching a particular
 	# name is the header to insert)
-	my @mess_headers = reverse @{$self->{myheaders}};
+	my @mess_headers = reverse @{$args{Headers}};
 
 	# presence of a h= tag is mandatory...
 	unless (defined $self->{Signature}->headerlist)
@@ -86,7 +80,8 @@ sub finish_header
 					# once, we'll get the next header in line
 					splice @mess_headers, $i, 1;
 
-					$self->output($hdr);
+					$hdr =~ s/\015\012\z//s;
+					$self->output($self->canonicalize_header($hdr) . "\015\012");
 					last inner_loop;
 				}
 			}
