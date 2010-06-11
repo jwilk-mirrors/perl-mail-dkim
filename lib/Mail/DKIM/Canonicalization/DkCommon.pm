@@ -18,25 +18,23 @@ sub init
 	my $self = shift;
 	$self->SUPER::init;
 
-	$self->{myheaders} = [];
+	$self->{header_count} = 0;
 }
 
 # similar to code in DkimCommon.pm
 sub add_header
 {
+	#Note: canonicalization of headers is performed
+	#in finish_header()
+
 	my $self = shift;
-	my ($line) = @_;
-
-	#croak "header parse error \"$line\"" unless ($line =~ /:/);
-
-	$line =~ s/\015\012\z//s;
-	push @{$self->{myheaders}},
-		$self->canonicalize_header($line . "\015\012");
+	$self->{header_count}++;
 }
 
 sub finish_header
 {
 	my $self = shift;
+	my %args = @_;
 
 	# RFC4870, 3.3:
 	#   h = A colon-separated list of header field names that identify the
@@ -57,15 +55,22 @@ sub finish_header
 	#   * If the "h" tag is used, only those header lines (and their
 	#     continuation lines if any) added to the "h" tag list are included.
 
+	# only consider headers AFTER my signature
+	my @sig_headers;
+	{
+		my $s0 = @{$args{Headers}} - $self->{header_count};
+		my $s1 = @{$args{Headers}} - 1;
+		@sig_headers = (@{$args{Headers}})[$s0 .. $s1];
+	}
+
 	# check if signature specifies a list of headers
 	my @sig_header_names = $self->{Signature}->headerlist;
-	my @sig_headers;
 	if (@sig_header_names)
 	{
 		# - first, group all header fields with the same name together
 		#   (using a hash of arrays)
 		my %heads;
-		foreach my $line (@{$self->{myheaders}})
+		foreach my $line (@sig_headers)
 		{
 			next unless $line =~ /^([^\s:]+)\s*:/;
 			my $field_name = lc $1;
@@ -90,6 +95,7 @@ sub finish_header
 		#   at the first occurrence of that name, and there are
 		#   multiple headers of that name, then put them all in.
 		#
+		@sig_headers = ();
 		while (my $field_name = pop @sig_header_names)
 		{
 			$counts{lc $field_name}--;
@@ -107,10 +113,6 @@ sub finish_header
 			}
 		}
 	}
-	else
-	{
-		@sig_headers = @{$self->{myheaders}};
-	}
 
 	# iterate through each header, in the order determined above
 	foreach my $line (@sig_headers)
@@ -121,7 +123,8 @@ sub finish_header
 			my $content = $2;
 			$self->{interesting_header}->{lc $field} = $content;
 		}
-		$self->output($line);
+		$line =~ s/\015\012\z//s;
+		$self->output($self->canonicalize_header($line . "\015\012"));
 	}
 
 	$self->output($self->canonicalize_body("\015\012"));

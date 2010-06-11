@@ -5,6 +5,8 @@
    their own copy of the header
  * lib/Mail/DKIM/Canonicalization/DkimCommon.pm: do not store header as
    parsed, rather only canonicalize header within finish_header()
+ * lib/Mail/DKIM/Canonicalization/DkCommon.pm: do not store header as
+   parsed, rather only canonicalize header within finish_header()
 
 2010-06-03: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Verifier.pm: prevent abuse- if a message has more than
