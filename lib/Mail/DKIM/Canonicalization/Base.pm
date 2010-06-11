@@ -97,7 +97,7 @@ Mail::DKIM::Canonicalization::Base - base class for canonicalization methods
 
   # add headers
   $method->add_header("Subject: this is the subject\015\012");
-  $method->finish_header;
+  $method->finish_header(Headers => \@all_headers);
 
   # add body
   $method->add_body("This is the body.\015\012");
@@ -157,6 +157,21 @@ can be accessed using the result() method.
 
 The body should be fed one or more "lines" at a time.
 I.e. do not feed part of a line.
+
+=head2 finish_header() - called when the header has been completely parsed
+
+  $method->finish_header(Headers => \@all_headers);
+
+Formerly the canonicalization object would only get the header data
+through successive invocations of add_header(). However, that required
+the canonicalization object to store a copy of the entire header so
+that it could choose the order in which headers were fed to the digest
+object. This is inefficient use of memory, since a message with many
+signatures may use many canonicalization objects and each
+canonicalization object has its own copy of the header.
+
+The headers array is an array of one element per header field, with
+the headers not processed/canonicalized in any way.
 
 =head2 result()
 

@@ -11,6 +11,12 @@ Version 0.39
     * memory usage- significantly reduced memory footprint for
       processing a message with a large header and many signatures
 
+  * API changes:
+    * the Canonicalization::finish_header() method now expects a
+      argument to be passed to it. In the unusual case that you are
+      using this method from your own code, please update your code.
+
+
 Version 0.38 - released 2010-03-31
 
   * New/changed functionality:
