@@ -398,7 +398,7 @@ sub finish_header
 
 	foreach my $algorithm (@{$self->{algorithms}})
 	{
-		$algorithm->finish_header;
+		$algorithm->finish_header(Headers => $self->{headers});
 	}
 
 	# stop processing signatures that are already known to be invalid

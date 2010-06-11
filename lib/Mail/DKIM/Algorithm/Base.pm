@@ -169,7 +169,7 @@ Call this method when all the headers have been submitted.
 sub finish_header
 {
 	my $self = shift;
-	$self->{canon}->finish_header;
+	$self->{canon}->finish_header(@_);
 }
 
 # checks the bh= tag of the signature to see if it has the same body

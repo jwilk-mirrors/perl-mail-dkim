@@ -269,7 +269,7 @@ sub finish_header
 		{
 			$algorithm->add_header($header);
 		}
-		$algorithm->finish_header;
+		$algorithm->finish_header(Headers => $self->{headers});
 	}
 }
 
