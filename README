@@ -40,12 +40,13 @@ BUGS
 Some details of the specification are not completely implemented.
 See the TODO file for a list of things I know about.
 
-Report bugs to Jason Long <jlong@messiah.edu>.
+Report bugs to Jason Long <jason@long.name>.
 If `make test' fails, please include the versions of your
 installed Crypt::OpenSSL::RSA module and OpenSSL libraries.
 
 COPYRIGHT AND LICENCE
 
+Copyright (C) 2010 by Jason Long
 Copyright (C) 2006-2009 by Messiah College
 
 This library is free software; you can redistribute it and/or modify

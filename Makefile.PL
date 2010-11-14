@@ -4,7 +4,7 @@ use ExtUtils::MakeMaker;
 # the contents of the Makefile that is written.
 WriteMakefile(
 	NAME           => 'Mail::DKIM',
-	VERSION        => "0.38_7",
+	VERSION        => "0.39",
 	PREREQ_PM      => {
 			Crypt::OpenSSL::RSA => 0.24,
 			Digest::SHA => 0,
@@ -14,5 +14,5 @@ WriteMakefile(
 			Test::Simple => 0,  # only needed for `make test'
 		},
 	ABSTRACT_FROM  => 'lib/Mail/DKIM.pm', # retrieve abstract from module
-	AUTHOR         => 'Jason Long <jlong@messiah.edu>',
+	AUTHOR         => 'Jason Long <jason@long.name>',
 );
