@@ -10,6 +10,8 @@ Version 0.39
       thrashing the whole computer (issue #3010997)
     * memory usage- significantly reduced memory footprint for
       processing a message with a large header and many signatures
+    * fix error message given when no KeyFile has been specified
+      (issue #1889690)
 
   * API changes:
     * the Canonicalization::finish_header() method now expects a
