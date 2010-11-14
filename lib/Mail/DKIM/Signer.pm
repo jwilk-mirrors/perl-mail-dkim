@@ -288,7 +288,7 @@ sub finish_body
 			|| $signature->{KeyFile}
 			|| $self->{Key}
 			|| $self->{KeyFile};
-		if (not ref $key)
+		if (defined($key) && !ref($key))
 		{
 			$key = Mail::DKIM::PrivateKey->load(
 					File => $key);

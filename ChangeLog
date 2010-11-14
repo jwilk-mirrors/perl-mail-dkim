@@ -1,3 +1,8 @@
+2010-11-14: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/Signer.pm: fix an unusual error message given when
+   no Key argument has been specified and it is time to load the
+   key
+
 2010-06-11: Jason Long <jlong@messiah.edu>
  * t/signer_dk.t: create regression tests for DomainKeys signature
    generation
