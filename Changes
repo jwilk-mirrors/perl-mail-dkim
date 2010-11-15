@@ -1,6 +1,9 @@
 This file summarizes what's changed between releases of Mail-DKIM.
 See the ChangeLog file for the details.
 
+Version 0.40
+
+
 Version 0.39 - released 2010-11-14
 
   * bugfixes:
