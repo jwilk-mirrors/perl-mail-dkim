@@ -83,7 +83,7 @@ sub fetch_async
 	my %prms = @_;
 
 	my ($query_type, $query_options) = split(/\//, $prms{Protocol}, 2);
-	if (lc($query_type) ne "dns")
+	if (lc($query_type || "") ne "dns")
 	{
 		die "unknown query type '$query_type'\n";
 	}

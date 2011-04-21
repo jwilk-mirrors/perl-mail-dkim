@@ -1,3 +1,6 @@
+2011-04-21: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/PublicKey.pm: fix a Perl warning about use of an
+   uninitialized value (reported by hsk@fli-leibniz.de)
 
  -- VERSION 0.39 --
 
