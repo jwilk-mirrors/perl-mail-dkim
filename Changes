@@ -3,6 +3,11 @@ See the ChangeLog file for the details.
 
 Version 0.40
 
+  * bugfixes:
+    * fix the error message given when an invalid algorithm is
+      specified in the construction of Mail::DKIM::Signer.
+    * avoid a Perl warning about use of an undefined value
+
 
 Version 0.39 - released 2010-11-14
 
