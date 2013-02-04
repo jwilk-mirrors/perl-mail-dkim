@@ -296,12 +296,17 @@ sub check_signature
 		return 0;
 	}
 
-	unless ($signature->domain ne '')
+	unless (defined $signature->domain)
 	{
 		# no domain specified
-		$self->{signature_reject_reason} =
-			!defined($signature->domain) ? "missing d tag"
-			: "invalid domain in d tag";
+		$self->{signature_reject_reason} = "missing d tag";
+		return 0;
+	}
+
+	if ($signature->domain eq '')
+	{
+		# blank domain
+		$self->{signature_reject_reason} = "invalid domain in d tag";
 		return 0;
 	}
 
