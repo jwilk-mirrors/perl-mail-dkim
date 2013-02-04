@@ -48,7 +48,7 @@ sub query
 		# so we wrap the query in a nested eval {} block
 		eval
 		{
-			$resp = $rslv->query($domain, $type);
+			$resp = $rslv->send($domain, $type);
 		};
 		my $E = $@;
 		alarm 0;

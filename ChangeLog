@@ -1,4 +1,10 @@
 2012-11-28: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/DNS.pm: replace use of query() with send(), since it
+   is never appropriate to append the default domain, and using send()
+   paves the way to using bgsend() in the future for async dns.
+   Contributed by Mark Martinec.
+
+2012-11-28: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/MessageParser.pm: rewrite of line parsing logic to
    avoid unnecessary copying of the internal buffer. This replaces use
    of $self->{buf} with ${$self->{buf_ref}} in many places. Patch
