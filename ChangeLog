@@ -4,6 +4,8 @@
    of '0' rather than treating it as if the s= tag was missing
  * lib/Mail/DKIM/PublicKey.pm: sanity check selector/domain before
    attempting a DNS query (this fixes another 'uninitialized value' warning)
+ * lib/Mail/DKIM/Signature.pm: avoid an 'uninitialized value' warning when
+   calling identity() and d= tag is missing
 
 2013-02-04: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/DNS.pm: construct a default RESOLVER that sets

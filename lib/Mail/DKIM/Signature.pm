@@ -703,7 +703,7 @@ sub identity
 	}
 	else
 	{
-		return '@' . $self->domain;
+		return '@' . ($self->domain||"");
 	}
 }
 
