@@ -53,7 +53,8 @@ such as support for an extended query:
 package Mail::DKIM::DNS;
 use Net::DNS;
 our $TIMEOUT = 10;
-our $RESOLVER;
+our $RESOLVER = Net::DNS::Resolver->new();
+$RESOLVER->udppacketsize(1280); # enables EDNS0, sets acceptable UDP packet size
 
 # query- returns a list of RR objects
 #   or an empty list if the domain record does not exist

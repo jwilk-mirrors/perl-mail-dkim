@@ -1,3 +1,8 @@
+2013-02-04: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/DNS.pm: construct a default RESOLVER that sets
+   udppacketsize to 1280. This enables EDNS0 (extension mechanism for DNS),
+   allowing Mail::DKIM to handle larger keys.
+
 2012-11-28: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/DNS.pm: replace use of query() with send(), since it
    is never appropriate to append the default domain, and using send()

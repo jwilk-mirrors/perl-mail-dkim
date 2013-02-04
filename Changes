@@ -1,7 +1,12 @@
 This file summarizes what's changed between releases of Mail-DKIM.
 See the ChangeLog file for the details.
 
-Version 0.40
+Version 0.40 - released 2013-02-04
+
+  * New/changed functionality:
+    * enable EDNS0 (extension mechanism for DNS) when performing
+      DNS queries; this allows larger DNS query results to be more
+      efficiently handled.
 
   * bugfixes:
     * fix the error message given when an invalid algorithm is
