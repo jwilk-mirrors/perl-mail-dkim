@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2007 Messiah College. All rights reserved.
+# Copyright 2007, 2012 Messiah College. All rights reserved.
 # Jason Long <jlong@messiah.edu>
 
 use strict;
@@ -13,6 +13,7 @@ use warnings;
 package Mail::DKIM::DNS;
 use Net::DNS;
 our $TIMEOUT = 10;
+our $RESOLVER;
 
 # query- returns a list of RR objects
 #   or an empty list if the domain record does not exist
@@ -27,8 +28,11 @@ sub query
 {
 	my ($domain, $type) = @_;
 
-	my $rslv = Net::DNS::Resolver->new()
-		or die "can't create DNS resolver";
+	my $rslv = $RESOLVER || Net::DNS::Resolver->new();
+	if (not $rslv)
+	{
+		die "can't create DNS resolver";
+	}
 
 	#
 	# perform the DNS query

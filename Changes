@@ -10,6 +10,11 @@ Version 0.40
     * speed- improved performance of parsing the message into lines
       (rt.cpan.org issue #77902). Patch by Mark Martinec.
 
+  * API changes:
+    * global variable $Mail::DKIM::DNS::RESOLVER can be set if the
+      user wants to specify options to Net::DNS::Resolver (see also
+      rt.cpan.org issue #80425).
+
 
 Version 0.39 - released 2010-11-14
 

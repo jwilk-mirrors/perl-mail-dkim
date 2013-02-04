@@ -3,6 +3,8 @@
    is never appropriate to append the default domain, and using send()
    paves the way to using bgsend() in the future for async dns.
    Contributed by Mark Martinec.
+ * lib/Mail/DKIM/DNS.pm: add global variable $RESOLVER which the
+   user can override if they want to specify options to Net::DNS.
 
 2012-11-28: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/MessageParser.pm: rewrite of line parsing logic to
