@@ -40,75 +40,81 @@ sub init
 {
 	my $self = shift;
 
+	my $buf = '';
+	$self->{buf_ref} = \$buf;
 	$self->{in_header} = 1;
-	$self->{buf} = "";
 }
 
 sub PRINT
 {
 	my $self = shift;
-	my $buf = $self->{buf};
-	$buf .= @_ == 1 ? $_[0] : join("", @_)  if @_;
+	my $buf_ref = $self->{buf_ref};
+	$$buf_ref .= @_ == 1 ? $_[0] : join("", @_)  if @_;
 
 	if ($self->{in_header}) {
-		while (length $buf)
+		local $1;  # avoid polluting a global $1
+		while ($$buf_ref ne '')
 		{
-			if (substr($buf,0,2) eq "\015\012")
+			if (substr($$buf_ref,0,2) eq "\015\012")
 			{
-				$buf = substr($buf, 2);
+				substr($$buf_ref, 0, 2) = '';
 				$self->finish_header();
 				$self->{in_header} = 0;
 				last;
 			}
-			if ($buf !~ /^(.+?\015\012)[^\ \t]/s)
+			if ($$buf_ref !~ /^(.+?\015\012)[^\ \t]/s)
 			{
 				last;
 			}
 			my $header = $1;
 			$self->add_header($header);
-			$buf = substr($buf, length($header));
+			substr($$buf_ref, 0, length($header)) = '';
 		}
 	}
 
 	if (!$self->{in_header}) {
-		my $j = rindex($buf,"\015\012");
+		my $j = rindex($$buf_ref,"\015\012");
 		if ($j >= 0)
 		{
-			$self->add_body(substr($buf, 0, $j+2));
-			substr($buf, 0, $j+2) = '';
+			# avoid copying a large buffer: the unterminated
+			# last line is typically short compared to the rest
+
+			my $carry = substr($$buf_ref, $j+2);
+			substr($$buf_ref, $j+2) = '';  # shrink to last CRLF
+			$self->add_body($$buf_ref);    # must end on CRLF
+			$$buf_ref = $carry;  # restore unterminated last line
 		}
 	}
-	$self->{buf} = $buf;
 	return 1;
 }
 
 sub CLOSE
 {
 	my $self = shift;
-	my $buf = $self->{buf};
+	my $buf_ref = $self->{buf_ref};
 
 	if ($self->{in_header})
 	{
-		if (length $buf)
+		if ($$buf_ref ne '')
 		{
 			# A line of header text ending CRLF would not have been
 			# processed yet since before we couldn't tell if it was
 			# the complete header. Now that we're in CLOSE, we can
 			# finish the header...
-			$buf =~ s/\015\012$//s;
-			$self->add_header("$buf\015\012");
+			$$buf_ref =~ s/\015\012\z//s;
+			$self->add_header("$$buf_ref\015\012");
 		}
 		$self->finish_header;
 		$self->{in_header} = 0;
 	}
 	else
 	{
-		if (length $buf)
+		if ($$buf_ref ne '')
 		{
-			$self->add_body($buf);
+			$self->add_body($$buf_ref);
 		}
 	}
-	$self->{buf} = "";
+	$$buf_ref = '';
 	$self->finish_body;
 	return 1;
 }

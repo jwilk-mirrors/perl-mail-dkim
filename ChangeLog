@@ -1,4 +1,10 @@
 2012-11-28: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/MessageParser.pm: rewrite of line parsing logic to
+   avoid unnecessary copying of the internal buffer. This replaces use
+   of $self->{buf} with ${$self->{buf_ref}} in many places. Patch
+   contributed by Mark Martinec.
+
+2012-11-28: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Signer.pm: throw proper error message if an invalid
    algorithm is requested
  * lib/Mail/DKIM/PublicKey.pm: further refinement to fix Perl warning
