@@ -1,6 +1,8 @@
 2012-11-28: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Signer.pm: throw proper error message if an invalid
    algorithm is requested
+ * lib/Mail/DKIM/PublicKey.pm: further refinement to fix Perl warning
+   about use of uninitialized value
 
 2011-04-21: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/PublicKey.pm: fix a Perl warning about use of an
