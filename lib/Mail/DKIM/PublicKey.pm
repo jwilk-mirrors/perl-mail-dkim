@@ -88,6 +88,12 @@ sub fetch_async
 		die "unknown query type '".($query_type||"")."'\n";
 	}
 
+	defined($prms{Selector}) && length($prms{Selector})
+		or die "invalid/missing Selector\n";
+
+	defined($prms{Domain}) && length($prms{Domain})
+		or die "invalid/missing Domain\n";
+
 	my $host = $prms{Selector} . "._domainkey." . $prms{Domain};
 	my %callbacks = %{$prms{Callbacks} || {}};
 	my $on_success = $callbacks{Success} || sub { $_[0] };
