@@ -310,7 +310,7 @@ sub check_signature
 		return 0;
 	}
 
-	unless ($signature->selector)
+	unless (defined $signature->selector)
 	{
 		# no selector specified
 		$self->{signature_reject_reason} = "missing s tag";

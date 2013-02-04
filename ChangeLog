@@ -1,6 +1,7 @@
 2013-02-04: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Verifier.pm: avoid an 'uninitialized value' warning when
-   signature being verified is missing a d= tag
+   signature being verified is missing a d= tag; accept a selector name
+   of '0' rather than treating it as if the s= tag was missing
  * lib/Mail/DKIM/PublicKey.pm: sanity check selector/domain before
    attempting a DNS query (this fixes another 'uninitialized value' warning)
 
