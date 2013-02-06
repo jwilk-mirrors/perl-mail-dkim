@@ -15,6 +15,8 @@ Version 0.40
       places (rt.cpan.org issue #82913).
     * speed- improved performance of parsing the message into lines
       (rt.cpan.org issue #77902). Patch by Mark Martinec.
+    * fix DNS queries to use the correct method (txtdata) of Net::DNS
+      (rt.cpan.org issue #83170). Patch by Mark Martinec.
 
   * API changes:
     * global variable $Mail::DKIM::DNS::RESOLVER can be set if the

@@ -216,7 +216,23 @@ sub Mail::DKIM::DNS::fake_query
 	{
 		warn "did not cache that DNS entry: $domain\n";
 		print STDERR ">>>\n";
-		print STDERR join("", (Mail::DKIM::DNS::orig_query($domain, $type))[0]->char_str_list) . "\n";
+		my @result = Mail::DKIM::DNS::orig_query($domain, $type);
+		if (!@result) {
+			print STDERR "No results: $@\n";
+		} else {
+			foreach my $rr (@result) {
+				# join with no intervening spaces, RFC 6376
+				if (Net::DNS->VERSION >= 0.69) {
+					# must call txtdata() in a list context
+					printf STDERR ("%s\n",
+						join("", $rr->txtdata));
+				} else {
+					# char_str_list method is 'historical'
+					printf STDERR ("%s\n",
+						join("", $rr->char_str_list));
+				}
+			}
+		}
 		print STDERR "<<<\n";
 		die;
 	}
@@ -247,6 +263,11 @@ sub type
 }
 
 sub char_str_list
+{
+	return ${$_[0]};
+}
+
+sub txtdata
 {
 	return ${$_[0]};
 }

@@ -60,8 +60,7 @@ Note: to disable use of EDNS0 (enabled by default as of Mail::DKIM 0.40):
 package Mail::DKIM::DNS;
 use Net::DNS;
 our $TIMEOUT = 10;
-our $RESOLVER = Net::DNS::Resolver->new();
-$RESOLVER->udppacketsize(2048); # enables EDNS0, sets acceptable UDP packet size
+our $RESOLVER;
 
 # query- returns a list of RR objects
 #   or an empty list if the domain record does not exist
@@ -76,11 +75,22 @@ sub query
 {
 	my ($domain, $type) = @_;
 
-	my $rslv = $RESOLVER || Net::DNS::Resolver->new();
-	if (not $rslv)
+	if (! $RESOLVER)
 	{
-		die "can't create DNS resolver";
+		$RESOLVER = Net::DNS::Resolver->new();
+		$RESOLVER or die "can't create DNS resolver: $@";
+
+		# enable EDNS0, set acceptable UDP packet size to a
+		# conservative payload size that should fit into a single
+		# packet (MTU less the IP header size) in most cases;
+		# See also draft-andrews-dnsext-udp-fragmentation
+		# and RFC 3542 section 11.3.
+		#
+		$RESOLVER->udppacketsize(1280-40);
 	}
+
+	my $rslv = $RESOLVER;
+	$rslv or die "DNS resolver not available";
 
 	#
 	# perform the DNS query
@@ -89,24 +99,30 @@ sub query
 	my $resp;
 	my $remaining_time = alarm(0);  # check time left, stop the timer
 	my $deadline = time + $remaining_time;
+	my $E;
 	eval
 	{
-		# set a 10 second timeout
+		# set a timeout, 10 seconds by default
 		local $SIG{ALRM} = sub { die "DNS query timeout for $domain\n" };
 		alarm $TIMEOUT;
 
 		# the query itself could cause an exception, which would prevent
 		# us from resetting the alarm before leaving the eval {} block
 		# so we wrap the query in a nested eval {} block
+		my $E2;
 		eval
 		{
 			$resp = $rslv->send($domain, $type);
+			1;
+		} or do {
+			$E2 = $@;
 		};
-		my $E = $@;
 		alarm 0;
-		die $E if $E;
+		if ($E2) { chomp $E2; die "$E2\n" }  # no line number here
+		1;
+	} or do {
+		$E = $@;  # the $@ only makes sense if eval returns a false
 	};
-	my $E = $@;
 	alarm 0;
 	# restart the timer if it was active
 	if ($remaining_time > 0)
@@ -116,17 +132,37 @@ sub query
 		# even at the expense of stretching the interval by one second
 		alarm($dt < 1 ? 1 : $dt);
 	}
-	die $E if $E;
+	if ($E) { chomp $E; die $E }  # ensure a line number
+
+# RFC 2308: NODATA is indicated by an answer with the RCODE set to NOERROR
+# and no relevant answers in the answer section.  The authority section
+# will contain an SOA record, or there will be no NS records there.
+# NODATA responses have to be algorithmically determined from the
+# response's contents as there is no RCODE value to indicate NODATA.
+# In some cases to determine with certainty that NODATA is the correct
+# response it can be necessary to send another query.
 
 	if ($resp)
 	{
-		my @result = grep { lc $_->type eq lc $type } $resp->answer;
-		return @result if @result;
-	}
+		my $header = $resp->header;
+		if ($header)
+		{
+			# NOERROR, NXDOMAIN, SERVFAIL, FORMERR, REFUSED, ...
+			my $rcode = $header->rcode;
 
-	$@ = $rslv->errorstring;
-	return () if ($@ eq "NOERROR" || $@ eq "NXDOMAIN");
-	die "DNS error: $@\n";
+			$@ = $rcode;
+			if ($rcode eq 'NOERROR') {
+				# may or may not contain RRs in the answer sect
+				my @result = grep { lc $_->type eq lc $type }
+						  $resp->answer;
+				$@ = 'NODATA'  if !@result;
+				return @result;  # possibly empty
+			} elsif ($rcode eq 'NXDOMAIN') {
+				return;  # empty list, rcode in $@
+			}
+		}
+	}
+	die "DNS error: " . $rslv->errorstring . "\n";
 }
 
 # query_async() - perform a DNS query asynchronously
@@ -149,14 +185,15 @@ sub query_async
 
 	my $waiter = sub {
 		my @resp;
-		my $warning;
+		my $rcode;
 		eval {
 			@resp = query($domain, $type);
-			$warning = $@;
-			undef $@;
+			$rcode = $@;
+			1;
+		} or do {
+			return $on_error->($@);
 		};
-		$@ and return $on_error->($@);
-		$@ = $warning;
+		$@ = $rcode;
 		return $on_success->(@resp);
 	};
 	return $waiter;

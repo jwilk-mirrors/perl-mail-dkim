@@ -65,17 +65,26 @@ sub fetch_async
 	my %callbacks = %{$prms{Callbacks} || {}};
 	my $on_success = $callbacks{Success} || sub { $_[0] };
 	$callbacks{Success} = sub {
-			my $resp = shift;
-			unless ($resp)
+			my @resp = @_;
+			unless (@resp)
 			{
-				# no response => NXDOMAIN, use default policy
+				# no requested resource records or NXDOMAIN,
+				# use default policy
 				return $on_success->($class->default);
 			}
 
 			my $strn;
-			foreach my $ans ($resp) {
-				next unless $ans->type eq "TXT";
-				$strn = join "", $ans->char_str_list;
+			foreach my $rr (@resp) {
+				next unless $rr->type eq "TXT";
+
+				# join with no intervening spaces, RFC 5617
+				if (Net::DNS->VERSION >= 0.69) {
+					# must call txtdata() in a list context
+					$strn = join "", $rr->txtdata;
+				} else {
+					# char_str_list method is 'historical'
+					$strn = join "", $rr->char_str_list;
+				}
 			}
 
 			unless ($strn)

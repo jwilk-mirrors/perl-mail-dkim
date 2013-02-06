@@ -101,14 +101,22 @@ sub fetch_async
 			my @resp = @_;
 			unless (@resp)
 			{
-				# no response => NXDOMAIN
+				# no requested resource records or NXDOMAIN,
 				return $on_success->();
 			}
 
 			my $strn;
-			foreach my $ans (@resp) {
-				next unless $ans->type eq "TXT";
-				$strn = join "", $ans->char_str_list;
+			foreach my $rr (@resp) {
+				next unless $rr->type eq "TXT";
+
+				# join with no intervening spaces, RFC 6376
+				if (Net::DNS->VERSION >= 0.69) {
+					# must call txtdata() in a list context
+					$strn = join "", $rr->txtdata;
+				} else {
+					# char_str_list method is 'historical'
+					$strn = join "", $rr->char_str_list;
+				}
 				last;
 			}
 

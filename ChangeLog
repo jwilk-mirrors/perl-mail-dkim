@@ -1,3 +1,9 @@
+2013-02-06: Jason Long <jlong@messiah.edu>
+ * lib/Mail/DKIM/DNS.pm: set udppacketsize to 1240, which is small enough
+   that packet fragmentation will not normally occur; use DNS txtdata()
+   method on versions of Net::DNS that support it. (This patch contributed
+   by Mark Martinec.)
+
 2013-02-04: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/DNS.pm: set default udppacketsize to 2048, which seems
    to be the suggested value to use in the Net::DNS documentation.
