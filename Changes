@@ -6,12 +6,13 @@ Version 0.40
   * New/changed functionality:
     * enable EDNS0 (extension mechanism for DNS) when performing
       DNS queries; this allows larger DNS query results to be more
-      efficiently handled.
+      efficiently handled (see rt.cpan.org issue #80425).
 
   * bugfixes:
     * fix the error message given when an invalid algorithm is
       specified in the construction of Mail::DKIM::Signer.
-    * avoid a Perl warning about use of an undefined value
+    * avoid Perl warning about use of an undefined value in several
+      places (rt.cpan.org issue #82913).
     * speed- improved performance of parsing the message into lines
       (rt.cpan.org issue #77902). Patch by Mark Martinec.
 
