@@ -24,6 +24,10 @@ if (defined $debug_canonicalization)
 	open $debugfh, ">", $debug_canonicalization
 		or die "Error: cannot write to $debug_canonicalization: $!\n";
 }
+
+# recommended, but may cause compatibility problems with old firewalls
+Mail::DKIM::DNS::enable_EDNS0;
+
 my $dkim = new Mail::DKIM::Verifier(
 		Debug_Canonicalization => $debugfh,
 	);

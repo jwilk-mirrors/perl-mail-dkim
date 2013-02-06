@@ -4,9 +4,8 @@ See the ChangeLog file for the details.
 Version 0.40
 
   * New/changed functionality:
-    * enable EDNS0 (extension mechanism for DNS) when performing
-      DNS queries; this allows larger DNS query results to be more
-      efficiently handled (see rt.cpan.org issue #80425).
+    * a single DNS resolver is created for the lifetime of the program,
+      rather than reinitializing the resolver for each new query.
 
   * bugfixes:
     * fix the error message given when an invalid algorithm is
@@ -19,9 +18,9 @@ Version 0.40
       (rt.cpan.org issue #83170). Patch by Mark Martinec.
 
   * API changes:
-    * global variable $Mail::DKIM::DNS::RESOLVER can be set if the
-      user wants to specify options to Net::DNS::Resolver (see also
-      rt.cpan.org issue #80425).
+    * global subroutines resolver() or enable_EDNS0() in module
+      Mail::DKIM::DNS can be called to specify non-default options
+      to Net::DNS::Resolver (see also rt.cpan.org issue #80425).
 
 
 Version 0.39 - released 2010-11-14
