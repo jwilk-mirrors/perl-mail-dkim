@@ -36,11 +36,18 @@ new default instance of L<Net::DNS::Resolver> to be created for each
 DNS query.
 
 Use this if you want to provide additional options to Net::DNS::Resolver,
-such as support for an extended query:
+such as different timeouts or use of a persistent socket:
 
   use Mail::DKIM::DNS;
-  $Mail::DKIM::DNS::RESOLVER = Net::DNS::Resolver->new;
+  $Mail::DKIM::DNS::RESOLVER = Net::DNS::Resolver->new(
+                    udp_timeout => 3, tcp_timeout => 3, retry => 2,
+                 );
   $Mail::DKIM::DNS::RESOLVER->udppacketsize(4096);
+  $Mail::DKIM::DNS::RESOLVER->persistent_udp(1);
+
+Note: to disable use of EDNS0 (enabled by default as of Mail::DKIM 0.40):
+
+  $Mail::DKIM::DNS::RESOLVER->udppacketsize(512);
 
 =back
 
@@ -54,7 +61,7 @@ package Mail::DKIM::DNS;
 use Net::DNS;
 our $TIMEOUT = 10;
 our $RESOLVER = Net::DNS::Resolver->new();
-$RESOLVER->udppacketsize(1280); # enables EDNS0, sets acceptable UDP packet size
+$RESOLVER->udppacketsize(2048); # enables EDNS0, sets acceptable UDP packet size
 
 # query- returns a list of RR objects
 #   or an empty list if the domain record does not exist
