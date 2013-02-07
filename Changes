@@ -3,6 +3,10 @@ See the ChangeLog file for the details.
 
 Version 0.41
 
+  * Fix to better comply with DKIM specification:
+    * DKIM signatures with multiple methods specified in q= tag are now
+      accepted. Such signatures are not known to appear in real life.
+      (rt.cpan.org issue #83176)
 
 
 Version 0.40 - released 2013-02-07
