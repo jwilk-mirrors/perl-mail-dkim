@@ -80,7 +80,7 @@ sub fetch_async
 	my $class = shift;
 	my %prms = @_;
 
-	defined($prms{Protocol}) && $prms{Protocol} eq "dns/txt"
+	defined($prms{Protocol}) && $prms{Protocol} =~ m{^dns(/txt)?$}s
 		or die "invalid/missing Protocol\n";
 
 	defined($prms{Selector}) && length($prms{Selector})
@@ -89,7 +89,6 @@ sub fetch_async
 	defined($prms{Domain}) && length($prms{Domain})
 		or die "invalid/missing Domain\n";
 
-	my $host = $prms{Selector} . "._domainkey." . $prms{Domain};
 	my %callbacks = %{$prms{Callbacks} || {}};
 	my $on_success = $callbacks{Success} || sub { $_[0] };
 	$callbacks{Success} = sub {
@@ -128,6 +127,7 @@ sub fetch_async
 	#
 	# perform DNS query for public key...
 	#
+	my $host = $prms{Selector} . "._domainkey." . $prms{Domain};
 	my $waiter = Mail::DKIM::DNS::query_async(
 			$host, "TXT",
 			Callbacks => \%callbacks,
