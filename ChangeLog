@@ -1,3 +1,5 @@
+ -- VERSION 0.40 --
+
 2013-02-06: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/DNS.pm: revert change that enabled EDNS0 by default;
    provide enable_EDNS0() subroutine for enabling EDNS0
