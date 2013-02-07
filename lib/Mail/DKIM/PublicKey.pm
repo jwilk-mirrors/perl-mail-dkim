@@ -61,32 +61,27 @@ sub fetch
 	return $self;
 }
 
-#EXPERIMENTAL1
-# my $x = Mail::DKIM::PublicKey->fetch_async(
-#                     Protocol => "dns",
-#                     etc.,
-#                   );
-# my $public_key = $x->();
-
-#EXPERIMENTAL2
-# my ($pubk, $E);
-# my $x = Mail::DKIM::PublicKey->fetch_async(
-#                     Protocol => "dns",
-#                     etc.,
-#                     Callbacks => { },
-#                   );
-# return $x->();
-
+# fetch_async() - asynchronously tries fetching a specific public key
+# using a specific protocol.
+#
+# Usage:
+#   my $fut = Mail::DKIM::PublicKey->fetch_async(
+#                      Protocol => "dns/txt",
+#                      Selector => "selector1",
+#                      Domain => "example.org",
+#                      Callbacks => { ... }, #optional
+#                      );
+#
+#   # some later time
+#   my $pubkey = $fut->();    # blocks until the public key is returned
+#
 sub fetch_async
 {
 	my $class = shift;
 	my %prms = @_;
 
-	my ($query_type, $query_options) = split(/\//, $prms{Protocol}, 2);
-	if (lc($query_type || "") ne "dns")
-	{
-		die "unknown query type '".($query_type||"")."'\n";
-	}
+	defined($prms{Protocol}) && $prms{Protocol} eq "dns/txt"
+		or die "invalid/missing Protocol\n";
 
 	defined($prms{Selector}) && length($prms{Selector})
 		or die "invalid/missing Selector\n";
