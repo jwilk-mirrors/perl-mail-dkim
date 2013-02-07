@@ -21,6 +21,7 @@ my $method = "simple";
 my $domain; # undef => auto-select domain
 my $expiration;
 my $identity;
+my $key_file = "private.key";
 my $key_protocol;
 my @extra_tag;
 my $debug_canonicalization;
@@ -34,6 +35,7 @@ GetOptions(
 		"domain=s" => \$domain,
 		"expiration=i" => \$expiration,
 		"identity=s" => \$identity,
+		"key=s" => \$key_file,
 		"key-protocol=s" => \$key_protocol,
 		"debug-canonicalization=s" => \$debug_canonicalization,
 		"extra-tag=s" => \@extra_tag,
@@ -61,7 +63,7 @@ my $dkim = new Mail::DKIM::Signer(
 		Algorithm => $algorithm,
 		Method => $method,
 		Selector => $selector,
-		KeyFile => "private.key",
+		KeyFile => $key_file,
 		Debug_Canonicalization => $debugfh,
 		);
 
