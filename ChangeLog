@@ -4,6 +4,9 @@
  * t/corpus/good_83176.txt: add new email to test suite; this email contains
    a signature with a LIST of query methods, one of which is good, but the
    rest should be quietly ignored. This test currently fails.
+ * lib/Mail/DKIM/Signature.pm (check_protocol): support multiple methods being
+   specified in signatures q= tag. We look for dns/txt to occur anywhere in
+   the field; all other values are ignored.
 
  -- VERSION 0.40 --
 

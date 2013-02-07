@@ -335,25 +335,33 @@ sub check_expiration
 	return ($self->{_verify_time} <= $x);
 }
 
-# checks whether the protocol found on this signature is valid for
-# fetching the public key
-# returns a true value if protocol is "dns/txt", false otherwise
+# checks whether any of the protocols specified by this signature is
+# valid for fetching the public key
+# returns a true value if protocol contains "dns/txt", false otherwise
 #
 sub check_protocol
 {
 	my $self = shift;
 
-	my ($type, $options) = split(/\//, $self->protocol, 2);
-	return unless ($type eq "dns");
-	return if ($options && $options ne "txt");
-
 	my $v = $self->version;
-	if ($v)
+
+	foreach my $prot (split /:/, $self->protocol)
 	{
-		# in v=1 signatures, the /txt option is REQUIRED
-		return unless ($options && $options eq "txt");
+		my ($type, $options) = split(/\//, $prot, 2);
+		if ($type eq "dns")
+		{
+			return "dns/txt" if $options && $options eq "txt";
+
+			# prior to DKIM version 1, the '/txt' part was optional
+			if (! $v)
+			{
+				return "dns/txt" if !defined($options);
+			}
+		}
 	}
-	return 1;
+
+	# unrecognized
+	return;
 }
 
 # checks whether the version tag has an acceptable value
@@ -785,17 +793,13 @@ sub protocol {
 		$self->set_tag("q", shift);
 
 	my $q = $self->get_tag("q");
-	if (not defined $q)
-	{
-		return "dns/txt";
-	}
-	elsif ($q =~ m#/#)
+	if (defined $q)
 	{
 		return $q;
 	}
 	else
 	{
-		return "$q/";
+		return "dns/txt";
 	}
 }	
 
