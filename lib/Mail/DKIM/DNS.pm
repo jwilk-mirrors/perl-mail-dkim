@@ -107,7 +107,7 @@ sub query
 
 	if (! $RESOLVER)
 	{
-		$RESOLVER = Net::DNS::Resolver->new();
+		$RESOLVER = Net::DNS::Resolver->new()
 			or die "Internal error: can't create DNS resolver";
 	}
 
