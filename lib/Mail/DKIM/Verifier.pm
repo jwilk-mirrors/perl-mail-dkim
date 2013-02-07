@@ -417,8 +417,8 @@ sub finish_header
 	if (@{$self->{algorithms}} == 0
 		&& @{$self->{signatures}} > 0)
 	{
-		$self->{result} = $self->{signatures}->[0]->result;
-		$self->{details} = $self->{signatures}->[0]->{verify_details};
+		$self->{result} = $self->{signatures}->[0]->result || "invalid";
+		$self->{details} = $self->{signatures}->[0]->{verify_details} || $self->{signature_reject_reason};
 		return;
 	}
 }

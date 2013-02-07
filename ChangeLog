@@ -1,6 +1,8 @@
 2013-02-07: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Verifier.pm (add_signature): call fetch_public_key() iff
-   the signature passes a validity check
+   the signature passes a validity check;
+   (finish_header): set result to 'invalid' if signature does not have a
+   result
  * lib/Mail/DKIM/Signature.pm (check_protocol): now returns a list of
    supported protocols, or an empty list if no supported protocols found.
 
