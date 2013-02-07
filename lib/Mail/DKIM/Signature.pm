@@ -335,9 +335,10 @@ sub check_expiration
 	return ($self->{_verify_time} <= $x);
 }
 
-# checks whether any of the protocols specified by this signature is
-# valid for fetching the public key
-# returns a true value if protocol contains "dns/txt", false otherwise
+# Returns a filtered list of protocols that can be used to fetch the
+# public key corresponding to this signature. An empty list means that
+# all designated protocols are unrecognized.
+# Note: at this time, the only recognized protocol is "dns/txt".
 #
 sub check_protocol
 {
@@ -350,12 +351,12 @@ sub check_protocol
 		my ($type, $options) = split(/\//, $prot, 2);
 		if ($type eq "dns")
 		{
-			return "dns/txt" if $options && $options eq "txt";
+			return ("dns/txt") if $options && $options eq "txt";
 
 			# prior to DKIM version 1, the '/txt' part was optional
 			if (! $v)
 			{
-				return "dns/txt" if !defined($options);
+				return ("dns/txt") if !defined($options);
 			}
 		}
 	}
@@ -522,9 +523,10 @@ sub fetch_public_key
 			}
 		};
 
+	my @methods = $self->check_protocol;
 	$self->{public_key_query} =
 		Mail::DKIM::PublicKey->fetch_async(
-			Protocol => $self->protocol,
+			Protocol => $methods[0],
 			Selector => $self->selector,
 			Domain => $self->domain,
 			Callbacks => {

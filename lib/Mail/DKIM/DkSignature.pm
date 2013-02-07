@@ -237,17 +237,19 @@ sub check_canonicalization
 	return 1;
 }
 
-# checks whether the protocol found on this subject is valid for
-# fetching the public key
-# returns a true value if protocol is "dns", false otherwise
+# Returns a filtered list of protocols that can be used to fetch the
+# public key corresponding to this signature. An empty list means that
+# all designated protocols are unrecognized.
+# Note: at this time, the only recognized protocol for DomainKey
+# signatures is "dns".
 #
 sub check_protocol
 {
 	my $self = shift;
 
 	my $protocol = $self->protocol;
-	return unless $protocol;
-	return ($protocol eq "dns");
+	return "dns/txt" if $protocol && $protocol eq "dns";
+	return;
 }
 
 sub check_version

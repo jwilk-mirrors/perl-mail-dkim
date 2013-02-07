@@ -1,6 +1,8 @@
 2013-02-07: Jason Long <jlong@messiah.edu>
  * lib/Mail/DKIM/Verifier.pm (add_signature): call fetch_public_key() iff
    the signature passes a validity check
+ * lib/Mail/DKIM/Signature.pm (check_protocol): now returns a list of
+   supported protocols, or an empty list if no supported protocols found.
 
 2013-02-06: Jason Long <jlong@messiah.edu>
  * t/corpus/good_83176.txt: add new email to test suite; this email contains
