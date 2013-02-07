@@ -158,7 +158,6 @@ sub handle_header
 		{
 			my $signature = Mail::DKIM::Signature->parse($line);
 			$self->add_signature($signature);
-			$signature->fetch_public_key;
 		};
 		if ($@)
 		{
@@ -178,7 +177,6 @@ sub handle_header
 		{
 			my $signature = Mail::DKIM::DkSignature->parse($line);
 			$self->add_signature($signature);
-			$signature->fetch_public_key;
 		};
 		if ($@)
 		{
@@ -211,6 +209,9 @@ sub add_signature
 			$self->{signature_reject_reason});
 		return;
 	}
+
+	# signature looks ok, go ahead and query for the public key
+	$signature->fetch_public_key;
 
 	# create a canonicalization filter and algorithm
 	my $algorithm_class = $signature->get_algorithm_class(
